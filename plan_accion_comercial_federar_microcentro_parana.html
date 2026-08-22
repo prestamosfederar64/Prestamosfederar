@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan de Acción Comercial - Federar</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin=""
+  />
+
+  <style>
+    :root{
+      --bg:#f5f7fb;
+      --panel:#ffffff;
+      --text:#182033;
+      --muted:#697386;
+      --border:#dfe4ec;
+      --primary:#1f5eff;
+      --primary-dark:#1648c7;
+      --success:#16a34a;
+      --warning:#f59e0b;
+      --danger:#dc2626;
+      --pending:#64748b;
+      --shadow:0 10px 30px rgba(24,32,51,.08);
+      --radius:16px;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .app{
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{
+      background:linear-gradient(135deg,#0f172a,#1e3a8a);
+      color:#fff;
+      padding:20px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+
+    header h1{
+      margin:0;
+      font-size:22px;
+    }
+
+    header p{
+      margin:6px 0 0;
+      opacity:.8;
+      font-size:14px;
+    }
+
+    .header-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    button,.btn{
+      border:0;
+      border-radius:10px;
+      padding:11px 14px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.2s ease;
+    }
+
+    button:hover,.btn:hover{transform:translateY(-1px)}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-primary:hover{background:var(--primary-dark)}
+    .btn-light{background:#fff;color:#13213f}
+    .btn-danger{background:#fee2e2;color:#991b1b}
+    .btn-secondary{background:#e8edf6;color:#263349}
+
+    .layout{
+      display:grid;
+      grid-template-columns:360px minmax(0,1fr);
+      gap:18px;
+      padding:18px;
+      flex:1;
+      min-height:0;
+    }
+
+    .sidebar{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+      min-width:0;
+    }
+
+    .card{
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:16px;
+    }
+
+    .card h2,.card h3{
+      margin:0 0 12px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:10px;
+    }
+
+    .stat{
+      background:#f8fafc;
+      border:1px solid var(--border);
+      padding:12px;
+      border-radius:12px;
+    }
+
+    .stat .label{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+      text-transform:uppercase;
+    }
+
+    .stat .value{
+      font-size:24px;
+      font-weight:800;
+      margin-top:4px;
+    }
+
+    .filters{
+      display:grid;
+      gap:10px;
+    }
+
+    input,select,textarea{
+      width:100%;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--text);
+      padding:11px 12px;
+      border-radius:10px;
+      font:inherit;
+      outline:none;
+    }
+
+    input:focus,select:focus,textarea:focus{
+      border-color:#8fb0ff;
+      box-shadow:0 0 0 3px rgba(31,94,255,.10);
+    }
+
+    label{
+      display:block;
+      font-size:12px;
+      color:var(--muted);
+      font-weight:800;
+      margin-bottom:5px;
+    }
+
+    .shop-list{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      max-height:390px;
+      overflow:auto;
+    }
+
+    .shop-item{
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:11px;
+      cursor:pointer;
+      transition:.2s ease;
+      background:#fff;
+    }
+
+    .shop-item:hover{
+      border-color:#b9c7e5;
+      background:#fbfcff;
+    }
+
+    .shop-item strong{
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .shop-item .meta{
+      font-size:12px;
+      color:var(--muted);
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      border-radius:999px;
+      padding:4px 8px;
+      font-size:11px;
+      font-weight:800;
+    }
+
+    .badge-pendiente{background:#e2e8f0;color:#334155}
+    .badge-visitado{background:#ffedd5;color:#9a3412}
+    .badge-interesado{background:#fef3c7;color:#92400e}
+    .badge-acuerdo{background:#dcfce7;color:#166534}
+    .badge-no-interesado{background:#fee2e2;color:#991b1b}
+
+    .map-wrap{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .map-toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+    }
+
+    #map{
+      min-height:650px;
+      height:calc(100vh - 170px);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      border:1px solid var(--border);
+      background:#dfe7f1;
+    }
+
+    .legend{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .legend span{
+      display:inline-flex;
+      gap:6px;
+      align-items:center;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+      z-index:3000;
+    }
+
+    .modal.show{display:flex}
+
+    .modal-card{
+      width:min(680px,100%);
+      max-height:90vh;
+      overflow:auto;
+      background:#fff;
+      border-radius:18px;
+      padding:20px;
+      box-shadow:0 24px 80px rgba(0,0,0,.28);
+    }
+
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:14px;
+    }
+
+    .modal-head h2{
+      margin:0;
+      font-size:20px;
+    }
+
+    .close{
+      background:#eef2f7;
+      width:40px;
+      height:40px;
+      padding:0;
+      border-radius:50%;
+      font-size:20px;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+    }
+
+    .full{grid-column:1/-1}
+
+    .actions{
+      display:flex;
+      justify-content:flex-end;
+      gap:10px;
+      margin-top:16px;
+      flex-wrap:wrap;
+    }
+
+    .hint{
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .empty{
+      text-align:center;
+      color:var(--muted);
+      padding:24px 12px;
+      font-size:13px;
+    }
+
+    .leaflet-popup-content-wrapper{
+      border-radius:12px;
+    }
+
+    @media(max-width:900px){
+      .layout{grid-template-columns:1fr}
+      #map{height:560px;min-height:560px}
+      .shop-list{max-height:260px}
+    }
+
+    @media(max-width:600px){
+      header{padding:16px}
+      .layout{padding:12px;gap:12px}
+      .form-grid{grid-template-columns:1fr}
+      .full{grid-column:auto}
+      #map{height:480px;min-height:480px}
+      .stats{grid-template-columns:repeat(2,1fr)}
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div>
+      <h1>Plan de Acción Comercial</h1>
+      <p>Recorridas, flyers y acuerdos con comercios</p>
+    </div>
+
+    <div class="header-actions">
+      <button class="btn-light" id="exportBtn">Exportar datos</button>
+      <button class="btn-primary" id="addBtn">+ Agregar comercio</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <section class="card">
+        <h3>Resumen</h3>
+        <div class="stats">
+          <div class="stat">
+            <div class="label">Comercios</div>
+            <div class="value" id="statTotal">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">Visitados</div>
+            <div class="value" id="statVisited">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">Acuerdos</div>
+            <div class="value" id="statDeals">0</div>
+          </div>
+          <div class="stat">
+            <div class="label">Flyers</div>
+            <div class="value" id="statFlyers">0</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Filtros</h3>
+        <div class="filters">
+          <div>
+            <label>Buscar comercio</label>
+            <input id="searchInput" placeholder="Nombre, rubro o dirección" />
+          </div>
+          <div>
+            <label>Estado</label>
+            <select id="statusFilter">
+              <option value="">Todos</option>
+              <option value="pendiente">Pendiente</option>
+              <option value="visitado">Visitado</option>
+              <option value="interesado">Interesado</option>
+              <option value="acuerdo">Acuerdo logrado</option>
+              <option value="no-interesado">No interesado</option>
+            </select>
+          </div>
+          <div>
+            <label>Analista</label>
+            <input id="analystFilter" placeholder="Ej: Juan" />
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h3>Locales registrados</h3>
+        <div id="shopList" class="shop-list"></div>
+      </section>
+    </aside>
+
+    <main class="map-wrap">
+      <div class="map-toolbar">
+        <div class="legend">
+          <span><i class="dot" style="background:#64748b"></i>Pendiente</span>
+          <span><i class="dot" style="background:#f97316"></i>Visitado</span>
+          <span><i class="dot" style="background:#eab308"></i>Interesado</span>
+          <span><i class="dot" style="background:#16a34a"></i>Acuerdo</span>
+          <span><i class="dot" style="background:#dc2626"></i>No interesado</span>
+        </div>
+        <span class="hint">Microcentro de Paraná · hacé clic sobre el mapa para cargar un comercio.</span>
+      </div>
+      <div id="map"></div>
+    </main>
+  </div>
+</div>
+
+<div class="modal" id="shopModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2 id="modalTitle">Agregar comercio</h2>
+      <button class="close" id="closeModal">×</button>
+    </div>
+
+    <form id="shopForm">
+      <input type="hidden" id="shopId" />
+      <div class="form-grid">
+        <div>
+          <label>Nombre del comercio</label>
+          <input id="name" required placeholder="Ej: Kiosco Centro" />
+        </div>
+
+        <div>
+          <label>Rubro</label>
+          <input id="category" placeholder="Kiosco, farmacia, almacén..." />
+        </div>
+
+        <div class="full">
+          <label>Dirección</label>
+          <input id="address" placeholder="Dirección del local" />
+        </div>
+
+        <div>
+          <label>Analista responsable</label>
+          <input id="analyst" placeholder="Nombre del analista" />
+        </div>
+
+        <div>
+          <label>Estado</label>
+          <select id="status">
+            <option value="pendiente">Pendiente</option>
+            <option value="visitado">Visitado</option>
+            <option value="interesado">Interesado</option>
+            <option value="acuerdo">Acuerdo logrado</option>
+            <option value="no-interesado">No interesado</option>
+          </select>
+        </div>
+
+        <div>
+          <label>Flyers entregados</label>
+          <input id="flyers" type="number" min="0" value="0" />
+        </div>
+
+        <div>
+          <label>Contacto / teléfono</label>
+          <input id="contact" placeholder="Teléfono o persona de contacto" />
+        </div>
+
+        <div>
+          <label>Fecha de visita</label>
+          <input id="visitDate" type="date" />
+        </div>
+
+        <div>
+          <label>Próximo seguimiento</label>
+          <input id="followUp" type="date" />
+        </div>
+
+        <div class="full">
+          <label>Tipo de acuerdo / acción realizada</label>
+          <input id="agreement" placeholder="Dejar flyers, recomendar clientes, QR, comisión, etc." />
+        </div>
+
+        <div class="full">
+          <label>Observaciones</label>
+          <textarea id="notes" rows="4" placeholder="Comentarios de la visita"></textarea>
+        </div>
+
+        <input id="lat" type="hidden" />
+        <input id="lng" type="hidden" />
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn-danger" id="deleteBtn" style="display:none">Eliminar</button>
+        <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
+        <button type="submit" class="btn-primary">Guardar comercio</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+
+<script>
+(() => {
+  const STORAGE_KEY = "federar_plan_comercial_v1";
+
+  const statusColors = {
+    "pendiente":"#64748b",
+    "visitado":"#f97316",
+    "interesado":"#eab308",
+    "acuerdo":"#16a34a",
+    "no-interesado":"#dc2626"
+  };
+
+  const statusLabels = {
+    "pendiente":"Pendiente",
+    "visitado":"Visitado",
+    "interesado":"Interesado",
+    "acuerdo":"Acuerdo logrado",
+    "no-interesado":"No interesado"
+  };
+
+  let shops = loadShops();
+  let markers = new Map();
+  let pendingLatLng = null;
+
+  const microcentroBounds = L.latLngBounds(
+    [-31.7425, -60.5425],
+    [-31.7215, -60.5155]
+  );
+
+  const map = L.map("map", {
+    maxBounds: microcentroBounds,
+    maxBoundsViscosity: 1.0,
+    minZoom: 14
+  }).setView([-31.73304, -60.52977], 16);
+
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+
+  // Recorte operativo del microcentro de Paraná.
+  // El mapa queda limitado a esta zona para facilitar la recorrida comercial.
+  L.rectangle(microcentroBounds, {
+    color: "#1f5eff",
+    weight: 2,
+    fillColor: "#1f5eff",
+    fillOpacity: 0.035,
+    dashArray: "6 6",
+    interactive: false
+  }).addTo(map);
+
+  function loadShops(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    }catch(e){
+      return [];
+    }
+  }
+
+  function saveShops(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(shops));
+  }
+
+  function makeMarker(shop){
+    return L.circleMarker([shop.lat, shop.lng], {
+      radius: 9,
+      color: "#ffffff",
+      weight: 2,
+      fillColor: statusColors[shop.status] || statusColors.pendiente,
+      fillOpacity: 1
+    });
+  }
+
+  function popupHtml(shop){
+    const safe = value => String(value || "").replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[c]));
+
+    return `
+      <div style="min-width:220px">
+        <strong style="font-size:15px">${safe(shop.name)}</strong><br>
+        <span style="color:#64748b;font-size:12px">${safe(shop.category || "Sin rubro")}</span>
+        <hr style="border:0;border-top:1px solid #e5e7eb;margin:8px 0">
+        <b>Estado:</b> ${safe(statusLabels[shop.status] || shop.status)}<br>
+        <b>Analista:</b> ${safe(shop.analyst || "-")}<br>
+        <b>Flyers:</b> ${Number(shop.flyers || 0)}<br>
+        <b>Dirección:</b> ${safe(shop.address || "-")}<br>
+        <button data-edit="${shop.id}" style="margin-top:10px;width:100%;padding:8px;border:0;border-radius:8px;background:#1f5eff;color:#fff;font-weight:700;cursor:pointer">Editar</button>
+      </div>
+    `;
+  }
+
+  function refreshMarkers(){
+    markers.forEach(m => map.removeLayer(m));
+    markers.clear();
+
+    getFilteredShops().forEach(shop => {
+      if(!Number.isFinite(Number(shop.lat)) || !Number.isFinite(Number(shop.lng))) return;
+      const marker = makeMarker(shop).addTo(map);
+      marker.bindPopup(popupHtml(shop));
+      marker.on("popupopen", () => {
+        setTimeout(() => {
+          const btn = document.querySelector(`[data-edit="${shop.id}"]`);
+          if(btn) btn.addEventListener("click", () => openEdit(shop.id), {once:true});
+        }, 0);
+      });
+      markers.set(shop.id, marker);
+    });
+  }
+
+  function getFilteredShops(){
+    const q = document.getElementById("searchInput").value.trim().toLowerCase();
+    const status = document.getElementById("statusFilter").value;
+    const analyst = document.getElementById("analystFilter").value.trim().toLowerCase();
+
+    return shops.filter(shop => {
+      const text = [shop.name, shop.category, shop.address].join(" ").toLowerCase();
+      const okQ = !q || text.includes(q);
+      const okStatus = !status || shop.status === status;
+      const okAnalyst = !analyst || String(shop.analyst || "").toLowerCase().includes(analyst);
+      return okQ && okStatus && okAnalyst;
+    });
+  }
+
+  function renderList(){
+    const list = document.getElementById("shopList");
+    const filtered = getFilteredShops();
+    list.innerHTML = "";
+
+    if(!filtered.length){
+      list.innerHTML = '<div class="empty">No hay comercios para mostrar.</div>';
+      return;
+    }
+
+    filtered.forEach(shop => {
+      const item = document.createElement("div");
+      item.className = "shop-item";
+      item.innerHTML = `
+        <strong>${escapeHtml(shop.name)}</strong>
+        <div class="meta">
+          <span>${escapeHtml(shop.category || "Sin rubro")}</span>
+          <span class="badge badge-${shop.status}">${statusLabels[shop.status] || shop.status}</span>
+        </div>
+      `;
+      item.addEventListener("click", () => {
+        if(markers.has(shop.id)){
+          map.setView([shop.lat, shop.lng], Math.max(map.getZoom(), 16));
+          markers.get(shop.id).openPopup();
+        }else{
+          openEdit(shop.id);
+        }
+      });
+      list.appendChild(item);
+    });
+  }
+
+  function renderStats(){
+    document.getElementById("statTotal").textContent = shops.length;
+    document.getElementById("statVisited").textContent = shops.filter(s => s.status !== "pendiente").length;
+    document.getElementById("statDeals").textContent = shops.filter(s => s.status === "acuerdo").length;
+    document.getElementById("statFlyers").textContent = shops.reduce((sum,s) => sum + Number(s.flyers || 0), 0);
+  }
+
+  function renderAll(){
+    renderStats();
+    renderList();
+    refreshMarkers();
+  }
+
+  function escapeHtml(value){
+    return String(value || "").replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[c]));
+  }
+
+  function openNew(latlng=null){
+    document.getElementById("shopForm").reset();
+    document.getElementById("shopId").value = "";
+    document.getElementById("modalTitle").textContent = "Agregar comercio";
+    document.getElementById("deleteBtn").style.display = "none";
+    document.getElementById("flyers").value = 0;
+    document.getElementById("status").value = "pendiente";
+
+    const coords = latlng || pendingLatLng || map.getCenter();
+    document.getElementById("lat").value = coords.lat;
+    document.getElementById("lng").value = coords.lng;
+
+    document.getElementById("shopModal").classList.add("show");
+  }
+
+  function openEdit(id){
+    const shop = shops.find(s => s.id === id);
+    if(!shop) return;
+
+    document.getElementById("shopId").value = shop.id;
+    document.getElementById("name").value = shop.name || "";
+    document.getElementById("category").value = shop.category || "";
+    document.getElementById("address").value = shop.address || "";
+    document.getElementById("analyst").value = shop.analyst || "";
+    document.getElementById("status").value = shop.status || "pendiente";
+    document.getElementById("flyers").value = Number(shop.flyers || 0);
+    document.getElementById("contact").value = shop.contact || "";
+    document.getElementById("visitDate").value = shop.visitDate || "";
+    document.getElementById("followUp").value = shop.followUp || "";
+    document.getElementById("agreement").value = shop.agreement || "";
+    document.getElementById("notes").value = shop.notes || "";
+    document.getElementById("lat").value = shop.lat;
+    document.getElementById("lng").value = shop.lng;
+
+    document.getElementById("modalTitle").textContent = "Editar comercio";
+    document.getElementById("deleteBtn").style.display = "inline-block";
+    document.getElementById("shopModal").classList.add("show");
+  }
+
+  function closeModal(){
+    document.getElementById("shopModal").classList.remove("show");
+    pendingLatLng = null;
+  }
+
+  document.getElementById("shopForm").addEventListener("submit", e => {
+    e.preventDefault();
+
+    const id = document.getElementById("shopId").value || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()));
+    const shop = {
+      id,
+      name: document.getElementById("name").value.trim(),
+      category: document.getElementById("category").value.trim(),
+      address: document.getElementById("address").value.trim(),
+      analyst: document.getElementById("analyst").value.trim(),
+      status: document.getElementById("status").value,
+      flyers: Math.max(0, Number(document.getElementById("flyers").value || 0)),
+      contact: document.getElementById("contact").value.trim(),
+      visitDate: document.getElementById("visitDate").value,
+      followUp: document.getElementById("followUp").value,
+      agreement: document.getElementById("agreement").value.trim(),
+      notes: document.getElementById("notes").value.trim(),
+      lat: Number(document.getElementById("lat").value),
+      lng: Number(document.getElementById("lng").value)
+    };
+
+    const index = shops.findIndex(s => s.id === id);
+    if(index >= 0) shops[index] = shop;
+    else shops.push(shop);
+
+    saveShops();
+    renderAll();
+    closeModal();
+
+    map.setView([shop.lat, shop.lng], Math.max(map.getZoom(), 15));
+  });
+
+  document.getElementById("deleteBtn").addEventListener("click", () => {
+    const id = document.getElementById("shopId").value;
+    if(!id) return;
+    if(!confirm("¿Eliminar este comercio?")) return;
+
+    shops = shops.filter(s => s.id !== id);
+    saveShops();
+    renderAll();
+    closeModal();
+  });
+
+  document.getElementById("addBtn").addEventListener("click", () => openNew());
+  document.getElementById("closeModal").addEventListener("click", closeModal);
+  document.getElementById("cancelBtn").addEventListener("click", closeModal);
+
+  document.getElementById("shopModal").addEventListener("click", e => {
+    if(e.target.id === "shopModal") closeModal();
+  });
+
+  map.on("click", e => {
+    pendingLatLng = e.latlng;
+    openNew(e.latlng);
+  });
+
+  ["searchInput","statusFilter","analystFilter"].forEach(id => {
+    document.getElementById(id).addEventListener("input", renderAll);
+    document.getElementById(id).addEventListener("change", renderAll);
+  });
+
+  document.getElementById("exportBtn").addEventListener("click", () => {
+    const blob = new Blob([JSON.stringify(shops,null,2)], {type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "plan_comercial_federar.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  renderAll();
+
+  if(shops.length){
+    const valid = shops.filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)));
+    if(valid.length){
+      const bounds = L.latLngBounds(valid.map(s => [s.lat,s.lng]));
+      map.fitBounds(bounds.pad(.2));
+    }
+  }
+})();
+</script>
+</body>
+</html>
