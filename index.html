@@ -134,7 +134,7 @@
     .stat{
       background:#f8fafc;
       border:1px solid var(--border);
-      padding:12px;
+      padding:9px 12px;
       border-radius:12px;
     }
 
@@ -244,13 +244,13 @@
       min-width:0;
       display:flex;
       flex-direction:column;
-      gap:12px;
+      gap:8px;
       min-height:0;
     }
 
     .list-card{
       flex:2 1 0;
-      min-height:150px;
+      min-height:120px;
       display:flex;
       flex-direction:column;
     }
@@ -265,7 +265,7 @@
 
     .map-container{
       flex:3 1 0;
-      min-height:260px;
+      min-height:210px;
       border-radius:var(--radius);
       overflow:hidden;
       box-shadow:var(--shadow);
@@ -476,11 +476,104 @@
       background:#f8fafc;
       border:1px solid var(--border);
       border-radius:10px;
-      padding:8px 12px;
+      padding:6px 12px;
     }
 
     .map-status-message.show{
       display:block;
+    }
+
+    .address-search-card{
+      padding:6px 10px;
+    }
+
+    .address-search-row{
+      position:relative;
+      display:flex;
+      gap:8px;
+    }
+
+    .address-search-row input{
+      flex:1;
+      min-width:0;
+    }
+
+    .address-results-dropdown{
+      display:none;
+      position:absolute;
+      bottom:calc(100% + 6px);
+      left:0;
+      right:0;
+      z-index:600;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:12px;
+      box-shadow:var(--shadow);
+      max-height:220px;
+      overflow:auto;
+      padding:6px;
+    }
+
+    .address-results-dropdown.show{
+      display:block;
+    }
+
+    .address-result-item{
+      padding:9px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      font-size:13px;
+      line-height:1.4;
+    }
+
+    .address-result-item:hover{
+      background:#f1f5fb;
+    }
+
+    .address-search-status{
+      display:none;
+      margin-top:8px;
+      font-size:12px;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .address-search-status.show{
+      display:block;
+    }
+
+    .address-search-status.error{
+      color:var(--danger);
+    }
+
+    .address-selected{
+      display:none;
+      position:absolute;
+      bottom:calc(100% + 6px);
+      left:0;
+      right:0;
+      z-index:600;
+      padding:10px 12px;
+      background:#f0f7ff;
+      border:1px solid #cfe0ff;
+      border-radius:12px;
+      box-shadow:var(--shadow);
+    }
+
+    .address-selected.show{
+      display:block;
+    }
+
+    .address-selected-text{
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:8px;
+    }
+
+    .address-selected-actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
     }
 
     .range-warning{
@@ -521,6 +614,10 @@
       .stats{grid-template-columns:repeat(2,1fr)}
       .filters-toggle{display:inline-flex}
       .filters-body.collapsed{display:none}
+
+      .address-search-row{flex-direction:column}
+      .address-results-dropdown{position:static;margin-top:8px}
+      .address-selected{position:static;margin-top:8px}
     }
   </style>
 </head>
@@ -619,6 +716,23 @@
         </div>
         <span class="hint">Microcentro de Paraná · hacé clic sobre el mapa para cargar un comercio.</span>
       </div>
+
+      <section class="card address-search-card">
+        <div class="address-search-row">
+          <input id="addressSearchInput" type="text" placeholder="Buscar domicilio en Paraná... (ej: San Martín 1234)" autocomplete="off" />
+          <button type="button" class="btn-secondary" id="addressSearchBtn">Buscar</button>
+          <div class="address-results-dropdown" id="addressResultsDropdown"></div>
+          <div class="address-selected" id="addressSelected">
+            <div class="address-selected-text" id="addressSelectedText"></div>
+            <div class="address-selected-actions">
+              <button type="button" class="btn-primary" id="addToShopFromSearchBtn">Agregar comercio aquí</button>
+              <button type="button" class="btn-secondary" id="clearAddressSearchBtn">Limpiar</button>
+            </div>
+          </div>
+        </div>
+        <div class="address-search-status" id="addressSearchStatus"></div>
+      </section>
+
       <div class="map-status-message" id="mapStatusMessage"></div>
       <div class="map-container">
         <div id="map"></div>
@@ -851,6 +965,16 @@
     return state.filtersByAnalyst[state.activeAnalyst];
   }
 
+  // LIMITACIÓN CONOCIDA (buscador de domicilios): microcentroBounds cubre solo
+  // el rectángulo operativo del microcentro, no Paraná ciudad completa (que es
+  // sensiblemente más grande -- ver GEOCODE_CONFIG.viewbox en core.js, que sí
+  // cubre toda la ciudad). Un domicilio real fuera de este rectángulo (ej.
+  // "Bajada Grande") puede geocodificarse correctamente pero el mapa, con
+  // maxBoundsViscosity:1.0, reencuadrará la vista dentro de este límite al
+  // intentar centrarlo. selectAddressResult() detecta este caso y avisa al
+  // usuario en vez de fallar en silencio. Ampliar microcentroBounds a todo
+  // Paraná es un cambio de alcance operativo del mapa que se dejó pendiente,
+  // a definir explícitamente en una próxima iteración.
   const microcentroBounds = L.latLngBounds(
     [-31.7425, -60.5425],
     [-31.7215, -60.5155]
@@ -880,6 +1004,163 @@
 
   const markersLayer = L.layerGroup().addTo(map);
   let markerIndex = new Map();
+
+  // --- Buscador de domicilios (geocodificación externa vía Nominatim) ---
+  // Estado completamente separado de los comercios: nunca se agrega a
+  // markersLayer, nunca se guarda en state.data ni se persiste.
+  let searchMarker = null;
+  let selectedAddressResult = null;
+  let geocodeAbortController = null;
+
+  async function geocodeAddress(query){
+    const url = Core.buildGeocodeUrl(query);
+    if(!url) return { ok:false, aborted:false, results: [] };
+
+    if(geocodeAbortController) geocodeAbortController.abort();
+    const controller = new AbortController();
+    geocodeAbortController = controller;
+
+    try{
+      // No seteamos User-Agent: los navegadores lo bloquean por seguridad y
+      // Nominatim acepta el User-Agent + Referer que el propio navegador
+      // envía para uso desde cliente. Ver nota de política de uso más abajo.
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: { "Accept": "application/json" }
+      });
+      if(!response.ok) throw new Error("Nominatim respondió " + response.status);
+      const raw = await response.json();
+      return { ok:true, aborted:false, results: Core.parseGeocodeResults(raw) };
+    }catch(err){
+      if(err.name === "AbortError") return { ok:false, aborted:true, results: [] };
+      console.warn("No se pudo geocodificar la dirección:", err);
+      return { ok:false, aborted:false, results: [] };
+    }
+  }
+
+  function setAddressSearchLoading(isLoading){
+    const btn = document.getElementById("addressSearchBtn");
+    btn.disabled = isLoading;
+    btn.textContent = isLoading ? "Buscando..." : "Buscar";
+  }
+
+  function setAddressSearchStatus(text, isError){
+    const el = document.getElementById("addressSearchStatus");
+    el.textContent = text;
+    el.classList.toggle("show", Boolean(text));
+    el.classList.toggle("error", Boolean(isError));
+  }
+
+  function clearAddressResultsDropdown(){
+    const dropdown = document.getElementById("addressResultsDropdown");
+    dropdown.innerHTML = "";
+    dropdown.classList.remove("show");
+  }
+
+  function renderAddressResultsDropdown(results){
+    const dropdown = document.getElementById("addressResultsDropdown");
+    dropdown.innerHTML = "";
+
+    results.forEach(result => {
+      const item = document.createElement("div");
+      item.className = "address-result-item";
+      item.textContent = result.label;
+      item.addEventListener("click", () => selectAddressResult(result));
+      dropdown.appendChild(item);
+    });
+
+    dropdown.classList.add("show");
+  }
+
+  function showAddressSelected(result){
+    document.getElementById("addressSelectedText").textContent = result.label;
+    document.getElementById("addressSelected").classList.add("show");
+  }
+
+  function hideAddressSelected(){
+    selectedAddressResult = null;
+    document.getElementById("addressSelected").classList.remove("show");
+  }
+
+  function placeSearchMarker(result){
+    if(searchMarker) map.removeLayer(searchMarker);
+    searchMarker = L.circleMarker([result.lat, result.lng], {
+      radius: 12,
+      color: "#ffffff",
+      weight: 3,
+      fillColor: "#7c3aed",
+      fillOpacity: 1
+    }).addTo(map);
+  }
+
+  function removeSearchMarker(){
+    if(searchMarker){
+      map.removeLayer(searchMarker);
+      searchMarker = null;
+    }
+  }
+
+  function selectAddressResult(result){
+    selectedAddressResult = result;
+    clearAddressResultsDropdown();
+    showAddressSelected(result);
+    placeSearchMarker(result);
+    map.setView([result.lat, result.lng], 17);
+
+    if(microcentroBounds.contains([result.lat, result.lng])){
+      setAddressSearchStatus("", false);
+    }else{
+      // El buscador cubre toda Paraná, pero el mapa solo puede desplazarse
+      // dentro del microcentro operativo (maxBounds); Leaflet reencuadra la
+      // vista dentro de ese límite, así que puede no quedar perfectamente
+      // centrada. El marcador temporal sí se coloca en la ubicación real.
+      setAddressSearchStatus("Esta dirección está fuera del área operativa actual del mapa (microcentro). Es posible que no se vea perfectamente centrada.", false);
+    }
+  }
+
+  async function runAddressSearch(){
+    const input = document.getElementById("addressSearchInput");
+    const query = input.value.trim();
+    if(!query) return;
+
+    clearAddressResultsDropdown();
+    hideAddressSelected();
+    removeSearchMarker();
+    setAddressSearchLoading(true);
+    setAddressSearchStatus("Buscando domicilio...", false);
+
+    const outcome = await geocodeAddress(query);
+
+    if(outcome.aborted) return;
+
+    setAddressSearchLoading(false);
+
+    if(!outcome.ok){
+      setAddressSearchStatus("No se pudo buscar el domicilio. Intentá nuevamente.", true);
+      return;
+    }
+
+    if(outcome.results.length === 0){
+      setAddressSearchStatus("No se encontró ese domicilio en Paraná.", true);
+      return;
+    }
+
+    setAddressSearchStatus("", false);
+
+    if(outcome.results.length === 1){
+      selectAddressResult(outcome.results[0]);
+    }else{
+      renderAddressResultsDropdown(outcome.results);
+    }
+  }
+
+  function resetAddressSearch(){
+    document.getElementById("addressSearchInput").value = "";
+    clearAddressResultsDropdown();
+    hideAddressSelected();
+    setAddressSearchStatus("", false);
+    removeSearchMarker();
+  }
 
   function hasValidCoords(shop){
     if(shop.lat === null || shop.lat === undefined || shop.lat === "") return false;
@@ -1070,7 +1351,7 @@
     }[c]));
   }
 
-  function openNew(latlng=null){
+  function openNew(latlng=null, prefillAddress=""){
     document.getElementById("shopForm").reset();
     document.getElementById("shopId").value = "";
     document.getElementById("modalTitle").textContent = "Agregar comercio";
@@ -1081,6 +1362,10 @@
     const coords = latlng || state.pendingLatLng || map.getCenter();
     document.getElementById("lat").value = coords.lat;
     document.getElementById("lng").value = coords.lng;
+
+    if(prefillAddress){
+      document.getElementById("address").value = prefillAddress;
+    }
 
     document.getElementById("shopModal").classList.add("show");
   }
@@ -1156,6 +1441,7 @@
     saveState();
     renderAll();
     closeModal();
+    resetAddressSearch();
 
     map.setView([shop.lat, shop.lng], Math.max(map.getZoom(), 15));
   });
@@ -1183,6 +1469,31 @@
   map.on("click", e => {
     state.pendingLatLng = e.latlng;
     openNew(e.latlng);
+  });
+
+  document.getElementById("addressSearchBtn").addEventListener("click", () => {
+    runAddressSearch();
+  });
+
+  document.getElementById("addressSearchInput").addEventListener("keydown", e => {
+    if(e.key === "Enter"){
+      e.preventDefault();
+      runAddressSearch();
+    }
+  });
+
+  document.getElementById("addToShopFromSearchBtn").addEventListener("click", () => {
+    if(!selectedAddressResult) return;
+    openNew({ lat: selectedAddressResult.lat, lng: selectedAddressResult.lng }, selectedAddressResult.label);
+  });
+
+  document.getElementById("clearAddressSearchBtn").addEventListener("click", resetAddressSearch);
+
+  document.addEventListener("click", e => {
+    const row = document.querySelector(".address-search-row");
+    if(row && !row.contains(e.target)){
+      clearAddressResultsDropdown();
+    }
   });
 
   document.getElementById("searchInput").addEventListener("input", e => {

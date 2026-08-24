@@ -102,6 +102,66 @@
     });
   }
 
+  // Config central del proveedor de geocodificación. Aislada acá para poder
+  // reemplazar Nominatim por otro proveedor a futuro tocando solo esta
+  // constante y buildGeocodeUrl/parseGeocodeResults, sin tocar la UI.
+  var GEOCODE_CONFIG = {
+    endpoint: "https://nominatim.openstreetmap.org/search",
+    countryCodes: "ar",
+    // Bounding box de Paraná ciudad (Entre Ríos), formato viewbox de Nominatim:
+    // izquierda,arriba,derecha,abajo. A propósito es más amplio que el
+    // microcentroBounds operativo del mapa (ver nota en index.html).
+    viewbox: "-60.5935,-31.6874,-60.3912,-31.8041",
+    bounded: 1,
+    limit: 5,
+    cityContext: "Paraná, Entre Ríos, Argentina"
+  };
+
+  function normalizeQueryText(value) {
+    return String(value == null ? "" : value).trim().replace(/\s+/g, " ");
+  }
+
+  function buildGeocodeQuery(value) {
+    var trimmed = normalizeQueryText(value);
+    if (!trimmed) return "";
+    var mentionsParana = normalizeText(trimmed).indexOf("parana") !== -1;
+    return mentionsParana ? trimmed : (trimmed + ", " + GEOCODE_CONFIG.cityContext);
+  }
+
+  function buildGeocodeUrl(query) {
+    var q = buildGeocodeQuery(query);
+    if (!q) return "";
+    var params = new URLSearchParams({
+      q: q,
+      format: "jsonv2",
+      limit: String(GEOCODE_CONFIG.limit),
+      countrycodes: GEOCODE_CONFIG.countryCodes,
+      viewbox: GEOCODE_CONFIG.viewbox,
+      bounded: String(GEOCODE_CONFIG.bounded)
+    });
+    return GEOCODE_CONFIG.endpoint + "?" + params.toString();
+  }
+
+  function toFiniteCoordinate(value) {
+    if (value === null || value === undefined || value === "") return NaN;
+    var n = Number(value);
+    return Number.isFinite(n) ? n : NaN;
+  }
+
+  function parseGeocodeResults(rawResults) {
+    if (!Array.isArray(rawResults)) return [];
+    return rawResults
+      .map(function (item) {
+        var lat = toFiniteCoordinate(item && item.lat);
+        var lng = toFiniteCoordinate(item && item.lon);
+        var label = (item && typeof item.display_name === "string") ? item.display_name : "";
+        return { lat: lat, lng: lng, label: label };
+      })
+      .filter(function (result) {
+        return Number.isFinite(result.lat) && Number.isFinite(result.lng) && Boolean(result.label);
+      });
+  }
+
   var Core = {
     ANALYSTS: ANALYSTS,
     isValidAnalystId: isValidAnalystId,
@@ -116,7 +176,12 @@
     isValidRange: isValidRange,
     matchesStatus: matchesStatus,
     filterMatchers: filterMatchers,
-    applyFilters: applyFilters
+    applyFilters: applyFilters,
+    GEOCODE_CONFIG: GEOCODE_CONFIG,
+    normalizeQueryText: normalizeQueryText,
+    buildGeocodeQuery: buildGeocodeQuery,
+    buildGeocodeUrl: buildGeocodeUrl,
+    parseGeocodeResults: parseGeocodeResults
   };
 
   if (typeof module !== "undefined" && module.exports) {
