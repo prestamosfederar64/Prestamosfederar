@@ -264,7 +264,6 @@
     }
 
     .map-container{
-      position:relative;
       flex:3 1 0;
       min-height:260px;
       border-radius:var(--radius);
@@ -469,23 +468,19 @@
       font-weight:700;
     }
 
-    .map-empty-state{
-      position:absolute;
-      inset:0;
-      z-index:400;
+    .map-status-message{
       display:none;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
       color:var(--muted);
-      font-size:13px;
-      font-weight:600;
-      padding:20px;
-      background:rgba(255,255,255,.88);
+      font-size:12px;
+      font-weight:700;
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:8px 12px;
     }
 
-    .map-empty-state.show{
-      display:flex;
+    .map-status-message.show{
+      display:block;
     }
 
     .range-warning{
@@ -624,9 +619,9 @@
         </div>
         <span class="hint">Microcentro de Paraná · hacé clic sobre el mapa para cargar un comercio.</span>
       </div>
+      <div class="map-status-message" id="mapStatusMessage"></div>
       <div class="map-container">
         <div id="map"></div>
-        <div class="map-empty-state" id="mapEmptyState">No se encontraron comercios con estos filtros.</div>
       </div>
 
       <section class="card list-card">
@@ -942,25 +937,26 @@
 
   function fitMapToResults(filtered){
     // El layout es flex-based, así que el tamaño del contenedor del mapa puede
-    // cambiar entre renders (ej. al mostrarse/ocultarse el mensaje de mapEmptyState).
+    // cambiar levemente entre renders (ej. al mostrarse/ocultarse mapStatusMessage).
+    // El mapa en sí (#map, .map-container) nunca se oculta ni se cubre.
     map.invalidateSize();
 
     const withCoords = filtered.filter(hasValidCoords);
-    const emptyState = document.getElementById("mapEmptyState");
+    const statusMessage = document.getElementById("mapStatusMessage");
 
     if(filtered.length === 0){
-      emptyState.textContent = "No se encontraron comercios con estos filtros.";
-      emptyState.classList.add("show");
+      statusMessage.textContent = "No se encontraron comercios con estos filtros.";
+      statusMessage.classList.add("show");
       return;
     }
 
     if(withCoords.length === 0){
-      emptyState.textContent = "Los comercios encontrados no tienen ubicación disponible en el mapa.";
-      emptyState.classList.add("show");
+      statusMessage.textContent = "Los comercios encontrados no tienen ubicación disponible en el mapa.";
+      statusMessage.classList.add("show");
       return;
     }
 
-    emptyState.classList.remove("show");
+    statusMessage.classList.remove("show");
 
     if(withCoords.length === 1){
       map.setView([withCoords[0].lat, withCoords[0].lng], 16);
