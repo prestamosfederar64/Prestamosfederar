@@ -26,7 +26,7 @@ Full design rationale: `docs/superpowers/specs/2026-08-24-analistas-separadas-de
 - Create: `js/core.js`
 - Create: `tests/core.test.js`
 
-- [ ] **Step 1: Create the empty, dual-environment core module**
+- [x] **Step 1: Create the empty, dual-environment core module**
 
 `js/core.js`:
 ```js
@@ -43,7 +43,7 @@ Full design rationale: `docs/superpowers/specs/2026-08-24-analistas-separadas-de
 })(typeof window !== "undefined" ? window : globalThis);
 ```
 
-- [ ] **Step 2: Create the test runner skeleton**
+- [x] **Step 2: Create the test runner skeleton**
 
 `tests/core.test.js`:
 ```js
@@ -72,7 +72,7 @@ if (process.exitCode) {
 }
 ```
 
-- [ ] **Step 3: Run the harness to confirm it works end to end**
+- [x] **Step 3: Run the harness to confirm it works end to end**
 
 Run: `node tests/core.test.js`
 Expected:
@@ -82,7 +82,7 @@ ok - Core module loads
 Todas las pruebas pasaron.
 ```
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add js/core.js tests/core.test.js
@@ -97,7 +97,7 @@ git commit -m "chore: scaffold dual-environment core module and test harness"
 - Modify: `js/core.js`
 - Modify: `tests/core.test.js`
 
-- [ ] **Step 1: Add the failing tests**
+- [x] **Step 1: Add the failing tests**
 
 Append to `tests/core.test.js` (before the `if (process.exitCode)` block):
 ```js
@@ -126,12 +126,12 @@ test("getSafeActiveAnalyst falls back to magali on invalid input", () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify these fail**
+- [x] **Step 2: Run to verify these fail**
 
 Run: `node tests/core.test.js`
 Expected: `FAIL - ANALYSTS contains exactly magali and victoria` (and the other two new tests also fail) with `TypeError` (Cannot read properties of undefined).
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 In `js/core.js`, replace `var Core = {};` with:
 ```js
@@ -155,12 +155,12 @@ In `js/core.js`, replace `var Core = {};` with:
   };
 ```
 
-- [ ] **Step 4: Run to verify all tests pass**
+- [x] **Step 4: Run to verify all tests pass**
 
 Run: `node tests/core.test.js`
 Expected: every line starts with `ok -`, ending with `Todas las pruebas pasaron.`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/core.js tests/core.test.js
@@ -175,7 +175,7 @@ git commit -m "feat: add analyst config and safe active-analyst validation"
 - Modify: `js/core.js`
 - Modify: `tests/core.test.js`
 
-- [ ] **Step 1: Add the failing tests**
+- [x] **Step 1: Add the failing tests**
 
 Append to `tests/core.test.js`:
 ```js
@@ -201,12 +201,12 @@ test("migrateLegacyData handles corrupt/non-array v1 without crashing", () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify these fail**
+- [x] **Step 2: Run to verify these fail**
 
 Run: `node tests/core.test.js`
 Expected: the three new `migrateLegacyData` tests fail with `TypeError` (`Core.migrateLegacyData is not a function`).
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Add to `js/core.js`, above the `var Core = {` block:
 ```js
@@ -224,12 +224,12 @@ Add to `js/core.js`, above the `var Core = {` block:
 
 Add `migrateLegacyData: migrateLegacyData,` to the returned `Core` object.
 
-- [ ] **Step 4: Run to verify all tests pass**
+- [x] **Step 4: Run to verify all tests pass**
 
 Run: `node tests/core.test.js`
 Expected: all `ok -` lines, `Todas las pruebas pasaron.`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/core.js tests/core.test.js
@@ -244,7 +244,7 @@ git commit -m "feat: add idempotent v1 to v2 legacy data migration"
 - Modify: `js/core.js`
 - Modify: `tests/core.test.js`
 
-- [ ] **Step 1: Add the failing tests**
+- [x] **Step 1: Add the failing tests**
 
 Append to `tests/core.test.js`:
 ```js
@@ -294,12 +294,12 @@ test("matchesDateRange: only from or only to", () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify these fail**
+- [x] **Step 2: Run to verify these fail**
 
 Run: `node tests/core.test.js`
 Expected: all `inRange`/`matchesDateRange` tests fail with `TypeError` (function not defined).
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Add to `js/core.js`, above the `var Core = {` block:
 ```js
@@ -330,12 +330,12 @@ Add to `js/core.js`, above the `var Core = {` block:
 
 Add `inRange: inRange, toEpoch: toEpoch, matchesDateRange: matchesDateRange,` to the returned `Core` object.
 
-- [ ] **Step 4: Run to verify all tests pass**
+- [x] **Step 4: Run to verify all tests pass**
 
 Run: `node tests/core.test.js`
 Expected: all `ok -` lines, `Todas las pruebas pasaron.`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/core.js tests/core.test.js
@@ -350,7 +350,7 @@ git commit -m "feat: add reusable inRange helper and date range matching"
 - Modify: `js/core.js`
 - Modify: `tests/core.test.js`
 
-- [ ] **Step 1: Add the failing tests**
+- [x] **Step 1: Add the failing tests**
 
 Append to `tests/core.test.js`:
 ```js
@@ -373,12 +373,12 @@ test("matchesSearch tolerates missing fields", () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify these fail**
+- [x] **Step 2: Run to verify these fail**
 
 Run: `node tests/core.test.js`
 Expected: the three `matchesSearch` tests fail with `TypeError` (function not defined).
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Add to `js/core.js`, above the `var Core = {` block:
 ```js
@@ -405,12 +405,12 @@ Add to `js/core.js`, above the `var Core = {` block:
 
 Add `normalizeText: normalizeText, matchesSearch: matchesSearch,` to the returned `Core` object.
 
-- [ ] **Step 4: Run to verify all tests pass**
+- [x] **Step 4: Run to verify all tests pass**
 
 Run: `node tests/core.test.js`
 Expected: all `ok -` lines, `Todas las pruebas pasaron.`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/core.js tests/core.test.js
@@ -425,7 +425,7 @@ git commit -m "feat: add accent and case-insensitive text search"
 - Modify: `js/core.js`
 - Modify: `tests/core.test.js`
 
-- [ ] **Step 1: Add the failing tests**
+- [x] **Step 1: Add the failing tests**
 
 Append to `tests/core.test.js`:
 ```js
@@ -446,12 +446,12 @@ test("matchesZone with empty query matches everything", () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify these fail**
+- [x] **Step 2: Run to verify these fail**
 
 Run: `node tests/core.test.js`
 Expected: the three `matchesZone` tests fail with `TypeError` (function not defined).
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Add to `js/core.js`, above the `var Core = {` block:
 ```js
@@ -465,12 +465,12 @@ Add to `js/core.js`, above the `var Core = {` block:
 
 Add `matchesZone: matchesZone,` to the returned `Core` object.
 
-- [ ] **Step 4: Run to verify all tests pass**
+- [x] **Step 4: Run to verify all tests pass**
 
 Run: `node tests/core.test.js`
 Expected: all `ok -` lines, `Todas las pruebas pasaron.`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/core.js tests/core.test.js
@@ -485,7 +485,7 @@ git commit -m "feat: add zone matching with address fallback"
 - Modify: `js/core.js`
 - Modify: `tests/core.test.js`
 
-- [ ] **Step 1: Add the failing tests**
+- [x] **Step 1: Add the failing tests**
 
 Append to `tests/core.test.js`:
 ```js
@@ -527,12 +527,12 @@ test("applyFilters with no filters set matches everything", () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify these fail**
+- [x] **Step 2: Run to verify these fail**
 
 Run: `node tests/core.test.js`
 Expected: `matchesStatus` and `applyFilters` tests fail with `TypeError` (function not defined).
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 Add to `js/core.js`, above the `var Core = {` block:
 ```js
@@ -560,12 +560,12 @@ Add to `js/core.js`, above the `var Core = {` block:
 
 Add `matchesStatus: matchesStatus, filterMatchers: filterMatchers, applyFilters: applyFilters,` to the returned `Core` object.
 
-- [ ] **Step 4: Run to verify all tests pass**
+- [x] **Step 4: Run to verify all tests pass**
 
 Run: `node tests/core.test.js`
 Expected: all `ok -` lines, `Todas las pruebas pasaron.`
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add js/core.js tests/core.test.js
@@ -581,7 +581,7 @@ git commit -m "feat: add status matching and centralized applyFilters"
 **Files:**
 - Modify: `index.html:534`
 
-- [ ] **Step 1: Add the script tag**
+- [x] **Step 1: Add the script tag**
 
 In `index.html`, find:
 ```html
@@ -594,12 +594,12 @@ Replace with:
 <script src="js/core.js"></script>
 ```
 
-- [ ] **Step 2: Verify no console errors on load**
+- [x] **Step 2: Verify no console errors on load**
 
 Run: `python -m http.server 8765` from the repo root (or any static server), open `http://localhost:8765/index.html` in a browser, open devtools console.
 Expected: page loads exactly as before (no visible change yet), zero console errors, and `window.Core` is defined (type `Core` in the console to confirm).
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add index.html
@@ -613,7 +613,7 @@ git commit -m "chore: load js/core.js in the page"
 **Files:**
 - Modify: `index.html` (inside the existing `<style>` block, right before the `@media(max-width:900px)` rule at `index.html:349`)
 
-- [ ] **Step 1: Insert the new CSS rules**
+- [x] **Step 1: Insert the new CSS rules**
 
 In `index.html`, find:
 ```css
@@ -727,7 +727,7 @@ Insert immediately before it:
 
 ```
 
-- [ ] **Step 2: Add the mobile filters-toggle rule inside the existing 600px media query**
+- [x] **Step 2: Add the mobile filters-toggle rule inside the existing 600px media query**
 
 In `index.html`, find:
 ```css
@@ -755,11 +755,11 @@ Replace with:
     }
 ```
 
-- [ ] **Step 3: Verify the page still renders with no console errors**
+- [x] **Step 3: Verify the page still renders with no console errors**
 
 Reload `http://localhost:8765/index.html`. Expected: identical visual output to before (new CSS classes aren't referenced by any HTML yet), zero console errors.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add index.html
@@ -773,7 +773,7 @@ git commit -m "style: add CSS for analyst selector, migration banner, filter bad
 **Files:**
 - Modify: `index.html:367-377`
 
-- [ ] **Step 1: Replace the header markup**
+- [x] **Step 1: Replace the header markup**
 
 In `index.html`, find:
 ```html
@@ -810,11 +810,11 @@ Replace with:
   </header>
 ```
 
-- [ ] **Step 2: Verify visually**
+- [x] **Step 2: Verify visually**
 
 Reload the page. Expected: a segmented "Magali | Victoria" control and an "Analista activa: Magali" line appear in the header; clicking the tabs does nothing yet (no JS wired); zero console errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add index.html
@@ -828,7 +828,7 @@ git commit -m "feat: add analyst selector markup to header"
 **Files:**
 - Modify: `index.html:403-426`
 
-- [ ] **Step 1: Replace the filters card markup**
+- [x] **Step 1: Replace the filters card markup**
 
 In `index.html`, find:
 ```html
@@ -900,11 +900,11 @@ Replace with:
       </section>
 ```
 
-- [ ] **Step 2: Verify visually**
+- [x] **Step 2: Verify visually**
 
 Reload the page. Expected: filters card now shows Buscar/Zona/Estado/Desde/Hasta/Limpiar filtros, plus a "0 comercios encontrados" line (static, not wired yet); on a narrow window (≤600px) a "Mostrar filtros" button appears and the filter inputs are hidden until clicked... note: the click handler isn't wired yet, that's expected at this step. Zero console errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add index.html
@@ -919,7 +919,7 @@ git commit -m "feat: expand filters card with zone, date range, counter and badg
 - Modify: `index.html:474-479` (Analista responsable field)
 - Modify: `index.html:444-446` (map wrapper)
 
-- [ ] **Step 1: Replace the Analista responsable field with Zona**
+- [x] **Step 1: Replace the Analista responsable field with Zona**
 
 In `index.html`, find:
 ```html
@@ -937,7 +937,7 @@ Replace with:
         </div>
 ```
 
-- [ ] **Step 2: Add the map empty-state element**
+- [x] **Step 2: Add the map empty-state element**
 
 In `index.html`, find:
 ```html
@@ -952,11 +952,11 @@ Replace with:
     </main>
 ```
 
-- [ ] **Step 3: Verify visually**
+- [x] **Step 3: Verify visually**
 
 Reload the page, click "+ Agregar comercio". Expected: the form shows a "Zona" field where "Analista responsable" used to be; no "No se encontraron..." text visible under the map (the element exists but is hidden by default via `.map-empty-state{display:none}`); zero console errors.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add index.html
@@ -972,7 +972,7 @@ This is the integrative task: the old script uses a single global `shops` array 
 **Files:**
 - Modify: `index.html:537-836` (entire inline script body, between `(() => {` and `})();`)
 
-- [ ] **Step 1: Replace the whole script body**
+- [x] **Step 1: Replace the whole script body**
 
 In `index.html`, find the full block starting at:
 ```js
@@ -1471,7 +1471,7 @@ Replace the entire block with:
 })();
 ```
 
-- [ ] **Step 2: Verify no console errors and basic functionality**
+- [x] **Step 2: Verify no console errors and basic functionality**
 
 Reload `http://localhost:8765/index.html`. Expected:
 - Zero console errors.
@@ -1481,7 +1481,7 @@ Reload `http://localhost:8765/index.html`. Expected:
 - Saving a new comercio makes it appear in the list, on the map, and in the stats, only under the analyst that was active when it was saved.
 - Switching back to Magali does not show Victoria's comercio, and vice versa.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add index.html
@@ -1494,7 +1494,7 @@ git commit -m "feat: rewrite app script for per-analyst state, centralized filte
 
 **Files:** none (browser console only — no files created or committed for this task)
 
-- [ ] **Step 1: Seed temporary test data via the browser console**
+- [x] **Step 1: Seed temporary test data via the browser console**
 
 With `http://localhost:8765/index.html` open and devtools console active, paste and run:
 ```js
@@ -1524,7 +1524,7 @@ With `http://localhost:8765/index.html` open and devtools console active, paste 
 })();
 ```
 
-- [ ] **Step 2: Verify separation and combined filters**
+- [x] **Step 2: Verify separation and combined filters**
 
 With the seeded data, check each scenario in the browser and confirm the result:
 - Magali tab active by default (fallback correctly applied since `federar_active_analyst` was removed) → list shows exactly 3 comercios (Kiosco Plaza, Farmacia Norte, Almacén Sur), 3 markers on the map, "3 comercios encontrados".
@@ -1542,7 +1542,7 @@ With the seeded data, check each scenario in the browser and confirm the result:
 - Edit a comercio (e.g. change Almacén Sur's status) → change reflects immediately in list, map marker color, and stats; switching to Victoria and back to Magali preserves the edit after a reload.
 - Reload the page entirely (F5) → analyst separation and all edits persist exactly as left.
 
-- [ ] **Step 3: Verify migration path independently**
+- [x] **Step 3: Verify migration path independently**
 
 In a private/incognito window (clean `localStorage`), run:
 ```js
@@ -1553,7 +1553,7 @@ location.reload();
 ```
 Expected: a dismissible banner appears reading "Se migraron 1 comercio existentes a la analista Magali (compatibilidad con datos previos)."; Magali tab shows the migrated comercio; Victoria tab is empty; reloading again does not show the banner a second time; `localStorage.getItem("federar_plan_comercial_v1")` still returns the original untouched array.
 
-- [ ] **Step 4: Verify migration robustness**
+- [x] **Step 4: Verify migration robustness**
 
 In the same clean window, run each of these independently (reload between each), and confirm the app loads without console errors and both analysts end up with an empty (but valid) shop list:
 ```js
@@ -1566,7 +1566,7 @@ localStorage.removeItem("federar_plan_comercial_v1");
 localStorage.setItem("federar_plan_comercial_v1", JSON.stringify({ not: "an array" }));
 ```
 
-- [ ] **Step 5: Verify active-analyst fallback**
+- [x] **Step 5: Verify active-analyst fallback**
 
 Run:
 ```js
@@ -1575,11 +1575,11 @@ location.reload();
 ```
 Expected: app loads with Magali active (safe fallback), no console errors.
 
-- [ ] **Step 6: Verify responsive behavior**
+- [x] **Step 6: Verify responsive behavior**
 
 Resize the browser (or devtools device toolbar) to a width ≤600px. Expected: the filters card body is hidden behind a "Mostrar filtros" button; clicking it reveals the filters and the label changes to "Ocultar filtros"; the analyst selector and shop list remain usable at this width.
 
-- [ ] **Step 7: Clean up all temporary test data**
+- [x] **Step 7: Clean up all temporary test data**
 
 Run in the console (on both the normal and incognito windows used above):
 ```js
