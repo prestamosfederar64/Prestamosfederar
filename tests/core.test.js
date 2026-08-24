@@ -40,6 +40,27 @@ test("getSafeActiveAnalyst falls back to magali on invalid input", () => {
   assert.strictEqual(Core.getSafeActiveAnalyst(""), "magali");
 });
 
+test("migrateLegacyData moves a valid v1 array into magali.shops", () => {
+  const v1 = [{ id: "1", name: "Kiosco A" }, { id: "2", name: "Kiosco B" }];
+  const result = Core.migrateLegacyData(v1);
+  assert.strictEqual(result.version, 2);
+  assert.strictEqual(result.analysts.magali.shops.length, 2);
+  assert.deepStrictEqual(result.analysts.victoria.shops, []);
+  assert.strictEqual(result.analysts.magali.shops[0].name, "Kiosco A");
+});
+
+test("migrateLegacyData handles absent v1 without crashing", () => {
+  const result = Core.migrateLegacyData(null);
+  assert.deepStrictEqual(result.analysts.magali.shops, []);
+  assert.deepStrictEqual(result.analysts.victoria.shops, []);
+});
+
+test("migrateLegacyData handles corrupt/non-array v1 without crashing", () => {
+  assert.deepStrictEqual(Core.migrateLegacyData({ not: "an array" }).analysts.magali.shops, []);
+  assert.deepStrictEqual(Core.migrateLegacyData("garbage string").analysts.magali.shops, []);
+  assert.deepStrictEqual(Core.migrateLegacyData(undefined).analysts.magali.shops, []);
+});
+
 if (process.exitCode) {
   console.error("\nAlgunas pruebas fallaron.");
 } else {
