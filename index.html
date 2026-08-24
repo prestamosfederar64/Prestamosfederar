@@ -449,6 +449,17 @@
       display:block;
     }
 
+    .range-warning{
+      display:none;
+      color:var(--danger);
+      font-size:12px;
+      font-weight:700;
+    }
+
+    .range-warning.show{
+      display:block;
+    }
+
     @media(max-width:900px){
       .layout{grid-template-columns:1fr}
       #map{height:560px;min-height:560px}
@@ -543,6 +554,7 @@
             <label>Hasta</label>
             <input id="dateToFilter" type="date" />
           </div>
+          <div class="range-warning" id="dateRangeWarning"></div>
           <button type="button" class="btn-secondary" id="clearFiltersBtn">Limpiar filtros</button>
         </div>
         <div class="results-count" id="resultsCount">0 comercios encontrados</div>
@@ -686,6 +698,16 @@
     return { search:"", zone:"", status:"", dateRange:{from:"", to:""} };
   }
 
+  function safeSetStorage(key, value){
+    try{
+      localStorage.setItem(key, value);
+      return true;
+    }catch(e){
+      console.warn(`No se pudo guardar en localStorage (clave: "${key}"). La app continúa funcionando en memoria solo para esta sesión.`, e);
+      return false;
+    }
+  }
+
   function readV2(){
     let raw;
     try{ raw = localStorage.getItem(STORAGE_KEY_V2); }catch(e){ return null; }
@@ -716,14 +738,16 @@
     const migrated = Core.migrateLegacyData(legacy);
     const migratedCount = migrated.analysts.magali.shops.length;
 
-    localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(migrated));
+    // Si falla la escritura (cuota, storage bloqueado, etc.), `migrated` se
+    // usa igual en memoria para el resto de la sesión; solo no persiste entre recargas.
+    safeSetStorage(STORAGE_KEY_V2, JSON.stringify(migrated));
 
     if(migratedCount > 0){
       let noticeShown;
       try{ noticeShown = localStorage.getItem(MIGRATION_NOTICE_KEY); }catch(e){ noticeShown = "1"; }
       if(!noticeShown){
         pendingMigrationCount = migratedCount;
-        try{ localStorage.setItem(MIGRATION_NOTICE_KEY, "1"); }catch(e){}
+        safeSetStorage(MIGRATION_NOTICE_KEY, "1");
       }
     }
 
@@ -748,7 +772,7 @@
   }
 
   function saveState(){
-    localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(state.data));
+    return safeSetStorage(STORAGE_KEY_V2, JSON.stringify(state.data));
   }
 
   function loadActiveAnalyst(){
@@ -758,7 +782,7 @@
   }
 
   function saveActiveAnalyst(id){
-    try{ localStorage.setItem(ACTIVE_ANALYST_KEY, id); }catch(e){}
+    safeSetStorage(ACTIVE_ANALYST_KEY, id);
   }
 
   const state = {
@@ -809,6 +833,12 @@
   const markersLayer = L.layerGroup().addTo(map);
   let markerIndex = new Map();
 
+  function hasValidCoords(shop){
+    if(shop.lat === null || shop.lat === undefined || shop.lat === "") return false;
+    if(shop.lng === null || shop.lng === undefined || shop.lng === "") return false;
+    return Number.isFinite(Number(shop.lat)) && Number.isFinite(Number(shop.lng));
+  }
+
   function makeMarker(shop){
     return L.circleMarker([shop.lat, shop.lng], {
       radius: 9,
@@ -843,7 +873,7 @@
     markerIndex = new Map();
 
     filtered.forEach(shop => {
-      if(!Number.isFinite(Number(shop.lat)) || !Number.isFinite(Number(shop.lng))) return;
+      if(!hasValidCoords(shop)) return;
       const marker = makeMarker(shop);
       marker.bindPopup(popupHtml(shop));
       marker.on("popupopen", () => {
@@ -858,10 +888,17 @@
   }
 
   function fitMapToResults(filtered){
-    const withCoords = filtered.filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)));
+    const withCoords = filtered.filter(hasValidCoords);
     const emptyState = document.getElementById("mapEmptyState");
 
+    if(filtered.length === 0){
+      emptyState.textContent = "No se encontraron comercios con estos filtros.";
+      emptyState.classList.add("show");
+      return;
+    }
+
     if(withCoords.length === 0){
+      emptyState.textContent = "Los comercios encontrados no tienen ubicación disponible en el mapa.";
       emptyState.classList.add("show");
       return;
     }
@@ -879,7 +916,16 @@
 
   function getFilteredShops(){
     const filters = getCurrentFilters();
+    if(!Core.isValidRange(filters.dateRange.from, filters.dateRange.to)) return [];
     return getActiveShops().filter(shop => Core.applyFilters(shop, filters));
+  }
+
+  function renderDateRangeWarning(){
+    const filters = getCurrentFilters();
+    const warning = document.getElementById("dateRangeWarning");
+    const invalid = !Core.isValidRange(filters.dateRange.from, filters.dateRange.to);
+    warning.textContent = invalid ? "La fecha Desde no puede ser posterior a Hasta." : "";
+    warning.classList.toggle("show", invalid);
   }
 
   function renderList(filtered){
@@ -955,6 +1001,7 @@
   }
 
   function renderAll(){
+    renderDateRangeWarning();
     const filtered = getFilteredShops();
     renderAnalystUI();
     renderStats(filtered);
