@@ -661,7 +661,10 @@
 
 <script>
 (() => {
-  const STORAGE_KEY = "federar_plan_comercial_v1";
+  const STORAGE_KEY_V1 = "federar_plan_comercial_v1";
+  const STORAGE_KEY_V2 = "federar_plan_comercial_v2";
+  const ACTIVE_ANALYST_KEY = "federar_active_analyst";
+  const MIGRATION_NOTICE_KEY = "federar_migration_notice_shown";
 
   const statusColors = {
     "pendiente":"#64748b",
@@ -679,9 +682,102 @@
     "no-interesado":"No interesado"
   };
 
-  let shops = loadShops();
-  let markers = new Map();
-  let pendingLatLng = null;
+  function emptyFilters(){
+    return { search:"", zone:"", status:"", dateRange:{from:"", to:""} };
+  }
+
+  function readV2(){
+    let raw;
+    try{ raw = localStorage.getItem(STORAGE_KEY_V2); }catch(e){ return null; }
+    if(!raw) return null;
+    try{
+      const parsed = JSON.parse(raw);
+      const shopsOf = a => parsed && parsed.analysts && parsed.analysts[a] && Array.isArray(parsed.analysts[a].shops);
+      return (parsed && shopsOf("magali") && shopsOf("victoria")) ? parsed : null;
+    }catch(e){
+      return null;
+    }
+  }
+
+  function readLegacyV1(){
+    let raw;
+    try{ raw = localStorage.getItem(STORAGE_KEY_V1); }catch(e){ return null; }
+    if(!raw) return null;
+    try{ return JSON.parse(raw); }catch(e){ return null; }
+  }
+
+  let pendingMigrationCount = 0;
+
+  function loadState(){
+    const existing = readV2();
+    if(existing) return existing;
+
+    const legacy = readLegacyV1();
+    const migrated = Core.migrateLegacyData(legacy);
+    const migratedCount = migrated.analysts.magali.shops.length;
+
+    localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(migrated));
+
+    if(migratedCount > 0){
+      let noticeShown;
+      try{ noticeShown = localStorage.getItem(MIGRATION_NOTICE_KEY); }catch(e){ noticeShown = "1"; }
+      if(!noticeShown){
+        pendingMigrationCount = migratedCount;
+        try{ localStorage.setItem(MIGRATION_NOTICE_KEY, "1"); }catch(e){}
+      }
+    }
+
+    return migrated;
+  }
+
+  function showMigrationNoticeIfPending(){
+    if(!pendingMigrationCount) return;
+    const banner = document.createElement("div");
+    banner.className = "migration-banner";
+    const text = document.createElement("span");
+    text.textContent = `Se migraron ${pendingMigrationCount} comercio${pendingMigrationCount === 1 ? "" : "s"} existentes a la analista Magali (compatibilidad con datos previos).`;
+    banner.appendChild(text);
+    const closeBtn = document.createElement("button");
+    closeBtn.type = "button";
+    closeBtn.setAttribute("aria-label", "Cerrar aviso");
+    closeBtn.textContent = "×";
+    closeBtn.addEventListener("click", () => banner.remove());
+    banner.appendChild(closeBtn);
+    document.querySelector(".app").insertBefore(banner, document.querySelector(".layout"));
+    pendingMigrationCount = 0;
+  }
+
+  function saveState(){
+    localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(state.data));
+  }
+
+  function loadActiveAnalyst(){
+    let stored;
+    try{ stored = localStorage.getItem(ACTIVE_ANALYST_KEY); }catch(e){ stored = null; }
+    return Core.getSafeActiveAnalyst(stored);
+  }
+
+  function saveActiveAnalyst(id){
+    try{ localStorage.setItem(ACTIVE_ANALYST_KEY, id); }catch(e){}
+  }
+
+  const state = {
+    activeAnalyst: loadActiveAnalyst(),
+    data: loadState(),
+    filtersByAnalyst: {
+      magali: emptyFilters(),
+      victoria: emptyFilters()
+    },
+    pendingLatLng: null
+  };
+
+  function getActiveShops(){
+    return state.data.analysts[state.activeAnalyst].shops;
+  }
+
+  function getCurrentFilters(){
+    return state.filtersByAnalyst[state.activeAnalyst];
+  }
 
   const microcentroBounds = L.latLngBounds(
     [-31.7425, -60.5425],
@@ -710,18 +806,8 @@
     interactive: false
   }).addTo(map);
 
-  function loadShops(){
-    try{
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? JSON.parse(raw) : [];
-    }catch(e){
-      return [];
-    }
-  }
-
-  function saveShops(){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(shops));
-  }
+  const markersLayer = L.layerGroup().addTo(map);
+  let markerIndex = new Map();
 
   function makeMarker(shop){
     return L.circleMarker([shop.lat, shop.lng], {
@@ -744,7 +830,7 @@
         <span style="color:#64748b;font-size:12px">${safe(shop.category || "Sin rubro")}</span>
         <hr style="border:0;border-top:1px solid #e5e7eb;margin:8px 0">
         <b>Estado:</b> ${safe(statusLabels[shop.status] || shop.status)}<br>
-        <b>Analista:</b> ${safe(shop.analyst || "-")}<br>
+        <b>Zona:</b> ${safe(shop.zone || "-")}<br>
         <b>Flyers:</b> ${Number(shop.flyers || 0)}<br>
         <b>Dirección:</b> ${safe(shop.address || "-")}<br>
         <button data-edit="${shop.id}" style="margin-top:10px;width:100%;padding:8px;border:0;border-radius:8px;background:#1f5eff;color:#fff;font-weight:700;cursor:pointer">Editar</button>
@@ -752,13 +838,13 @@
     `;
   }
 
-  function refreshMarkers(){
-    markers.forEach(m => map.removeLayer(m));
-    markers.clear();
+  function refreshMarkers(filtered){
+    markersLayer.clearLayers();
+    markerIndex = new Map();
 
-    getFilteredShops().forEach(shop => {
+    filtered.forEach(shop => {
       if(!Number.isFinite(Number(shop.lat)) || !Number.isFinite(Number(shop.lng))) return;
-      const marker = makeMarker(shop).addTo(map);
+      const marker = makeMarker(shop);
       marker.bindPopup(popupHtml(shop));
       marker.on("popupopen", () => {
         setTimeout(() => {
@@ -766,27 +852,38 @@
           if(btn) btn.addEventListener("click", () => openEdit(shop.id), {once:true});
         }, 0);
       });
-      markers.set(shop.id, marker);
+      markersLayer.addLayer(marker);
+      markerIndex.set(shop.id, marker);
     });
+  }
+
+  function fitMapToResults(filtered){
+    const withCoords = filtered.filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)));
+    const emptyState = document.getElementById("mapEmptyState");
+
+    if(withCoords.length === 0){
+      emptyState.classList.add("show");
+      return;
+    }
+
+    emptyState.classList.remove("show");
+
+    if(withCoords.length === 1){
+      map.setView([withCoords[0].lat, withCoords[0].lng], 16);
+      return;
+    }
+
+    const bounds = L.latLngBounds(withCoords.map(s => [s.lat, s.lng]));
+    map.fitBounds(bounds.pad(.2));
   }
 
   function getFilteredShops(){
-    const q = document.getElementById("searchInput").value.trim().toLowerCase();
-    const status = document.getElementById("statusFilter").value;
-    const analyst = document.getElementById("analystFilter").value.trim().toLowerCase();
-
-    return shops.filter(shop => {
-      const text = [shop.name, shop.category, shop.address].join(" ").toLowerCase();
-      const okQ = !q || text.includes(q);
-      const okStatus = !status || shop.status === status;
-      const okAnalyst = !analyst || String(shop.analyst || "").toLowerCase().includes(analyst);
-      return okQ && okStatus && okAnalyst;
-    });
+    const filters = getCurrentFilters();
+    return getActiveShops().filter(shop => Core.applyFilters(shop, filters));
   }
 
-  function renderList(){
+  function renderList(filtered){
     const list = document.getElementById("shopList");
-    const filtered = getFilteredShops();
     list.innerHTML = "";
 
     if(!filtered.length){
@@ -805,9 +902,9 @@
         </div>
       `;
       item.addEventListener("click", () => {
-        if(markers.has(shop.id)){
+        if(markerIndex.has(shop.id)){
           map.setView([shop.lat, shop.lng], Math.max(map.getZoom(), 16));
-          markers.get(shop.id).openPopup();
+          markerIndex.get(shop.id).openPopup();
         }else{
           openEdit(shop.id);
         }
@@ -816,17 +913,55 @@
     });
   }
 
-  function renderStats(){
+  function renderStats(filtered){
+    const shops = getActiveShops();
     document.getElementById("statTotal").textContent = shops.length;
     document.getElementById("statVisited").textContent = shops.filter(s => s.status !== "pendiente").length;
     document.getElementById("statDeals").textContent = shops.filter(s => s.status === "acuerdo").length;
     document.getElementById("statFlyers").textContent = shops.reduce((sum,s) => sum + Number(s.flyers || 0), 0);
+
+    document.getElementById("resultsCount").textContent =
+      `${filtered.length} comercio${filtered.length === 1 ? "" : "s"} encontrado${filtered.length === 1 ? "" : "s"}`;
+  }
+
+  function renderActiveFilterBadges(){
+    const filters = getCurrentFilters();
+    const badges = [];
+    if(filters.search) badges.push(`Búsqueda: ${filters.search}`);
+    if(filters.zone) badges.push(`Zona: ${filters.zone}`);
+    if(filters.status) badges.push(`Estado: ${statusLabels[filters.status] || filters.status}`);
+    if(filters.dateRange.from || filters.dateRange.to){
+      badges.push(`Fechas: ${filters.dateRange.from || "…"} a ${filters.dateRange.to || "…"}`);
+    }
+
+    document.getElementById("activeFilterBadges").innerHTML =
+      badges.map(b => `<span class="filter-badge">${escapeHtml(b)}</span>`).join("");
+  }
+
+  function renderAnalystUI(){
+    document.querySelectorAll(".analyst-tab").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.analyst === state.activeAnalyst);
+    });
+    document.getElementById("activeAnalystLabel").textContent = Core.ANALYSTS[state.activeAnalyst].name;
+  }
+
+  function syncFilterInputsFromState(){
+    const filters = getCurrentFilters();
+    document.getElementById("searchInput").value = filters.search;
+    document.getElementById("zoneFilter").value = filters.zone;
+    document.getElementById("statusFilter").value = filters.status;
+    document.getElementById("dateFromFilter").value = filters.dateRange.from;
+    document.getElementById("dateToFilter").value = filters.dateRange.to;
   }
 
   function renderAll(){
-    renderStats();
-    renderList();
-    refreshMarkers();
+    const filtered = getFilteredShops();
+    renderAnalystUI();
+    renderStats(filtered);
+    renderList(filtered);
+    renderActiveFilterBadges();
+    refreshMarkers(filtered);
+    fitMapToResults(filtered);
   }
 
   function escapeHtml(value){
@@ -843,7 +978,7 @@
     document.getElementById("flyers").value = 0;
     document.getElementById("status").value = "pendiente";
 
-    const coords = latlng || pendingLatLng || map.getCenter();
+    const coords = latlng || state.pendingLatLng || map.getCenter();
     document.getElementById("lat").value = coords.lat;
     document.getElementById("lng").value = coords.lng;
 
@@ -851,14 +986,14 @@
   }
 
   function openEdit(id){
-    const shop = shops.find(s => s.id === id);
+    const shop = getActiveShops().find(s => s.id === id);
     if(!shop) return;
 
     document.getElementById("shopId").value = shop.id;
     document.getElementById("name").value = shop.name || "";
     document.getElementById("category").value = shop.category || "";
     document.getElementById("address").value = shop.address || "";
-    document.getElementById("analyst").value = shop.analyst || "";
+    document.getElementById("zone").value = shop.zone || "";
     document.getElementById("status").value = shop.status || "pendiente";
     document.getElementById("flyers").value = Number(shop.flyers || 0);
     document.getElementById("contact").value = shop.contact || "";
@@ -876,19 +1011,34 @@
 
   function closeModal(){
     document.getElementById("shopModal").classList.remove("show");
-    pendingLatLng = null;
+    state.pendingLatLng = null;
   }
+
+  function switchAnalyst(id){
+    if(!Core.isValidAnalystId(id) || id === state.activeAnalyst) return;
+    state.activeAnalyst = id;
+    saveActiveAnalyst(id);
+    syncFilterInputsFromState();
+    renderAll();
+  }
+
+  document.getElementById("analystTabs").addEventListener("click", e => {
+    const btn = e.target.closest(".analyst-tab");
+    if(btn) switchAnalyst(btn.dataset.analyst);
+  });
 
   document.getElementById("shopForm").addEventListener("submit", e => {
     e.preventDefault();
 
     const id = document.getElementById("shopId").value || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()));
+    const shops = getActiveShops();
+    const existingIndex = shops.findIndex(s => s.id === id);
     const shop = {
       id,
       name: document.getElementById("name").value.trim(),
       category: document.getElementById("category").value.trim(),
       address: document.getElementById("address").value.trim(),
-      analyst: document.getElementById("analyst").value.trim(),
+      zone: document.getElementById("zone").value.trim(),
       status: document.getElementById("status").value,
       flyers: Math.max(0, Number(document.getElementById("flyers").value || 0)),
       contact: document.getElementById("contact").value.trim(),
@@ -900,11 +1050,10 @@
       lng: Number(document.getElementById("lng").value)
     };
 
-    const index = shops.findIndex(s => s.id === id);
-    if(index >= 0) shops[index] = shop;
+    if(existingIndex >= 0) shops[existingIndex] = shop;
     else shops.push(shop);
 
-    saveShops();
+    saveState();
     renderAll();
     closeModal();
 
@@ -916,8 +1065,9 @@
     if(!id) return;
     if(!confirm("¿Eliminar este comercio?")) return;
 
-    shops = shops.filter(s => s.id !== id);
-    saveShops();
+    const analyst = state.data.analysts[state.activeAnalyst];
+    analyst.shops = analyst.shops.filter(s => s.id !== id);
+    saveState();
     renderAll();
     closeModal();
   });
@@ -931,34 +1081,60 @@
   });
 
   map.on("click", e => {
-    pendingLatLng = e.latlng;
+    state.pendingLatLng = e.latlng;
     openNew(e.latlng);
   });
 
-  ["searchInput","statusFilter","analystFilter"].forEach(id => {
-    document.getElementById(id).addEventListener("input", renderAll);
-    document.getElementById(id).addEventListener("change", renderAll);
+  document.getElementById("searchInput").addEventListener("input", e => {
+    getCurrentFilters().search = e.target.value;
+    renderAll();
+  });
+
+  document.getElementById("zoneFilter").addEventListener("input", e => {
+    getCurrentFilters().zone = e.target.value;
+    renderAll();
+  });
+
+  document.getElementById("statusFilter").addEventListener("change", e => {
+    getCurrentFilters().status = e.target.value;
+    renderAll();
+  });
+
+  document.getElementById("dateFromFilter").addEventListener("change", e => {
+    getCurrentFilters().dateRange.from = e.target.value;
+    renderAll();
+  });
+
+  document.getElementById("dateToFilter").addEventListener("change", e => {
+    getCurrentFilters().dateRange.to = e.target.value;
+    renderAll();
+  });
+
+  document.getElementById("clearFiltersBtn").addEventListener("click", () => {
+    state.filtersByAnalyst[state.activeAnalyst] = emptyFilters();
+    syncFilterInputsFromState();
+    renderAll();
+  });
+
+  document.getElementById("filtersToggle").addEventListener("click", () => {
+    const body = document.getElementById("filtersBody");
+    const collapsed = body.classList.toggle("collapsed");
+    document.getElementById("filtersToggle").textContent = collapsed ? "Mostrar filtros" : "Ocultar filtros";
   });
 
   document.getElementById("exportBtn").addEventListener("click", () => {
-    const blob = new Blob([JSON.stringify(shops,null,2)], {type:"application/json"});
+    const blob = new Blob([JSON.stringify(getActiveShops(),null,2)], {type:"application/json"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "plan_comercial_federar.json";
+    a.download = `plan_comercial_federar_${state.activeAnalyst}.json`;
     a.click();
     URL.revokeObjectURL(url);
   });
 
+  syncFilterInputsFromState();
   renderAll();
-
-  if(shops.length){
-    const valid = shops.filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)));
-    if(valid.length){
-      const bounds = L.latLngBounds(valid.map(s => [s.lat,s.lng]));
-      map.fitBounds(bounds.pad(.2));
-    }
-  }
+  showMigrationNoticeIfPending();
 })();
 </script>
 </body>
