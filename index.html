@@ -241,18 +241,15 @@
     .badge-no-interesado{background:#fee2e2;color:#991b1b}
 
     .map-wrap{
+      position:relative;
       min-width:0;
       display:flex;
       flex-direction:column;
       gap:8px;
       min-height:0;
-    }
-
-    .list-card{
-      flex:2 1 0;
-      min-height:120px;
-      display:flex;
-      flex-direction:column;
+      /* El drawer cerrado se desplaza fuera de esta caja con translateX(105%);
+         sin esto, su posición transformada agranda el scroll horizontal de la página. */
+      overflow-x:hidden;
     }
 
     .map-toolbar{
@@ -264,8 +261,9 @@
     }
 
     .map-container{
-      flex:3 1 0;
-      min-height:210px;
+      position:relative;
+      flex:1 1 auto;
+      min-height:320px;
       border-radius:var(--radius);
       overflow:hidden;
       box-shadow:var(--shadow);
@@ -276,6 +274,65 @@
     #map{
       width:100%;
       height:100%;
+    }
+
+    .list-drawer-toggle{
+      position:absolute;
+      right:14px;
+      bottom:14px;
+      z-index:500;
+      background:#13213f;
+      color:#fff;
+      border-radius:999px;
+      padding:10px 16px;
+      font-size:13px;
+      font-weight:800;
+      box-shadow:var(--shadow);
+    }
+
+    .list-drawer-toggle:hover{
+      background:#1c2c52;
+    }
+
+    .list-drawer{
+      position:absolute;
+      top:0;
+      right:0;
+      bottom:0;
+      width:340px;
+      max-width:88vw;
+      z-index:900;
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:var(--radius) 0 0 var(--radius);
+      box-shadow:-14px 0 30px rgba(24,32,51,.14);
+      display:flex;
+      flex-direction:column;
+      padding:16px;
+      transform:translateX(105%);
+      transition:transform .25s ease;
+    }
+
+    .list-drawer.show{
+      transform:translateX(0);
+    }
+
+    .list-drawer-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .list-drawer-head h3{
+      margin:0;
+    }
+
+    .list-drawer .shop-list{
+      flex:1;
+      min-height:0;
+      overflow:auto;
     }
 
     .legend{
@@ -601,8 +658,23 @@
 
       .map-container{flex:none;height:560px;min-height:560px}
 
-      .list-card{flex:none}
-      .shop-list{flex:none;max-height:260px}
+      .list-drawer{
+        position:fixed;
+        top:auto;
+        left:0;
+        right:0;
+        bottom:0;
+        width:auto;
+        max-width:none;
+        max-height:70vh;
+        border-radius:var(--radius) var(--radius) 0 0;
+        box-shadow:0 -14px 30px rgba(24,32,51,.14);
+        transform:translateY(105%);
+      }
+
+      .list-drawer.show{
+        transform:translateY(0);
+      }
     }
 
     @media(max-width:600px){
@@ -736,12 +808,18 @@
       <div class="map-status-message" id="mapStatusMessage"></div>
       <div class="map-container">
         <div id="map"></div>
+        <button type="button" class="list-drawer-toggle" id="listDrawerToggle" aria-expanded="false" aria-controls="listDrawer">
+          Ver locales (<span id="listDrawerCount">0</span>)
+        </button>
       </div>
 
-      <section class="card list-card">
-        <h3>Locales registrados</h3>
+      <aside class="list-drawer" id="listDrawer" aria-hidden="true" aria-label="Locales registrados">
+        <div class="list-drawer-head">
+          <h3>Locales registrados</h3>
+          <button type="button" class="close" id="listDrawerClose" aria-label="Cerrar listado">×</button>
+        </div>
         <div id="shopList" class="shop-list"></div>
-      </section>
+      </aside>
     </main>
   </div>
 </div>
@@ -1302,6 +1380,8 @@
 
     document.getElementById("resultsCount").textContent =
       `${filtered.length} comercio${filtered.length === 1 ? "" : "s"} encontrado${filtered.length === 1 ? "" : "s"}`;
+
+    document.getElementById("listDrawerCount").textContent = filtered.length;
   }
 
   function renderActiveFilterBadges(){
@@ -1399,6 +1479,20 @@
     state.pendingLatLng = null;
   }
 
+  function setListDrawerOpen(isOpen){
+    const drawer = document.getElementById("listDrawer");
+    const toggle = document.getElementById("listDrawerToggle");
+    drawer.classList.toggle("show", isOpen);
+    drawer.setAttribute("aria-hidden", String(!isOpen));
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    // El toggle queda tapado por el drawer cuando está abierto; se oculta para
+    // que no quede foco de teclado en un botón invisible.
+    toggle.style.visibility = isOpen ? "hidden" : "visible";
+    // El drawer es un overlay (no cambia el ancho real de .map-container), pero
+    // se llama igual tras la transición por si a futuro el layout lo acopla.
+    window.setTimeout(() => map.invalidateSize(), 260);
+  }
+
   function switchAnalyst(id){
     if(!Core.isValidAnalystId(id) || id === state.activeAnalyst) return;
     state.activeAnalyst = id;
@@ -1488,6 +1582,12 @@
   });
 
   document.getElementById("clearAddressSearchBtn").addEventListener("click", resetAddressSearch);
+
+  document.getElementById("listDrawerToggle").addEventListener("click", () => {
+    setListDrawerOpen(!document.getElementById("listDrawer").classList.contains("show"));
+  });
+
+  document.getElementById("listDrawerClose").addEventListener("click", () => setListDrawerOpen(false));
 
   document.addEventListener("click", e => {
     const row = document.querySelector(".address-search-row");
