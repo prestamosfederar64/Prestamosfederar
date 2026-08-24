@@ -69,6 +69,13 @@
     return haystack.indexOf(q) !== -1;
   }
 
+  function matchesZone(shop, zoneQuery) {
+    var q = normalizeText(zoneQuery);
+    if (!q) return true;
+    var source = shop.zone && String(shop.zone).trim() ? shop.zone : shop.address;
+    return normalizeText(source).indexOf(q) !== -1;
+  }
+
   var Core = {
     ANALYSTS: ANALYSTS,
     isValidAnalystId: isValidAnalystId,
@@ -78,7 +85,8 @@
     toEpoch: toEpoch,
     matchesDateRange: matchesDateRange,
     normalizeText: normalizeText,
-    matchesSearch: matchesSearch
+    matchesSearch: matchesSearch,
+    matchesZone: matchesZone
   };
 
   if (typeof module !== "undefined" && module.exports) {

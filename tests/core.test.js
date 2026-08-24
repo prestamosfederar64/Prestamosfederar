@@ -124,6 +124,22 @@ test("matchesSearch tolerates missing fields", () => {
   assert.strictEqual(Core.matchesSearch({ name: "Kiosco" }, "kiosco"), true);
 });
 
+test("matchesZone uses zone field with partial, case-insensitive match", () => {
+  const shop = { zone: "Centro", address: "Calle Falsa 123" };
+  assert.strictEqual(Core.matchesZone(shop, "centro"), true);
+  assert.strictEqual(Core.matchesZone(shop, "CENTRO"), true);
+  assert.strictEqual(Core.matchesZone(shop, "norte"), false);
+});
+
+test("matchesZone falls back to address when zone is empty", () => {
+  const shop = { zone: "", address: "Zona Centro, Paraná" };
+  assert.strictEqual(Core.matchesZone(shop, "centro"), true);
+});
+
+test("matchesZone with empty query matches everything", () => {
+  assert.strictEqual(Core.matchesZone({ zone: "Centro" }, ""), true);
+});
+
 if (process.exitCode) {
   console.error("\nAlgunas pruebas fallaron.");
 } else {
