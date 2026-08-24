@@ -61,6 +61,51 @@ test("migrateLegacyData handles corrupt/non-array v1 without crashing", () => {
   assert.deepStrictEqual(Core.migrateLegacyData(undefined).analysts.magali.shops, []);
 });
 
+test("inRange respects both bounds inclusive", () => {
+  assert.strictEqual(Core.inRange(5, 1, 10), true);
+  assert.strictEqual(Core.inRange(1, 1, 10), true);
+  assert.strictEqual(Core.inRange(10, 1, 10), true);
+  assert.strictEqual(Core.inRange(0, 1, 10), false);
+  assert.strictEqual(Core.inRange(11, 1, 10), false);
+});
+
+test("inRange with only one bound set", () => {
+  assert.strictEqual(Core.inRange(50, 10, null), true);
+  assert.strictEqual(Core.inRange(5, 10, null), false);
+  assert.strictEqual(Core.inRange(5, null, 10), true);
+  assert.strictEqual(Core.inRange(15, null, 10), false);
+});
+
+test("inRange with no bounds always true for a real value", () => {
+  assert.strictEqual(Core.inRange(123, null, null), true);
+});
+
+test("matchesDateRange: no filter set includes everything", () => {
+  assert.strictEqual(Core.matchesDateRange("2026-08-15", "", ""), true);
+  assert.strictEqual(Core.matchesDateRange("", "", ""), true);
+});
+
+test("matchesDateRange: shop without visitDate excluded when a filter is active", () => {
+  assert.strictEqual(Core.matchesDateRange("", "2026-08-01", ""), false);
+  assert.strictEqual(Core.matchesDateRange("", "", "2026-08-31"), false);
+  assert.strictEqual(Core.matchesDateRange(null, "2026-08-01", "2026-08-31"), false);
+});
+
+test("matchesDateRange: inclusive range with both bounds", () => {
+  assert.strictEqual(Core.matchesDateRange("2026-08-01", "2026-08-01", "2026-08-31"), true);
+  assert.strictEqual(Core.matchesDateRange("2026-08-31", "2026-08-01", "2026-08-31"), true);
+  assert.strictEqual(Core.matchesDateRange("2026-08-15", "2026-08-01", "2026-08-31"), true);
+  assert.strictEqual(Core.matchesDateRange("2026-07-31", "2026-08-01", "2026-08-31"), false);
+  assert.strictEqual(Core.matchesDateRange("2026-09-01", "2026-08-01", "2026-08-31"), false);
+});
+
+test("matchesDateRange: only from or only to", () => {
+  assert.strictEqual(Core.matchesDateRange("2026-09-01", "2026-08-01", ""), true);
+  assert.strictEqual(Core.matchesDateRange("2026-07-01", "2026-08-01", ""), false);
+  assert.strictEqual(Core.matchesDateRange("2026-07-01", "", "2026-08-01"), true);
+  assert.strictEqual(Core.matchesDateRange("2026-09-01", "", "2026-08-01"), false);
+});
+
 if (process.exitCode) {
   console.error("\nAlgunas pruebas fallaron.");
 } else {

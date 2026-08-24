@@ -25,11 +25,38 @@
     };
   }
 
+  function inRange(value, min, max) {
+    if (value == null || Number.isNaN(value)) return false;
+    if (min != null && !Number.isNaN(min) && value < min) return false;
+    if (max != null && !Number.isNaN(max) && value > max) return false;
+    return true;
+  }
+
+  function toEpoch(dateStr) {
+    if (!dateStr) return null;
+    var t = new Date(dateStr + "T00:00:00").getTime();
+    return Number.isNaN(t) ? null : t;
+  }
+
+  function matchesDateRange(dateStr, from, to) {
+    var fromEpoch = toEpoch(from);
+    var toEpochValue = toEpoch(to);
+    if (fromEpoch == null && toEpochValue == null) return true;
+
+    var valueEpoch = toEpoch(dateStr);
+    if (valueEpoch == null) return false;
+
+    return inRange(valueEpoch, fromEpoch, toEpochValue);
+  }
+
   var Core = {
     ANALYSTS: ANALYSTS,
     isValidAnalystId: isValidAnalystId,
     getSafeActiveAnalyst: getSafeActiveAnalyst,
-    migrateLegacyData: migrateLegacyData
+    migrateLegacyData: migrateLegacyData,
+    inRange: inRange,
+    toEpoch: toEpoch,
+    matchesDateRange: matchesDateRange
   };
 
   if (typeof module !== "undefined" && module.exports) {
