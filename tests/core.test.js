@@ -213,6 +213,73 @@ test("applyFilters: an invalid date range never accidentally matches (caller mus
   assert.strictEqual(Core.applyFilters(shop, filters), false);
 });
 
+test("buildGeocodeQuery trims and collapses whitespace, adds Paraná context", () => {
+  assert.strictEqual(Core.buildGeocodeQuery("San Martín 1234"), "San Martín 1234, Paraná, Entre Ríos, Argentina");
+  assert.strictEqual(Core.buildGeocodeQuery("  San Martín   1234  "), "San Martín 1234, Paraná, Entre Ríos, Argentina");
+});
+
+test("buildGeocodeQuery does not duplicate Paraná context when already present", () => {
+  assert.strictEqual(Core.buildGeocodeQuery("San Martín 1234, Paraná"), "San Martín 1234, Paraná");
+  assert.strictEqual(Core.buildGeocodeQuery("San Martín 1234, Parana, Entre Rios"), "San Martín 1234, Parana, Entre Rios");
+  assert.strictEqual(Core.buildGeocodeQuery("PARANA centro"), "PARANA centro");
+});
+
+test("buildGeocodeQuery returns empty string for empty/whitespace-only input", () => {
+  assert.strictEqual(Core.buildGeocodeQuery(""), "");
+  assert.strictEqual(Core.buildGeocodeQuery("   "), "");
+  assert.strictEqual(Core.buildGeocodeQuery(null), "");
+  assert.strictEqual(Core.buildGeocodeQuery(undefined), "");
+});
+
+test("buildGeocodeUrl includes the expected search params", () => {
+  const url = new URL(Core.buildGeocodeUrl("San Martín 1234"));
+  assert.strictEqual(url.origin + url.pathname, "https://nominatim.openstreetmap.org/search");
+  assert.strictEqual(url.searchParams.get("q"), "San Martín 1234, Paraná, Entre Ríos, Argentina");
+  assert.strictEqual(url.searchParams.get("format"), "jsonv2");
+  assert.strictEqual(url.searchParams.get("limit"), "5");
+  assert.strictEqual(url.searchParams.get("countrycodes"), "ar");
+  assert.strictEqual(url.searchParams.get("bounded"), "1");
+  assert.ok(url.searchParams.get("viewbox"));
+});
+
+test("buildGeocodeUrl returns empty string for empty query", () => {
+  assert.strictEqual(Core.buildGeocodeUrl(""), "");
+  assert.strictEqual(Core.buildGeocodeUrl("   "), "");
+});
+
+test("parseGeocodeResults maps valid Nominatim-shaped results", () => {
+  const raw = [
+    { lat: "-31.7358595", lon: "-60.5321115", display_name: "1234, San Martín, Paraná, Entre Ríos, Argentina" },
+    { lat: "-31.7329167", lon: "-60.5280194", display_name: "850, Urquiza, Paraná, Entre Ríos, Argentina" }
+  ];
+  const results = Core.parseGeocodeResults(raw);
+  assert.strictEqual(results.length, 2);
+  assert.strictEqual(results[0].lat, -31.7358595);
+  assert.strictEqual(results[0].lng, -60.5321115);
+  assert.strictEqual(results[0].label, "1234, San Martín, Paraná, Entre Ríos, Argentina");
+});
+
+test("parseGeocodeResults discards entries with invalid coordinates or missing label", () => {
+  const raw = [
+    { lat: "not-a-number", lon: "-60.53", display_name: "Bad lat" },
+    { lat: "-31.73", lon: "not-a-number", display_name: "Bad lon" },
+    { lat: null, lon: "-60.53", display_name: "Null lat" },
+    { lat: "-31.73", lon: "-60.53", display_name: "" },
+    { lat: "-31.73", lon: "-60.53" },
+    { lat: "-31.73", lon: "-60.53", display_name: "Valid one" }
+  ];
+  const results = Core.parseGeocodeResults(raw);
+  assert.strictEqual(results.length, 1);
+  assert.strictEqual(results[0].label, "Valid one");
+});
+
+test("parseGeocodeResults handles non-array or empty input without crashing", () => {
+  assert.deepStrictEqual(Core.parseGeocodeResults(null), []);
+  assert.deepStrictEqual(Core.parseGeocodeResults(undefined), []);
+  assert.deepStrictEqual(Core.parseGeocodeResults({}), []);
+  assert.deepStrictEqual(Core.parseGeocodeResults([]), []);
+});
+
 if (process.exitCode) {
   console.error("\nAlgunas pruebas fallaron.");
 } else {
