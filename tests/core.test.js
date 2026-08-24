@@ -140,6 +140,43 @@ test("matchesZone with empty query matches everything", () => {
   assert.strictEqual(Core.matchesZone({ zone: "Centro" }, ""), true);
 });
 
+test("matchesStatus: empty status means Todos", () => {
+  assert.strictEqual(Core.matchesStatus({ status: "pendiente" }, ""), true);
+  assert.strictEqual(Core.matchesStatus({ status: "pendiente" }, "pendiente"), true);
+  assert.strictEqual(Core.matchesStatus({ status: "pendiente" }, "acuerdo"), false);
+});
+
+test("applyFilters combines all matchers with AND", () => {
+  const shop = {
+    name: "Farmacia Centro",
+    category: "Farmacia",
+    address: "Av. San Martín 1450",
+    zone: "Centro",
+    status: "interesado",
+    visitDate: "2026-08-10",
+    contact: "",
+    notes: ""
+  };
+
+  const matchingFilters = {
+    search: "farmacia",
+    zone: "centro",
+    status: "interesado",
+    dateRange: { from: "2026-08-01", to: "2026-08-31" }
+  };
+  assert.strictEqual(Core.applyFilters(shop, matchingFilters), true);
+
+  assert.strictEqual(Core.applyFilters(shop, Object.assign({}, matchingFilters, { status: "acuerdo" })), false);
+  assert.strictEqual(Core.applyFilters(shop, Object.assign({}, matchingFilters, { dateRange: { from: "2026-09-01", to: "2026-09-30" } })), false);
+  assert.strictEqual(Core.applyFilters(shop, Object.assign({}, matchingFilters, { zone: "norte" })), false);
+});
+
+test("applyFilters with no filters set matches everything", () => {
+  const shop = { name: "X", category: "", address: "", zone: "", status: "pendiente", visitDate: "", contact: "", notes: "" };
+  const filters = { search: "", zone: "", status: "", dateRange: { from: "", to: "" } };
+  assert.strictEqual(Core.applyFilters(shop, filters), true);
+});
+
 if (process.exitCode) {
   console.error("\nAlgunas pruebas fallaron.");
 } else {

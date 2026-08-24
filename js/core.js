@@ -76,6 +76,27 @@
     return normalizeText(source).indexOf(q) !== -1;
   }
 
+  function matchesStatus(shop, status) {
+    return !status || shop.status === status;
+  }
+
+  var filterMatchers = {
+    search: function (shop, value) { return matchesSearch(shop, value); },
+    zone: function (shop, value) { return matchesZone(shop, value); },
+    status: function (shop, value) { return matchesStatus(shop, value); },
+    dateRange: function (shop, value) {
+      var range = value || {};
+      return matchesDateRange(shop.visitDate, range.from, range.to);
+    }
+  };
+
+  function applyFilters(shop, filters) {
+    var f = filters || {};
+    return Object.keys(filterMatchers).every(function (key) {
+      return filterMatchers[key](shop, f[key]);
+    });
+  }
+
   var Core = {
     ANALYSTS: ANALYSTS,
     isValidAnalystId: isValidAnalystId,
@@ -86,7 +107,10 @@
     matchesDateRange: matchesDateRange,
     normalizeText: normalizeText,
     matchesSearch: matchesSearch,
-    matchesZone: matchesZone
+    matchesZone: matchesZone,
+    matchesStatus: matchesStatus,
+    filterMatchers: filterMatchers,
+    applyFilters: applyFilters
   };
 
   if (typeof module !== "undefined" && module.exports) {
