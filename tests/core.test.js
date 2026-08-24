@@ -106,6 +106,24 @@ test("matchesDateRange: only from or only to", () => {
   assert.strictEqual(Core.matchesDateRange("2026-09-01", "", "2026-08-01"), false);
 });
 
+test("matchesSearch is case and accent insensitive with partial match", () => {
+  const shop = { name: "Farmacia Central", address: "Av. San Martín 1450", category: "Farmacia" };
+  assert.strictEqual(Core.matchesSearch(shop, "san martin"), true);
+  assert.strictEqual(Core.matchesSearch(shop, "SAN MARTIN"), true);
+  assert.strictEqual(Core.matchesSearch(shop, "  san   martin  "), true);
+  assert.strictEqual(Core.matchesSearch(shop, "farmacia"), true);
+  assert.strictEqual(Core.matchesSearch(shop, "kiosco"), false);
+});
+
+test("matchesSearch with empty query matches everything", () => {
+  assert.strictEqual(Core.matchesSearch({ name: "X" }, ""), true);
+  assert.strictEqual(Core.matchesSearch({ name: "X" }, "   "), true);
+});
+
+test("matchesSearch tolerates missing fields", () => {
+  assert.strictEqual(Core.matchesSearch({ name: "Kiosco" }, "kiosco"), true);
+});
+
 if (process.exitCode) {
   console.error("\nAlgunas pruebas fallaron.");
 } else {

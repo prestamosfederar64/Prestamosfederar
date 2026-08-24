@@ -49,6 +49,26 @@
     return inRange(valueEpoch, fromEpoch, toEpochValue);
   }
 
+  function normalizeText(value) {
+    return String(value == null ? "" : value)
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, " ");
+  }
+
+  var SEARCH_FIELDS = ["name", "category", "address", "zone", "contact", "notes"];
+
+  function matchesSearch(shop, query) {
+    var q = normalizeText(query);
+    if (!q) return true;
+    var haystack = normalizeText(
+      SEARCH_FIELDS.map(function (field) { return shop[field]; }).join(" ")
+    );
+    return haystack.indexOf(q) !== -1;
+  }
+
   var Core = {
     ANALYSTS: ANALYSTS,
     isValidAnalystId: isValidAnalystId,
@@ -56,7 +76,9 @@
     migrateLegacyData: migrateLegacyData,
     inRange: inRange,
     toEpoch: toEpoch,
-    matchesDateRange: matchesDateRange
+    matchesDateRange: matchesDateRange,
+    normalizeText: normalizeText,
+    matchesSearch: matchesSearch
   };
 
   if (typeof module !== "undefined" && module.exports) {
