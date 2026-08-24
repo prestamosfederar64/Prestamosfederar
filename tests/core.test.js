@@ -177,6 +177,42 @@ test("applyFilters with no filters set matches everything", () => {
   assert.strictEqual(Core.applyFilters(shop, filters), true);
 });
 
+test("isValidRange: from < to is valid", () => {
+  assert.strictEqual(Core.isValidRange("2026-08-01", "2026-08-31"), true);
+});
+
+test("isValidRange: from === to is valid", () => {
+  assert.strictEqual(Core.isValidRange("2026-08-15", "2026-08-15"), true);
+});
+
+test("isValidRange: only from set is valid", () => {
+  assert.strictEqual(Core.isValidRange("2026-08-01", ""), true);
+  assert.strictEqual(Core.isValidRange("2026-08-01", null), true);
+});
+
+test("isValidRange: only to set is valid", () => {
+  assert.strictEqual(Core.isValidRange("", "2026-08-31"), true);
+  assert.strictEqual(Core.isValidRange(null, "2026-08-31"), true);
+});
+
+test("isValidRange: neither set is valid", () => {
+  assert.strictEqual(Core.isValidRange("", ""), true);
+  assert.strictEqual(Core.isValidRange(null, null), true);
+});
+
+test("isValidRange: from > to is invalid", () => {
+  assert.strictEqual(Core.isValidRange("2026-08-31", "2026-08-01"), false);
+});
+
+test("applyFilters: an invalid date range never accidentally matches (caller must gate with isValidRange first)", () => {
+  const shop = { name: "X", category: "", address: "", zone: "", status: "pendiente", visitDate: "2026-08-15", contact: "", notes: "" };
+  const invalidRange = { from: "2026-08-31", to: "2026-08-01" };
+  assert.strictEqual(Core.isValidRange(invalidRange.from, invalidRange.to), false);
+
+  const filters = { search: "", zone: "", status: "", dateRange: invalidRange };
+  assert.strictEqual(Core.applyFilters(shop, filters), false);
+});
+
 if (process.exitCode) {
   console.error("\nAlgunas pruebas fallaron.");
 } else {

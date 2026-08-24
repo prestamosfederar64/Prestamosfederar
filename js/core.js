@@ -76,6 +76,11 @@
     return normalizeText(source).indexOf(q) !== -1;
   }
 
+  function isValidRange(min, max) {
+    if (min == null || min === "" || max == null || max === "") return true;
+    return min <= max;
+  }
+
   function matchesStatus(shop, status) {
     return !status || shop.status === status;
   }
@@ -108,6 +113,7 @@
     normalizeText: normalizeText,
     matchesSearch: matchesSearch,
     matchesZone: matchesZone,
+    isValidRange: isValidRange,
     matchesStatus: matchesStatus,
     filterMatchers: filterMatchers,
     applyFilters: applyFilters
