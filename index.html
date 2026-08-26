@@ -84,9 +84,33 @@
       align-items: center;
       justify-content: center;
       background: #ffffff;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 7px;
       box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand-text-logo {
+      display: flex;
+      flex-direction: column;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .brand-text-main {
+      font-family: 'Inter', sans-serif;
+      font-size: 19px;
+      font-weight: 900;
+      color: #091e42;
+      letter-spacing: -0.5px;
+    }
+
+    .brand-text-sub {
+      font-family: 'Inter', sans-serif;
+      font-size: 7px;
+      font-weight: 700;
+      color: #64748b;
+      letter-spacing: 0.4px;
+      margin-top: 2px;
     }
 
     .analyst-active-badge {
@@ -830,15 +854,12 @@
   <!-- HEADER -->
   <header>
     <div class="header-brand">
-      <!-- FEDERAR LOGO COMPLETO CON PRESTAMOS EFECTIVOS -->
-      <div class="brand-logo-wrap" title="FEDERAR Préstamos Efectivos">
-        <svg width="128" height="30" viewBox="0 0 160 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 13L15 4L26 13L15 22L4 13Z" fill="#ea580c"/>
-          <path d="M15 22L26 13L37 22L26 31L15 22Z" fill="#ea580c"/>
-          <path d="M4 29L12 22L21 29L14 36L4 29Z" fill="#c2410c"/>
-          <text x="43" y="22" font-family="'Inter', sans-serif" font-weight="900" font-size="21" fill="#091e42" letter-spacing="-0.5">FEDER<tspan fill="#ea580c">ar</tspan></text>
-          <text x="44" y="32" font-family="'Inter', sans-serif" font-weight="600" font-size="7" fill="#64748b" letter-spacing="0.3">PRESTAMOS EFECTIVOS</text>
-        </svg>
+      <!-- FEDERAR LOGO SIN ISOTIPO GEOMÉTRICO -->
+      <div class="brand-logo-wrap" title="FEDERAR">
+        <div class="brand-text-logo">
+          <span class="brand-text-main">FEDER<span style="color:#ea580c;">ar</span></span>
+          <span class="brand-text-sub">PRESTAMOS EFECTIVOS</span>
+        </div>
       </div>
       <span class="analyst-active-badge">Analista: <strong id="activeAnalystLabel">Magali</strong></span>
     </div>
