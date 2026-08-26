@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plan de Acción Comercial - Federar Paraná</title>
+  <title>Federar</title>
 
   <!-- Leaflet CSS -->
   <link
@@ -28,16 +28,16 @@
       --primary-hover: #1e40af;
       --primary-light: #eff6ff;
       --brand-orange: #ea580c;
-      --brand-navy: #0f172a;
+      --brand-navy: #091e42;
       --success: #10b981;
       --warning: #f59e0b;
       --danger: #ef4444;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
       --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
       --shadow-lg: 0 20px 35px -5px rgba(15, 23, 42, 0.15);
-      --radius-sm: 8px;
-      --radius: 12px;
-      --radius-lg: 16px;
+      --radius-sm: 6px;
+      --radius: 10px;
+      --radius-lg: 14px;
     }
 
     * { box-sizing: border-box; }
@@ -47,7 +47,7 @@
       font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.5;
+      line-height: 1.4;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -61,12 +61,12 @@
     header {
       background: #091e42;
       color: #fff;
-      padding: 12px 20px;
+      padding: 10px 18px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      gap: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -76,7 +76,7 @@
     .header-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .brand-logo-wrap {
@@ -84,42 +84,21 @@
       align-items: center;
       justify-content: center;
       background: #ffffff;
-      padding: 4px 8px;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      padding: 4px 10px;
+      border-radius: 7px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     }
-
-    .brand-title-wrap {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .brand-main-title {
-      margin: 0;
-      font-size: 16px;
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .brand-main-title .feder { color: #ffffff; }
-    .brand-main-title .ar { color: #ea580c; }
-    .brand-main-title .subhead { font-size: 13px; font-weight: 600; color: #cbd5e1; }
 
     .analyst-active-badge {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       background: rgba(255, 255, 255, 0.12);
-      padding: 2px 8px;
+      padding: 3px 8px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 600;
       color: #e2e8f0;
-      margin-top: 2px;
-      width: fit-content;
     }
 
     /* ANALYST SWITCHER */
@@ -127,7 +106,7 @@
       display: flex;
       background: rgba(0, 0, 0, 0.35);
       padding: 3px;
-      border-radius: 10px;
+      border-radius: 8px;
       gap: 3px;
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
@@ -136,10 +115,10 @@
       background: transparent;
       border: 0;
       color: #cbd5e1;
-      padding: 6px 14px;
-      font-size: 12px;
+      padding: 5px 12px;
+      font-size: 11px;
       font-weight: 700;
-      border-radius: 7px;
+      border-radius: 6px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -163,7 +142,7 @@
       display: flex;
       background: rgba(255, 255, 255, 0.1);
       padding: 3px;
-      border-radius: 10px;
+      border-radius: 8px;
       gap: 3px;
     }
 
@@ -171,10 +150,10 @@
       background: transparent;
       border: 0;
       color: #e2e8f0;
-      padding: 6px 14px;
-      font-size: 12px;
+      padding: 5px 12px;
+      font-size: 11px;
       font-weight: 700;
-      border-radius: 7px;
+      border-radius: 6px;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -194,9 +173,9 @@
     /* BUTTONS */
     button, .btn {
       border: 0;
-      border-radius: 8px;
-      padding: 7px 12px;
-      font-size: 12px;
+      border-radius: 6px;
+      padding: 6px 11px;
+      font-size: 11px;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
@@ -221,13 +200,13 @@
     .btn-success:hover { background: #059669; }
     .btn-whatsapp { background: #16a34a; color: #fff; }
     .btn-whatsapp:hover { background: #15803d; }
-    .btn-sm { padding: 5px 9px; font-size: 11px; border-radius: 6px; }
+    .btn-sm { padding: 5px 9px; font-size: 11px; }
 
     /* LAYOUT CONTAINERS */
     .view-tab {
       display: none;
       flex: 1;
-      padding: 16px;
+      padding: 14px;
     }
 
     .view-tab.active { display: block; }
@@ -235,21 +214,21 @@
     /* MAP VIEW GRID */
     .map-layout {
       display: grid;
-      grid-template-columns: 360px minmax(0, 1fr);
-      gap: 16px;
-      height: calc(100vh - 86px);
-      min-height: 560px;
+      grid-template-columns: 350px minmax(0, 1fr);
+      gap: 14px;
+      height: calc(100vh - 78px);
+      min-height: 540px;
     }
 
     .sidebar {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       overflow-y: auto;
       padding-right: 4px;
     }
 
-    .sidebar::-webkit-scrollbar { width: 5px; }
+    .sidebar::-webkit-scrollbar { width: 4px; }
     .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
     .card {
@@ -257,14 +236,14 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow-sm);
-      padding: 14px;
+      padding: 12px;
     }
 
     .card-title {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
       color: #1e293b;
-      margin: 0 0 10px;
+      margin: 0 0 8px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -273,26 +252,26 @@
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+      gap: 6px;
     }
 
     .stat-box {
       background: #f8fafc;
       border: 1px solid var(--border);
-      padding: 9px 11px;
-      border-radius: 8px;
+      padding: 7px 9px;
+      border-radius: 7px;
     }
 
     .stat-box .stat-lbl {
       color: var(--muted);
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
 
     .stat-box .stat-val {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 800;
       color: #0f172a;
       margin-top: 1px;
@@ -307,7 +286,7 @@
     /* FILTERS */
     .filters {
       display: grid;
-      gap: 9px;
+      gap: 8px;
     }
 
     label {
@@ -316,6 +295,8 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.02em;
+      margin-bottom: 2px;
+      display: block;
     }
 
     input, select, textarea {
@@ -323,33 +304,33 @@
       border: 1px solid var(--border);
       background: #fff;
       color: var(--text);
-      padding: 8px 10px;
-      border-radius: 7px;
+      padding: 6px 8px;
+      border-radius: 6px;
       font: inherit;
-      font-size: 12px;
+      font-size: 11px;
       outline: none;
       transition: all 0.15s ease;
     }
 
     input:focus, select:focus, textarea:focus {
       border-color: var(--border-focus);
-      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+      box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.12);
     }
 
     /* SHOP LIST */
     .shop-list {
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      max-height: 360px;
+      gap: 6px;
+      max-height: 340px;
       overflow-y: auto;
       padding-right: 2px;
     }
 
     .shop-item {
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 9px 11px;
+      border-radius: 7px;
+      padding: 7px 9px;
       cursor: pointer;
       transition: all 0.15s ease;
       background: #fff;
@@ -366,20 +347,20 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 6px;
-      margin-bottom: 3px;
+      margin-bottom: 2px;
     }
 
     .shop-item strong {
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: #0f172a;
     }
 
     .shop-item .meta {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--muted);
       display: flex;
-      gap: 5px;
+      gap: 4px;
       flex-wrap: wrap;
       align-items: center;
     }
@@ -389,8 +370,8 @@
       display: inline-flex;
       align-items: center;
       border-radius: 4px;
-      padding: 2px 6px;
-      font-size: 10px;
+      padding: 1px 5px;
+      font-size: 9px;
       font-weight: 800;
       text-transform: uppercase;
     }
@@ -402,9 +383,9 @@
     .badge-no-interesado { background: #fee2e2; color: #b91c1c; }
 
     .tier-badge {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
-      padding: 2px 6px;
+      padding: 1px 5px;
       border-radius: 4px;
     }
     .tier-alto { background: #fdf4ff; color: #9333ea; border: 1px solid #f5d0fe; }
@@ -414,7 +395,7 @@
     .analyst-tag {
       font-size: 9px;
       font-weight: 800;
-      padding: 1px 5px;
+      padding: 1px 4px;
       border-radius: 4px;
       background: #e0e7ff;
       color: #3730a3;
@@ -424,19 +405,19 @@
     .map-wrap {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
       height: 100%;
       min-width: 0;
     }
 
     .map-toolbar {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       background: #fff;
-      padding: 8px 12px;
+      padding: 7px 10px;
       border-radius: var(--radius);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
@@ -444,22 +425,22 @@
 
     .legend {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 600;
       color: #475569;
     }
 
     .legend span {
       display: inline-flex;
-      gap: 5px;
+      gap: 4px;
       align-items: center;
     }
 
     .dot {
-      width: 9px;
-      height: 9px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       display: inline-block;
     }
@@ -471,23 +452,23 @@
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
       background: #e2e8f0;
-      min-height: 460px;
+      min-height: 450px;
       position: relative;
     }
 
     .gps-btn-float {
       position: absolute;
-      top: 12px;
-      right: 12px;
+      top: 10px;
+      right: 10px;
       z-index: 999;
       background: #fff;
       color: #091e42;
       border: 1px solid #1d4ed8;
-      border-radius: 7px;
-      padding: 7px 12px;
+      border-radius: 6px;
+      padding: 6px 10px;
       font-size: 11px;
       font-weight: 700;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       cursor: pointer;
     }
 
@@ -496,56 +477,56 @@
     /* CRM & FOLLOW-UP VIEW */
     .crm-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
     }
 
     .crm-column {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px;
+      padding: 12px;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .crm-col-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 8px;
+      padding-bottom: 6px;
       border-bottom: 2px solid var(--border);
     }
 
     .crm-col-header h3 {
       margin: 0;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 800;
     }
 
     .count-pill {
       background: #f1f5f9;
       color: #334155;
-      padding: 2px 7px;
+      padding: 1px 6px;
       border-radius: 999px;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 800;
     }
 
     .crm-cards {
       display: flex;
       flex-direction: column;
-      gap: 9px;
-      max-height: calc(100vh - 190px);
+      gap: 8px;
+      max-height: calc(100vh - 170px);
       overflow-y: auto;
     }
 
     .crm-card-item {
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 10px;
+      border-radius: 7px;
+      padding: 8px;
       background: #fff;
       box-shadow: var(--shadow-sm);
       transition: all 0.15s ease;
@@ -556,15 +537,15 @@
       transform: translateY(-1px);
     }
 
-    .crm-card-item.overdue { border-left: 4px solid #ef4444; }
-    .crm-card-item.today { border-left: 4px solid #f59e0b; }
-    .crm-card-item.upcoming { border-left: 4px solid #10b981; }
+    .crm-card-item.overdue { border-left: 3px solid #ef4444; }
+    .crm-card-item.today { border-left: 3px solid #f59e0b; }
+    .crm-card-item.upcoming { border-left: 3px solid #10b981; }
 
     .crm-card-actions {
       display: flex;
-      gap: 5px;
-      margin-top: 8px;
-      padding-top: 8px;
+      gap: 4px;
+      margin-top: 6px;
+      padding-top: 6px;
       border-top: 1px dashed var(--border);
     }
 
@@ -574,25 +555,25 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .kpi-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
     }
 
     .kpi-card {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 14px;
+      padding: 12px;
       box-shadow: var(--shadow-sm);
     }
 
     .kpi-card .kpi-lbl {
-      font-size: 10px;
+      font-size: 9px;
       color: var(--muted);
       font-weight: 700;
       text-transform: uppercase;
@@ -600,49 +581,49 @@
     }
 
     .kpi-card .kpi-num {
-      font-size: 24px;
+      font-size: 22px;
       font-weight: 800;
       color: #0f172a;
-      margin: 3px 0;
+      margin: 2px 0;
     }
 
     .kpi-card .kpi-sub {
-      font-size: 11px;
+      font-size: 10px;
       color: #475569;
     }
 
     .dashboard-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 16px;
+      gap: 14px;
     }
 
     /* FUNNEL */
     .funnel-container {
       display: flex;
       flex-direction: column;
-      gap: 9px;
-      padding: 6px 0;
+      gap: 8px;
+      padding: 4px 0;
     }
 
     .funnel-step {
       display: flex;
       flex-direction: column;
-      gap: 3px;
+      gap: 2px;
     }
 
     .funnel-header {
       display: flex;
       justify-content: space-between;
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       color: #334155;
     }
 
     .funnel-bar-bg {
       background: #f1f5f9;
-      height: 22px;
-      border-radius: 6px;
+      height: 20px;
+      border-radius: 5px;
       overflow: hidden;
       display: flex;
       border: 1px solid var(--border);
@@ -653,9 +634,9 @@
       border-radius: 4px;
       display: flex;
       align-items: center;
-      padding: 0 8px;
+      padding: 0 6px;
       color: #fff;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 800;
       transition: width 0.6s ease;
     }
@@ -669,109 +650,127 @@
     .data-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 12px;
+      font-size: 11px;
     }
 
     .data-table th {
       text-align: left;
-      padding: 8px 10px;
+      padding: 7px 8px;
       background: #f8fafc;
       color: #475569;
       font-weight: 700;
       border-bottom: 2px solid var(--border);
-      font-size: 10px;
+      font-size: 9px;
       text-transform: uppercase;
     }
 
     .data-table td {
-      padding: 8px 10px;
+      padding: 7px 8px;
       border-bottom: 1px solid var(--border);
       color: #1e293b;
     }
 
     .data-table tr:hover td { background: #f8fbff; }
 
-    /* MODAL */
+    /* COMPACT NO-SCROLL MODAL */
     .modal {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(9, 30, 66, 0.6);
       backdrop-filter: blur(2px);
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 16px;
+      padding: 12px;
       z-index: 3000;
     }
 
     .modal.show { display: flex; }
 
     .modal-card {
-      width: min(680px, 100%);
-      max-height: 90vh;
-      overflow-y: auto;
+      width: min(840px, 98vw);
+      max-height: 94vh;
+      display: flex;
+      flex-direction: column;
       background: #fff;
-      border-radius: var(--radius);
-      padding: 20px;
-      box-shadow: var(--shadow-lg);
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+      overflow: hidden;
     }
 
     .modal-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 14px;
-      padding-bottom: 8px;
+      padding: 10px 16px;
       border-bottom: 1px solid var(--border);
+      background: #f8fafc;
+      flex-shrink: 0;
     }
 
     .modal-head h2 {
       margin: 0;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 800;
       color: #0f172a;
     }
 
     .close {
-      background: #f1f5f9;
-      width: 30px;
-      height: 30px;
+      background: #e2e8f0;
+      width: 26px;
+      height: 26px;
       padding: 0;
       border-radius: 50%;
-      font-size: 16px;
-      color: #475569;
+      font-size: 15px;
+      color: #334155;
+      cursor: pointer;
     }
 
-    .close:hover { background: #e2e8f0; color: #0f172a; }
+    .close:hover { background: #cbd5e1; color: #0f172a; }
 
-    .form-grid {
+    .modal-body {
+      padding: 12px 16px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .form-grid-compact {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px 10px;
     }
 
-    .full { grid-column: 1 / -1; }
+    .span-2 { grid-column: span 2; }
+    .span-3 { grid-column: span 3; }
 
-    /* TIMELINE */
+    .modal-foot {
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      background: #f8fafc;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .timeline {
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      margin-top: 6px;
-      padding: 8px;
+      gap: 5px;
+      margin-top: 4px;
+      padding: 6px;
       background: #f8fafc;
-      border-radius: 7px;
+      border-radius: 6px;
       border: 1px solid var(--border);
-      max-height: 130px;
+      max-height: 80px;
       overflow-y: auto;
     }
 
     .timeline-item {
-      font-size: 11px;
-      padding: 5px 8px;
+      font-size: 10px;
+      padding: 4px 6px;
       background: #fff;
-      border-radius: 5px;
+      border-radius: 4px;
       border: 1px solid #e2e8f0;
     }
 
@@ -781,44 +780,47 @@
       color: #64748b;
       display: flex;
       justify-content: space-between;
-      margin-bottom: 2px;
     }
 
     /* TOAST */
     .toast {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
+      bottom: 16px;
+      right: 16px;
       background: #0f172a;
       color: #fff;
-      padding: 9px 15px;
-      border-radius: 7px;
-      font-size: 12px;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 11px;
       font-weight: 600;
       box-shadow: var(--shadow-lg);
       z-index: 4000;
       display: none;
-      animation: slideUp 0.3s ease;
+      animation: slideUp 0.25s ease;
     }
 
     @keyframes slideUp {
-      from { transform: translateY(15px); opacity: 0; }
+      from { transform: translateY(10px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
 
     /* RESPONSIVE */
     @media(max-width: 960px) {
       .map-layout { grid-template-columns: 1fr; height: auto; }
-      #map { height: 460px; min-height: 460px; }
+      #map { height: 440px; min-height: 440px; }
       .dashboard-grid { grid-template-columns: 1fr; }
+      .form-grid-compact { grid-template-columns: 1fr 1fr; }
+      .span-2 { grid-column: span 2; }
+      .span-3 { grid-column: span 2; }
     }
 
-    @media(max-width: 720px) {
-      header { padding: 10px 12px; flex-direction: column; align-items: stretch; gap: 8px; }
+    @media(max-width: 640px) {
+      header { padding: 8px 10px; flex-direction: column; align-items: stretch; gap: 6px; }
       .analyst-switcher { justify-content: center; }
       .nav-tabs { justify-content: center; }
-      .header-actions { justify-content: flex-end; }
-      .form-grid { grid-template-columns: 1fr; }
+      .form-grid-compact { grid-template-columns: 1fr; }
+      .span-2 { grid-column: span 1; }
+      .span-3 { grid-column: span 1; }
     }
   </style>
 </head>
@@ -828,25 +830,16 @@
   <!-- HEADER -->
   <header>
     <div class="header-brand">
-      <!-- FEDERAR CORPORATE LOGO -->
-      <div class="brand-logo-wrap" title="FEDERAR Préstamos Efectivos">
-        <svg width="104" height="28" viewBox="0 0 160 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Geometric orange symbol -->
-          <path d="M4 14L16 4L28 14L16 24L4 14Z" fill="#ea580c"/>
-          <path d="M16 24L28 14L40 24L28 34L16 24Z" fill="#ea580c"/>
-          <path d="M4 34L14 26L26 34L16 42L4 34Z" fill="#c2410c"/>
-          <!-- Text: FEDERAR -->
-          <text x="46" y="27" font-family="'Inter', sans-serif" font-weight="900" font-size="22" fill="#091e42" letter-spacing="-0.5">FEDER<tspan fill="#ea580c">ar</tspan></text>
-          <text x="47" y="38" font-family="'Inter', sans-serif" font-weight="600" font-size="7.5" fill="#64748b" letter-spacing="0.2">PRESTAMOS EFECTIVOS</text>
+      <!-- FEDERAR ONLY LOGO -->
+      <div class="brand-logo-wrap" title="Federar">
+        <svg width="105" height="24" viewBox="0 0 140 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 11L14 3L24 11L14 19L4 11Z" fill="#ea580c"/>
+          <path d="M14 19L24 11L34 19L24 27L14 19Z" fill="#ea580c"/>
+          <path d="M4 26L12 20L22 26L14 32L4 26Z" fill="#c2410c"/>
+          <text x="38" y="23" font-family="'Inter', sans-serif" font-weight="900" font-size="22" fill="#091e42" letter-spacing="-0.5">FEDER<tspan fill="#ea580c">ar</tspan></text>
         </svg>
       </div>
-      <div class="brand-title-wrap">
-        <div class="brand-main-title">
-          <span>Plan Comercial</span>
-          <span class="subhead">Sucursal Paraná</span>
-        </div>
-        <span class="analyst-active-badge">Analista Activa: <strong id="activeAnalystLabel">Magali</strong></span>
-      </div>
+      <span class="analyst-active-badge">Analista: <strong id="activeAnalystLabel">Magali</strong></span>
     </div>
 
     <!-- ANALYST SWITCHER -->
@@ -908,7 +901,7 @@
               <label>Búsqueda general</label>
               <input id="searchInput" />
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
               <div>
                 <label>Estado</label>
                 <select id="statusFilter">
@@ -935,7 +928,7 @@
                 </select>
               </div>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
               <div>
                 <label>Flujo de Clientes</label>
                 <select id="tierFilter">
@@ -973,7 +966,7 @@
             <span><i class="dot" style="background:#10b981"></i>Acuerdo</span>
             <span><i class="dot" style="background:#ef4444"></i>No interesado</span>
           </div>
-          <span style="font-size:11px;color:var(--muted)">Hacé clic sobre el mapa para cargar un comercio o usá Mi Ubicación.</span>
+          <span style="font-size:10px;color:var(--muted)">Hacé clic sobre el mapa para cargar un comercio o usá Mi Ubicación.</span>
         </div>
 
         <div id="map">
@@ -1123,144 +1116,149 @@
         <!-- DISTRIBUCIÓN POR TIPOS DE CONVENIO -->
         <div class="card">
           <div class="card-title">Tipos de Convenio Acordados</div>
-          <div id="agreementsBreakdown" style="display:flex;flex-direction:column;gap:8px;padding-top:4px;"></div>
+          <div id="agreementsBreakdown" style="display:flex;flex-direction:column;gap:6px;padding-top:4px;"></div>
         </div>
 
         <!-- DISTRIBUCIÓN POR CIRCUITO -->
         <div class="card">
           <div class="card-title">Cobertura por Circuito / Calle</div>
-          <div id="circuitsBreakdown" style="display:flex;flex-direction:column;gap:8px;padding-top:4px;"></div>
+          <div id="circuitsBreakdown" style="display:flex;flex-direction:column;gap:6px;padding-top:4px;"></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MODAL COMERCIO (CREAR / EDITAR) -->
+<!-- MODAL COMPACTO SIN SCROLL FORZADO -->
 <div class="modal" id="shopModal">
   <div class="modal-card">
     <div class="modal-head">
       <h2 id="modalTitle">Agregar Comercio</h2>
-      <button class="close" id="closeModal">×</button>
+      <button class="close" id="closeModal" type="button">×</button>
     </div>
 
-    <form id="shopForm">
+    <form id="shopForm" style="display:flex;flex-direction:column;flex:1;overflow:hidden;margin:0;">
       <input type="hidden" id="shopId" />
-      <div class="form-grid">
-        <div>
-          <label>Nombre del comercio *</label>
-          <input id="name" required />
-        </div>
 
-        <div>
-          <label>Rubro</label>
-          <input id="category" />
-        </div>
-
-        <div>
-          <label>Dirección</label>
-          <input id="address" />
-        </div>
-
-        <div>
-          <label>Circuito / Corredor Comercial</label>
-          <select id="zone">
-            <option value="Peatonal San Martín">Peatonal San Martín</option>
-            <option value="Calle Urquiza">Calle Urquiza</option>
-            <option value="Calle 25 de Mayo">Calle 25 de Mayo</option>
-            <option value="Calle Pellegrini">Calle Pellegrini</option>
-            <option value="Calle España">Calle España</option>
-            <option value="Calle Cervantes">Calle Cervantes</option>
-            <option value="Calle Corrientes">Calle Corrientes</option>
-            <option value="Otra zona">Otra zona</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Analista Responsable</label>
-          <select id="analystSelect">
-            <option value="magali">Magali</option>
-            <option value="victoria">Victoria</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Flujo de Clientes</label>
-          <select id="tier">
-            <option value="alto">Alto flujo de clientes</option>
-            <option value="medio" selected>Flujo medio</option>
-            <option value="bajo">Flujo bajo</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Estado del Contacto</label>
-          <select id="status">
-            <option value="pendiente">Pendiente</option>
-            <option value="visitado">Visitado</option>
-            <option value="interesado">Interesado</option>
-            <option value="acuerdo">Acuerdo logrado</option>
-            <option value="no-interesado">No interesado</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Flyers Entregados</label>
-          <input id="flyers" type="number" min="0" value="0" />
-        </div>
-
-        <div>
-          <label>Teléfono / WhatsApp</label>
-          <div style="display:flex;gap:6px;">
-            <input id="contact" />
-            <button type="button" class="btn btn-whatsapp btn-sm" id="modalWaBtn">WhatsApp</button>
+      <div class="modal-body">
+        <div class="form-grid-compact">
+          <!-- Fila 1: Datos Principales -->
+          <div>
+            <label>Nombre del comercio *</label>
+            <input id="name" required />
           </div>
-        </div>
 
-        <div>
-          <label>Contacto / Encargado</label>
-          <input id="contactPerson" />
-        </div>
-
-        <div>
-          <label>Fecha de Última Visita</label>
-          <input id="visitDate" type="date" />
-        </div>
-
-        <div>
-          <label>Próximo Seguimiento</label>
-          <input id="followUp" type="date" />
-        </div>
-
-        <div class="full">
-          <label>Tipo de Convenio Federar Acordado</label>
-          <select id="agreementType">
-            <option value="">(Sin convenio definido)</option>
-            <option value="Material POP / Exhibidor en mostrador">Material POP / Exhibidor en mostrador</option>
-            <option value="Créditos preferenciales para Empleados">Créditos preferenciales para Empleados</option>
-            <option value="Financiación de compras a Clientes">Financiación de compras a Clientes</option>
-            <option value="Descuento / Beneficio cruzado para socios Federar">Descuento / Beneficio cruzado para socios Federar</option>
-            <option value="Alianza Institucional / Otro">Alianza Institucional / Otro</option>
-          </select>
-        </div>
-
-        <div class="full">
-          <label>Detalle del Acuerdo / Acción Realizada</label>
-          <input id="agreement" />
-        </div>
-
-        <div class="full">
-          <label>Nueva Nota de Bitácora / Visita</label>
-          <div style="display:flex;gap:8px;">
-            <input id="newLogInput" />
-            <button type="button" class="btn btn-secondary btn-sm" id="addLogBtn">+ Nota</button>
+          <div>
+            <label>Rubro</label>
+            <input id="category" />
           </div>
-        </div>
 
-        <div class="full">
-          <label>Historial de Interacciones</label>
-          <div class="timeline" id="logTimeline">
-            <div style="color:var(--muted);font-size:11px;text-align:center;">Sin notas de historial aún.</div>
+          <div>
+            <label>Dirección</label>
+            <input id="address" />
+          </div>
+
+          <!-- Fila 2: Segmentación y Asignación -->
+          <div>
+            <label>Circuito / Zona</label>
+            <select id="zone">
+              <option value="Peatonal San Martín">Peatonal San Martín</option>
+              <option value="Calle Urquiza">Calle Urquiza</option>
+              <option value="Calle 25 de Mayo">Calle 25 de Mayo</option>
+              <option value="Calle Pellegrini">Calle Pellegrini</option>
+              <option value="Calle España">Calle España</option>
+              <option value="Calle Cervantes">Calle Cervantes</option>
+              <option value="Calle Corrientes">Calle Corrientes</option>
+              <option value="Otra zona">Otra zona</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Analista Asignada</label>
+            <select id="analystSelect">
+              <option value="magali">Magali</option>
+              <option value="victoria">Victoria</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Flujo de Clientes</label>
+            <select id="tier">
+              <option value="alto">Alto flujo de clientes</option>
+              <option value="medio" selected>Flujo medio</option>
+              <option value="bajo">Flujo bajo</option>
+            </select>
+          </div>
+
+          <!-- Fila 3: Estado y Contacto -->
+          <div>
+            <label>Estado</label>
+            <select id="status">
+              <option value="pendiente">Pendiente</option>
+              <option value="visitado">Visitado</option>
+              <option value="interesado">Interesado</option>
+              <option value="acuerdo">Acuerdo logrado</option>
+              <option value="no-interesado">No interesado</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Contacto / Encargado</label>
+            <input id="contactPerson" />
+          </div>
+
+          <div>
+            <label>Teléfono / WhatsApp</label>
+            <div style="display:flex;gap:4px;">
+              <input id="contact" />
+              <button type="button" class="btn btn-whatsapp btn-sm" id="modalWaBtn">WhatsApp</button>
+            </div>
+          </div>
+
+          <!-- Fila 4: Operativa y Fechas -->
+          <div>
+            <label>Flyers Entregados</label>
+            <input id="flyers" type="number" min="0" value="0" />
+          </div>
+
+          <div>
+            <label>Fecha de Visita</label>
+            <input id="visitDate" type="date" />
+          </div>
+
+          <div>
+            <label>Próximo Seguimiento</label>
+            <input id="followUp" type="date" />
+          </div>
+
+          <!-- Fila 5: Convenio -->
+          <div class="span-3">
+            <label>Tipo de Convenio Federar Acordado</label>
+            <select id="agreementType">
+              <option value="">(Sin convenio definido)</option>
+              <option value="Material POP / Exhibidor en mostrador">Material POP / Exhibidor en mostrador</option>
+              <option value="Créditos preferenciales para Empleados">Créditos preferenciales para Empleados</option>
+              <option value="Financiación de compras a Clientes">Financiación de compras a Clientes</option>
+              <option value="Descuento / Beneficio cruzado para socios Federar">Descuento / Beneficio cruzado para socios Federar</option>
+              <option value="Alianza Institucional / Otro">Alianza Institucional / Otro</option>
+            </select>
+          </div>
+
+          <div class="span-3">
+            <label>Detalle del Acuerdo / Acción Realizada</label>
+            <input id="agreement" />
+          </div>
+
+          <!-- Fila 6: Bitácora Compacta -->
+          <div class="span-3">
+            <label>Nueva Nota de Bitácora</label>
+            <div style="display:flex;gap:6px;">
+              <input id="newLogInput" />
+              <button type="button" class="btn btn-secondary btn-sm" id="addLogBtn">+ Nota</button>
+            </div>
+            <div class="timeline" id="logTimeline">
+              <div style="color:var(--muted);font-size:10px;text-align:center;">Sin notas registradas.</div>
+            </div>
           </div>
         </div>
 
@@ -1268,7 +1266,7 @@
         <input id="lng" type="hidden" />
       </div>
 
-      <div class="actions" style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-top:1px solid var(--border);padding-top:12px;">
+      <div class="modal-foot">
         <button type="button" class="btn-danger" id="deleteBtn" style="display:none">Eliminar</button>
         <div style="display:flex;gap:8px;margin-left:auto;">
           <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
@@ -1555,7 +1553,7 @@
         if(userLocationMarker) map.removeLayer(userLocationMarker);
 
         userLocationMarker = L.circleMarker([lat, lng], {
-          radius: 9,
+          radius: 8,
           fillColor: "#1d4ed8",
           color: "#ffffff",
           weight: 3,
@@ -1620,15 +1618,15 @@
     const tierKey = normalizeTier(shop.tier);
 
     return `
-      <div style="min-width:240px;padding:2px">
+      <div style="min-width:230px;padding:2px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
           <span class="badge badge-${shop.status}">${safe(statusLabels[shop.status] || shop.status)}</span>
           <span class="tier-badge tier-${tierKey}">${safe(tierLabels[tierKey] || 'Flujo medio')}</span>
         </div>
-        <strong style="font-size:14px;color:#0f172a;display:block">${safe(shop.name)}</strong>
+        <strong style="font-size:13px;color:#0f172a;display:block">${safe(shop.name)}</strong>
         <span style="color:#64748b;font-size:11px">${safe(shop.category || "Sin rubro")} · ${safe(shop.zone || "Microcentro")}</span>
-        <hr style="border:0;border-top:1px solid #e2e8f0;margin:6px 0">
-        <div style="font-size:11px;display:grid;gap:3px;color:#334155">
+        <hr style="border:0;border-top:1px solid #e2e8f0;margin:5px 0">
+        <div style="font-size:11px;display:grid;gap:2px;color:#334155">
           <div><b>Analista:</b> <span class="analyst-tag">${safe(analystDisplayName)}</span></div>
           <div><b>Dirección:</b> ${safe(shop.address || "-")}</div>
           <div><b>Flyers:</b> ${Number(shop.flyers || 0)}</div>
@@ -1636,9 +1634,9 @@
           ${shop.followUp ? `<div><b>Seguimiento:</b> ${safe(shop.followUp)}</div>` : ''}
         </div>
 
-        <div style="display:flex;gap:6px;margin-top:10px">
-          ${waLink ? `<a href="${waLink}" target="_blank" style="text-decoration:none;flex:1"><button style="width:100%;padding:6px;background:#16a34a;color:#fff;border:0;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer">WhatsApp</button></a>` : ''}
-          <button data-edit="${shop.id}" style="flex:1;padding:6px;border:0;border-radius:6px;background:#1d4ed8;color:#fff;font-weight:700;font-size:11px;cursor:pointer">Editar</button>
+        <div style="display:flex;gap:6px;margin-top:8px">
+          ${waLink ? `<a href="${waLink}" target="_blank" style="text-decoration:none;flex:1"><button style="width:100%;padding:5px;background:#16a34a;color:#fff;border:0;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer">WhatsApp</button></a>` : ''}
+          <button data-edit="${shop.id}" style="flex:1;padding:5px;border:0;border-radius:5px;background:#1d4ed8;color:#fff;font-weight:700;font-size:11px;cursor:pointer">Editar</button>
         </div>
       </div>
     `;
@@ -1689,7 +1687,7 @@
     document.getElementById("listCount").textContent = `${filtered.length} locales`;
 
     if(!filtered.length) {
-      list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px 10px;font-size:12px">No hay comercios registrados con los filtros aplicados.</div>';
+      list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:18px 10px;font-size:11px">No hay comercios registrados con los filtros aplicados.</div>';
       return;
     }
 
@@ -1791,10 +1789,10 @@
     document.getElementById("countUpcoming").textContent = countUp;
     document.getElementById("countInterested").textContent = countInt;
 
-    if(!countOver) overdueList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px">Sin seguimientos vencidos.</div>';
-    if(!countTod) todayList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px">Sin tareas para hoy.</div>';
-    if(!countUp) upcomingList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px">Sin seguimientos próximos.</div>';
-    if(!countInt) interestedList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px">No hay comercios interesados activos.</div>';
+    if(!countOver) overdueList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin seguimientos vencidos.</div>';
+    if(!countTod) todayList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin tareas para hoy.</div>';
+    if(!countUp) upcomingList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">Sin seguimientos próximos.</div>';
+    if(!countInt) interestedList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">No hay comercios interesados activos.</div>';
   }
 
   function createCrmCard(shop, type) {
@@ -1814,7 +1812,7 @@
       <div style="font-size:10px;color:var(--muted);margin-top:2px">
         ${escapeHtml(shop.category || "Sin rubro")} · ${escapeHtml(shop.zone || "Microcentro")}
       </div>
-      <div style="font-size:11px;margin-top:5px;color:#334155">
+      <div style="font-size:11px;margin-top:4px;color:#334155">
         <div><b>Contacto:</b> ${escapeHtml(shop.contactPerson || shop.contact || "Sin contacto")}</div>
         ${shop.followUp ? `<div><b>Seguimiento:</b> ${escapeHtml(shop.followUp)}</div>` : ''}
       </div>
@@ -1967,7 +1965,7 @@
     const cont = document.getElementById("logTimeline");
     cont.innerHTML = "";
     if(!activeLogs.length) {
-      cont.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;">Sin notas de historial aún.</div>';
+      cont.innerHTML = '<div style="color:var(--muted);font-size:10px;text-align:center;">Sin notas registradas.</div>';
       return;
     }
     activeLogs.slice().reverse().forEach(l => {
