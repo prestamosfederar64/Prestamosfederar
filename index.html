@@ -222,6 +222,8 @@
     .btn-secondary:hover { background: #e2e8f0; }
     .btn-success { background: #10b981; color: #fff; }
     .btn-success:hover { background: #059669; }
+    .btn-orange { background: #ea580c; color: #fff; }
+    .btn-orange:hover { background: #c2410c; }
     .btn-whatsapp { background: #16a34a; color: #fff; }
     .btn-whatsapp:hover { background: #15803d; }
     .btn-sm { padding: 5px 9px; font-size: 11px; }
@@ -480,23 +482,31 @@
       position: relative;
     }
 
-    .gps-btn-float {
+    .map-controls-group {
       position: absolute;
       top: 10px;
       right: 10px;
       z-index: 999;
-      background: #fff;
-      color: #091e42;
-      border: 1px solid #1d4ed8;
-      border-radius: 6px;
-      padding: 6px 10px;
-      font-size: 11px;
-      font-weight: 700;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-      cursor: pointer;
+      display: flex;
+      gap: 6px;
     }
 
-    .gps-btn-float:hover { background: #eff6ff; }
+    .route-info-panel {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      z-index: 999;
+      background: rgba(9, 30, 66, 0.92);
+      color: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 11px;
+      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+
+    .route-info-panel.active { display: block; }
 
     /* CRM & FOLLOW-UP VIEW */
     .crm-grid {
@@ -992,9 +1002,29 @@
         </div>
 
         <div id="map">
-          <button class="gps-btn-float" id="gpsBtn" title="Ubicarme en el mapa">
-            Mi Ubicación
-          </button>
+          <!-- MAP CONTROLS -->
+          <div class="map-controls-group">
+            <button class="btn btn-white btn-sm" id="traceCircuitBtn" title="Trazar ruta sugerida entre comercios">
+              Trazar Ruta
+            </button>
+            <button class="btn btn-primary btn-sm" id="routeTrackBtn" title="Iniciar o pausar marcado de recorrido GPS">
+              Iniciar Recorrido
+            </button>
+            <button class="btn btn-secondary btn-sm" id="gpsBtn" title="Ubicarme en el mapa">
+              Mi Ubicación
+            </button>
+          </div>
+
+          <!-- RECORRIDO LIVE STATS PANEL -->
+          <div class="route-info-panel" id="routeInfoPanel">
+            <div style="font-weight:800;margin-bottom:2px;display:flex;justify-content:space-between;gap:12px;">
+              <span>Recorrido Activo</span>
+              <span id="routeTimer">00:00</span>
+            </div>
+            <div style="font-size:10px;color:#cbd5e1;">
+              Distancia: <strong id="routeDistLabel" style="color:#fff;">0 m</strong> · Puntos: <strong id="routePointsCount" style="color:#fff;">0</strong>
+            </div>
+          </div>
         </div>
       </main>
     </div>
@@ -1310,6 +1340,7 @@
   const STORAGE_KEY_V2 = "federar_plan_comercial_v2";
   const STORAGE_KEY_V1 = "federar_plan_comercial_v1";
   const ACTIVE_ANALYST_KEY = "federar_active_analyst";
+  const ROUTE_STORAGE_PREFIX = "federar_route_track_";
 
   const ANALYST_NAMES = {
     magali: "Magali",
@@ -1479,6 +1510,16 @@
   let userLocationMarker = null;
   let activeLogs = [];
 
+  // ROUTE TRACKING VARIABLES
+  let isTrackingRoute = false;
+  let routeWatchId = null;
+  let routePoints = [];
+  let routePolyline = null;
+  let circuitPolyline = null;
+  let routeStartTime = null;
+  let routeTimerInterval = null;
+  let totalDistanceMeters = 0;
+
   const microcentroBounds = L.latLngBounds(
     [-31.7425, -60.5425],
     [-31.7215, -60.5155]
@@ -1532,6 +1573,7 @@
       document.getElementById("activeAnalystLabel").textContent = ANALYST_NAMES[activeAnalyst] || "Magali";
 
       renderAll();
+      loadSavedRouteForActiveAnalyst();
       if(document.getElementById("tab-crm").classList.contains("active")) renderCrmBoard();
       if(document.getElementById("tab-metrics").classList.contains("active")) renderMetricsDashboard();
       showToast(`Vista cambiada a: ${ANALYST_NAMES[activeAnalyst]}`);
@@ -1592,6 +1634,214 @@
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
+  });
+
+  // ROUTE TRACKING & LIVE PATH RECORDING
+  const routeTrackBtn = document.getElementById("routeTrackBtn");
+  const routeInfoPanel = document.getElementById("routeInfoPanel");
+  const routeTimerEl = document.getElementById("routeTimer");
+  const routeDistLabel = document.getElementById("routeDistLabel");
+  const routePointsCount = document.getElementById("routePointsCount");
+
+  function formatTimer(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  }
+
+  function startRouteTracking() {
+    if (!navigator.geolocation) {
+      alert("Geolocalización no disponible.");
+      return;
+    }
+
+    isTrackingRoute = true;
+    routeTrackBtn.textContent = "Finalizar Recorrido";
+    routeTrackBtn.className = "btn btn-danger btn-sm";
+    routeInfoPanel.classList.add("active");
+
+    routeStartTime = Date.now();
+    let elapsedSeconds = 0;
+    if(routeTimerInterval) clearInterval(routeTimerInterval);
+    routeTimerInterval = setInterval(() => {
+      elapsedSeconds++;
+      routeTimerEl.textContent = formatTimer(elapsedSeconds);
+    }, 1000);
+
+    if(!routePolyline) {
+      routePolyline = L.polyline(routePoints, {
+        color: "#ea580c",
+        weight: 4,
+        opacity: 0.9,
+        lineCap: "round",
+        lineJoin: "round"
+      }).addTo(map);
+    }
+
+    routeWatchId = navigator.geolocation.watchPosition(
+      pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        const newPoint = [lat, lng];
+
+        if(routePoints.length > 0) {
+          const lastPoint = routePoints[routePoints.length - 1];
+          const dist = L.latLng(lastPoint).distanceTo(L.latLng(newPoint));
+          if(dist >= 3) { // Solo agregar si se movió al menos 3 metros
+            totalDistanceMeters += dist;
+            routePoints.push(newPoint);
+            routePolyline.setLatLngs(routePoints);
+          }
+        } else {
+          routePoints.push(newPoint);
+          routePolyline.setLatLngs(routePoints);
+        }
+
+        if(userLocationMarker) map.removeLayer(userLocationMarker);
+        userLocationMarker = L.circleMarker([lat, lng], {
+          radius: 8,
+          fillColor: "#ea580c",
+          color: "#ffffff",
+          weight: 3,
+          fillOpacity: 1
+        }).addTo(map);
+
+        routePointsCount.textContent = routePoints.length;
+        routeDistLabel.textContent = totalDistanceMeters > 1000 
+          ? (totalDistanceMeters / 1000).toFixed(2) + " km" 
+          : Math.round(totalDistanceMeters) + " m";
+
+        saveActiveRoute();
+      },
+      err => {
+        console.warn("Error en watchPosition:", err.message);
+      },
+      { enableHighAccuracy: true, timeout: 12000, maximumAge: 2000 }
+    );
+
+    showToast("Grabación de recorrido iniciada");
+  }
+
+  function stopRouteTracking() {
+    isTrackingRoute = false;
+    routeTrackBtn.textContent = "Iniciar Recorrido";
+    routeTrackBtn.className = "btn btn-primary btn-sm";
+    routeInfoPanel.classList.remove("active");
+
+    if(routeWatchId !== null) {
+      navigator.geolocation.clearWatch(routeWatchId);
+      routeWatchId = null;
+    }
+    if(routeTimerInterval) {
+      clearInterval(routeTimerInterval);
+      routeTimerInterval = null;
+    }
+
+    saveActiveRoute();
+    showToast(`Recorrido finalizado. Total: ${Math.round(totalDistanceMeters)} metros.`);
+  }
+
+  function saveActiveRoute() {
+    const key = ROUTE_STORAGE_PREFIX + activeAnalyst;
+    localStorage.setItem(key, JSON.stringify({
+      points: routePoints,
+      distance: totalDistanceMeters,
+      date: new Date().toISOString()
+    }));
+  }
+
+  function loadSavedRouteForActiveAnalyst() {
+    if(routePolyline) {
+      map.removeLayer(routePolyline);
+      routePolyline = null;
+    }
+    routePoints = [];
+    totalDistanceMeters = 0;
+
+    const key = ROUTE_STORAGE_PREFIX + activeAnalyst;
+    try {
+      const raw = localStorage.getItem(key);
+      if(raw) {
+        const parsed = JSON.parse(raw);
+        if(parsed && Array.isArray(parsed.points) && parsed.points.length > 0) {
+          routePoints = parsed.points;
+          totalDistanceMeters = parsed.distance || 0;
+          routePolyline = L.polyline(routePoints, {
+            color: "#ea580c",
+            weight: 4,
+            opacity: 0.8,
+            dashArray: isTrackingRoute ? null : "4 6",
+            lineCap: "round"
+          }).addTo(map);
+        }
+      }
+    } catch(e) {}
+  }
+
+  routeTrackBtn.addEventListener("click", () => {
+    if(isTrackingRoute) {
+      stopRouteTracking();
+    } else {
+      startRouteTracking();
+    }
+  });
+
+  // TRAZAR CIRCUITO SUGERIDO ENTRE COMERCIOS
+  const traceCircuitBtn = document.getElementById("traceCircuitBtn");
+  let isCircuitVisible = false;
+
+  traceCircuitBtn.addEventListener("click", () => {
+    if(isCircuitVisible) {
+      if(circuitPolyline) {
+        map.removeLayer(circuitPolyline);
+        circuitPolyline = null;
+      }
+      isCircuitVisible = false;
+      traceCircuitBtn.textContent = "Trazar Ruta";
+      traceCircuitBtn.className = "btn btn-white btn-sm";
+      showToast("Ruta sugerida oculta");
+      return;
+    }
+
+    const filtered = getFilteredShops().filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)));
+    if(filtered.length < 2) {
+      alert("Se necesitan al menos 2 comercios para trazar una ruta.");
+      return;
+    }
+
+    // Ordenamiento por aproximación geográfica básica (ruta más corta secuencial)
+    const points = [];
+    const remaining = [...filtered];
+    let current = remaining.shift();
+    points.push([current.lat, current.lng]);
+
+    while(remaining.length > 0) {
+      let nearestIdx = 0;
+      let minDistance = Infinity;
+      for(let i = 0; i < remaining.length; i++) {
+        const d = L.latLng(current.lat, current.lng).distanceTo(L.latLng(remaining[i].lat, remaining[i].lng));
+        if(d < minDistance) {
+          minDistance = d;
+          nearestIdx = i;
+        }
+      }
+      current = remaining.splice(nearestIdx, 1)[0];
+      points.push([current.lat, current.lng]);
+    }
+
+    if(circuitPolyline) map.removeLayer(circuitPolyline);
+    circuitPolyline = L.polyline(points, {
+      color: "#1d4ed8",
+      weight: 3,
+      opacity: 0.75,
+      dashArray: "6 6"
+    }).addTo(map);
+
+    map.fitBounds(circuitPolyline.getBounds().pad(0.15));
+    isCircuitVisible = true;
+    traceCircuitBtn.textContent = "Ocultar Ruta";
+    traceCircuitBtn.className = "btn btn-secondary btn-sm";
+    showToast(`Ruta trazada para ${points.length} comercios`);
   });
 
   // WHATSAPP URL
@@ -2163,6 +2413,7 @@
   });
 
   renderAll();
+  loadSavedRouteForActiveAnalyst();
 
   const currentShops = getShopsForCurrentView();
   if(currentShops.length) {
