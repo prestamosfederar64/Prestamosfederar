@@ -13,14 +13,13 @@
   />
   <!-- Google Fonts: Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
 
   <style>
     :root {
       --bg: #f3f6fa;
       --panel: #ffffff;
-      --panel-glass: rgba(255, 255, 255, 0.95);
       --text: #0f172a;
       --muted: #64748b;
       --border: #e2e8f0;
@@ -28,16 +27,10 @@
       --primary: #1d4ed8;
       --primary-hover: #1e40af;
       --primary-light: #eff6ff;
-      --primary-text: #1e3a8a;
-      --accent: #0ea5e9;
       --success: #10b981;
-      --success-light: #ecfdf5;
       --warning: #f59e0b;
-      --warning-light: #fffbeb;
       --danger: #ef4444;
-      --danger-light: #fef2f2;
       --purple: #8b5cf6;
-      --purple-light: #f5f3ff;
       --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
       --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
       --shadow-lg: 0 20px 35px -5px rgba(15, 23, 42, 0.15);
@@ -67,50 +60,94 @@
     header {
       background: linear-gradient(135deg, #091e42 0%, #1e3a8a 50%, #1e40af 100%);
       color: #fff;
-      padding: 16px 24px;
+      padding: 14px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 14px;
       box-shadow: 0 4px 20px rgba(15, 23, 42, 0.2);
       position: sticky;
       top: 0;
       z-index: 1000;
+      flex-wrap: wrap;
     }
 
     .header-brand {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .brand-icon {
       background: linear-gradient(135deg, #3b82f6, #60a5fa);
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 20px;
       box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
     }
 
     header h1 {
       margin: 0;
-      font-size: 19px;
+      font-size: 17px;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
 
-    header p {
-      margin: 2px 0 0;
-      font-size: 12px;
-      color: #bfdbfe;
-      font-weight: 500;
+    .analyst-active-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.18);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #e0f2fe;
     }
 
-    /* TABS */
+    /* ANALYST SWITCHER TABS */
+    .analyst-switcher {
+      display: flex;
+      background: rgba(0, 0, 0, 0.25);
+      backdrop-filter: blur(8px);
+      padding: 4px;
+      border-radius: 12px;
+      gap: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .analyst-btn {
+      background: transparent;
+      border: 0;
+      color: #cbd5e1;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .analyst-btn:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .analyst-btn.active {
+      background: #fff;
+      color: #1e3a8a;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    /* MODULE NAVIGATION TABS */
     .nav-tabs {
       display: flex;
       background: rgba(255, 255, 255, 0.12);
@@ -124,27 +161,20 @@
       background: transparent;
       border: 0;
       color: #e2e8f0;
-      padding: 8px 16px;
-      font-size: 13px;
+      padding: 7px 14px;
+      font-size: 12px;
       font-weight: 700;
       border-radius: 8px;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       transition: all 0.2s ease;
+      font-family: inherit;
     }
 
-    .tab-btn:hover {
-      color: #fff;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .tab-btn.active {
-      background: #fff;
-      color: #1e3a8a;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    }
+    .tab-btn:hover { color: #fff; background: rgba(255, 255, 255, 0.1); }
+    .tab-btn.active { background: #fff; color: #1e3a8a; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
 
     .header-actions {
       display: flex;
@@ -155,9 +185,9 @@
     /* BUTTONS */
     button, .btn {
       border: 0;
-      border-radius: 10px;
-      padding: 9px 14px;
-      font-size: 13px;
+      border-radius: 9px;
+      padding: 8px 12px;
+      font-size: 12px;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
@@ -171,7 +201,7 @@
     button:hover, .btn:hover { transform: translateY(-1px); }
     button:active, .btn:active { transform: translateY(0); }
 
-    .btn-primary { background: #2563eb; color: #fff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+    .btn-primary { background: #2563eb; color: #fff; box-shadow: 0 3px 10px rgba(37, 99, 235, 0.3); }
     .btn-primary:hover { background: #1d4ed8; }
     .btn-light { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.2); }
     .btn-light:hover { background: rgba(255,255,255,0.25); color: #fff; }
@@ -185,37 +215,35 @@
     .btn-success:hover { background: #059669; }
     .btn-whatsapp { background: #25D366; color: #fff; box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3); }
     .btn-whatsapp:hover { background: #1ebc59; }
-    .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 8px; }
+    .btn-sm { padding: 5px 9px; font-size: 11px; border-radius: 7px; }
 
     /* LAYOUT CONTAINERS */
     .view-tab {
       display: none;
       flex: 1;
-      padding: 18px;
+      padding: 16px;
     }
 
-    .view-tab.active {
-      display: block;
-    }
+    .view-tab.active { display: block; }
 
     /* MAP VIEW GRID */
     .map-layout {
       display: grid;
-      grid-template-columns: 370px minmax(0, 1fr);
-      gap: 18px;
-      height: calc(100vh - 105px);
-      min-height: 580px;
+      grid-template-columns: 360px minmax(0, 1fr);
+      gap: 16px;
+      height: calc(100vh - 95px);
+      min-height: 560px;
     }
 
     .sidebar {
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       overflow-y: auto;
       padding-right: 4px;
     }
 
-    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar { width: 5px; }
     .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
     .card {
@@ -223,14 +251,14 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow-sm);
-      padding: 16px;
+      padding: 14px;
     }
 
     .card-title {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
       color: #1e293b;
-      margin: 0 0 12px;
+      margin: 0 0 10px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -245,25 +273,23 @@
     .stat-box {
       background: #f8fafc;
       border: 1px solid var(--border);
-      padding: 10px 12px;
+      padding: 9px 11px;
       border-radius: 10px;
-      position: relative;
-      overflow: hidden;
     }
 
     .stat-box .stat-lbl {
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
 
     .stat-box .stat-val {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
       color: #0f172a;
-      margin-top: 2px;
+      margin-top: 1px;
     }
 
     .stat-box.highlight {
@@ -275,17 +301,11 @@
     /* FILTERS */
     .filters {
       display: grid;
-      gap: 10px;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+      gap: 9px;
     }
 
     label {
-      font-size: 11px;
+      font-size: 10px;
       color: #475569;
       font-weight: 700;
       text-transform: uppercase;
@@ -297,10 +317,10 @@
       border: 1px solid var(--border);
       background: #fff;
       color: var(--text);
-      padding: 9px 12px;
-      border-radius: 9px;
+      padding: 8px 10px;
+      border-radius: 8px;
       font: inherit;
-      font-size: 13px;
+      font-size: 12px;
       outline: none;
       transition: all 0.15s ease;
     }
@@ -314,16 +334,16 @@
     .shop-list {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      max-height: 380px;
+      gap: 7px;
+      max-height: 360px;
       overflow-y: auto;
       padding-right: 2px;
     }
 
     .shop-item {
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 10px 12px;
+      border-radius: 10px;
+      padding: 9px 11px;
       cursor: pointer;
       transition: all 0.2s ease;
       background: #fff;
@@ -339,12 +359,12 @@
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 4px;
+      gap: 6px;
+      margin-bottom: 3px;
     }
 
     .shop-item strong {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       color: #0f172a;
     }
@@ -353,7 +373,7 @@
       font-size: 11px;
       color: var(--muted);
       display: flex;
-      gap: 6px;
+      gap: 5px;
       flex-wrap: wrap;
       align-items: center;
     }
@@ -362,13 +382,12 @@
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
-      border-radius: 6px;
-      padding: 2px 7px;
+      gap: 3px;
+      border-radius: 5px;
+      padding: 2px 6px;
       font-size: 10px;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.02em;
     }
 
     .badge-pendiente { background: #f1f5f9; color: #475569; }
@@ -380,12 +399,21 @@
     .tier-badge {
       font-size: 10px;
       font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 6px;
+      padding: 2px 5px;
+      border-radius: 5px;
     }
     .tier-A { background: #fdf4ff; color: #a21caf; border: 1px solid #f5d0fe; }
     .tier-B { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
     .tier-C { background: #f8fafc; color: #64748b; border: 1px solid #e2e8f0; }
+
+    .analyst-tag {
+      font-size: 9px;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #ede9fe;
+      color: #6d28d9;
+    }
 
     /* MAP CONTAINER */
     .map-wrap {
@@ -403,7 +431,7 @@
       align-items: center;
       justify-content: space-between;
       background: #fff;
-      padding: 10px 14px;
+      padding: 9px 12px;
       border-radius: var(--radius);
       border: 1px solid var(--border);
       box-shadow: var(--shadow-sm);
@@ -411,7 +439,7 @@
 
     .legend {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       flex-wrap: wrap;
       font-size: 11px;
       font-weight: 600;
@@ -420,13 +448,13 @@
 
     .legend span {
       display: inline-flex;
-      gap: 5px;
+      gap: 4px;
       align-items: center;
     }
 
     .dot {
-      width: 10px;
-      height: 10px;
+      width: 9px;
+      height: 9px;
       border-radius: 50%;
       display: inline-block;
     }
@@ -438,72 +466,70 @@
       box-shadow: var(--shadow);
       border: 1px solid var(--border);
       background: #e2e8f0;
-      min-height: 480px;
+      min-height: 460px;
       position: relative;
     }
 
     .gps-btn-float {
       position: absolute;
-      top: 14px;
-      right: 14px;
+      top: 12px;
+      right: 12px;
       z-index: 999;
       background: #fff;
       color: #1e3a8a;
       border: 2px solid #3b82f6;
-      border-radius: 10px;
-      padding: 8px 14px;
-      font-size: 12px;
+      border-radius: 8px;
+      padding: 7px 12px;
+      font-size: 11px;
       font-weight: 800;
       box-shadow: 0 4px 14px rgba(0,0,0,0.15);
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
-    .gps-btn-float:hover {
-      background: #eff6ff;
-    }
+    .gps-btn-float:hover { background: #eff6ff; }
 
     /* CRM & FOLLOW-UP VIEW */
     .crm-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
     }
 
     .crm-column {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px;
+      padding: 14px;
       box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .crm-col-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 10px;
+      padding-bottom: 8px;
       border-bottom: 2px solid var(--border);
     }
 
     .crm-col-header h3 {
       margin: 0;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 800;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .count-pill {
       background: #f1f5f9;
       color: #334155;
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 999px;
       font-size: 11px;
       font-weight: 800;
@@ -512,15 +538,15 @@
     .crm-cards {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      max-height: calc(100vh - 220px);
+      gap: 9px;
+      max-height: calc(100vh - 200px);
       overflow-y: auto;
     }
 
     .crm-card-item {
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 12px;
+      border-radius: 10px;
+      padding: 11px;
       background: #fff;
       box-shadow: var(--shadow-sm);
       transition: all 0.2s ease;
@@ -538,8 +564,8 @@
 
     .crm-card-actions {
       display: flex;
-      gap: 6px;
-      margin-top: 10px;
+      gap: 5px;
+      margin-top: 8px;
       padding-top: 8px;
       border-top: 1px dashed var(--border);
     }
@@ -550,25 +576,25 @@
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 16px;
     }
 
     .kpi-row {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
     }
 
     .kpi-card {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      padding: 18px;
+      padding: 16px;
       box-shadow: var(--shadow-sm);
     }
 
     .kpi-card .kpi-lbl {
-      font-size: 12px;
+      font-size: 11px;
       color: var(--muted);
       font-weight: 700;
       text-transform: uppercase;
@@ -576,49 +602,49 @@
     }
 
     .kpi-card .kpi-num {
-      font-size: 30px;
+      font-size: 26px;
       font-weight: 800;
       color: #0f172a;
-      margin: 6px 0;
+      margin: 4px 0;
     }
 
     .kpi-card .kpi-sub {
-      font-size: 12px;
+      font-size: 11px;
       color: #475569;
     }
 
     .dashboard-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 20px;
+      gap: 16px;
     }
 
     /* FUNNEL */
     .funnel-container {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      padding: 10px 0;
+      gap: 9px;
+      padding: 8px 0;
     }
 
     .funnel-step {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
     }
 
     .funnel-header {
       display: flex;
       justify-content: space-between;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
       color: #334155;
     }
 
     .funnel-bar-bg {
       background: #f1f5f9;
-      height: 26px;
-      border-radius: 8px;
+      height: 24px;
+      border-radius: 7px;
       overflow: hidden;
       display: flex;
       border: 1px solid var(--border);
@@ -626,10 +652,10 @@
 
     .funnel-bar-fill {
       height: 100%;
-      border-radius: 6px;
+      border-radius: 5px;
       display: flex;
       align-items: center;
-      padding: 0 10px;
+      padding: 0 8px;
       color: #fff;
       font-size: 11px;
       font-weight: 800;
@@ -645,29 +671,27 @@
     .data-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 12px;
     }
 
     .data-table th {
       text-align: left;
-      padding: 10px 12px;
+      padding: 8px 10px;
       background: #f8fafc;
       color: #475569;
       font-weight: 700;
       border-bottom: 2px solid var(--border);
-      font-size: 11px;
+      font-size: 10px;
       text-transform: uppercase;
     }
 
     .data-table td {
-      padding: 10px 12px;
+      padding: 8px 10px;
       border-bottom: 1px solid var(--border);
       color: #1e293b;
     }
 
-    .data-table tr:hover td {
-      background: #f8fbff;
-    }
+    .data-table tr:hover td { background: #f8fbff; }
 
     /* MODAL */
     .modal {
@@ -678,19 +702,19 @@
       display: none;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      padding: 16px;
       z-index: 3000;
     }
 
     .modal.show { display: flex; }
 
     .modal-card {
-      width: min(720px, 100%);
+      width: min(700px, 100%);
       max-height: 90vh;
       overflow-y: auto;
       background: #fff;
       border-radius: var(--radius-lg);
-      padding: 24px;
+      padding: 22px;
       box-shadow: var(--shadow-lg);
     }
 
@@ -699,28 +723,28 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      margin-bottom: 18px;
-      padding-bottom: 12px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
       border-bottom: 1px solid var(--border);
     }
 
     .modal-head h2 {
       margin: 0;
-      font-size: 18px;
+      font-size: 17px;
       font-weight: 800;
       color: #0f172a;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .close {
       background: #f1f5f9;
-      width: 36px;
-      height: 36px;
+      width: 32px;
+      height: 32px;
       padding: 0;
       border-radius: 50%;
-      font-size: 18px;
+      font-size: 16px;
       color: #475569;
     }
 
@@ -729,35 +753,35 @@
     .form-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
+      gap: 11px;
     }
 
     .full { grid-column: 1 / -1; }
 
-    /* TIMELINE / BITACORA */
+    /* TIMELINE */
     .timeline {
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      margin-top: 8px;
-      padding: 10px;
+      gap: 8px;
+      margin-top: 6px;
+      padding: 8px;
       background: #f8fafc;
-      border-radius: 10px;
+      border-radius: 8px;
       border: 1px solid var(--border);
-      max-height: 160px;
+      max-height: 140px;
       overflow-y: auto;
     }
 
     .timeline-item {
-      font-size: 12px;
-      padding: 6px 10px;
+      font-size: 11px;
+      padding: 5px 8px;
       background: #fff;
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid #e2e8f0;
     }
 
     .timeline-item .time-meta {
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
       color: #64748b;
       display: flex;
@@ -765,16 +789,16 @@
       margin-bottom: 2px;
     }
 
-    /* TOAST / ALERTS */
+    /* TOAST */
     .toast {
       position: fixed;
       bottom: 20px;
       right: 20px;
       background: #0f172a;
       color: #fff;
-      padding: 12px 18px;
-      border-radius: 10px;
-      font-size: 13px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 12px;
       font-weight: 600;
       box-shadow: var(--shadow-lg);
       z-index: 4000;
@@ -783,25 +807,23 @@
     }
 
     @keyframes slideUp {
-      from { transform: translateY(20px); opacity: 0; }
+      from { transform: translateY(15px); opacity: 0; }
       to { transform: translateY(0); opacity: 1; }
     }
 
     /* RESPONSIVE */
     @media(max-width: 960px) {
       .map-layout { grid-template-columns: 1fr; height: auto; }
-      #map { height: 480px; min-height: 480px; }
+      #map { height: 460px; min-height: 460px; }
       .dashboard-grid { grid-template-columns: 1fr; }
-      .sidebar { max-height: 450px; }
     }
 
-    @media(max-width: 680px) {
-      header { padding: 12px 14px; flex-direction: column; align-items: stretch; }
+    @media(max-width: 720px) {
+      header { padding: 10px 12px; flex-direction: column; align-items: stretch; gap: 10px; }
+      .analyst-switcher { justify-content: center; }
       .nav-tabs { justify-content: center; }
       .header-actions { justify-content: space-between; }
       .form-grid { grid-template-columns: 1fr; }
-      .stats-grid { grid-template-columns: repeat(2, 1fr); }
-      .view-tab { padding: 12px; }
     }
   </style>
 </head>
@@ -814,11 +836,20 @@
       <div class="brand-icon">🏛️</div>
       <div>
         <h1>FEDERAR · Plan Comercial</h1>
-        <p>Microcentro de Paraná · Recorridas, Flyers & Convenios</p>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">
+          <span class="analyst-active-badge">👩 Analista Activa: <strong id="activeAnalystLabel">Magali</strong></span>
+        </div>
       </div>
     </div>
 
-    <!-- TABS -->
+    <!-- ANALYST SWITCHER TABS (SEPARACIÓN POR ANALISTA) -->
+    <div class="analyst-switcher" id="analystSwitcher">
+      <button class="analyst-btn active" data-analyst="magali">👩 Magali</button>
+      <button class="analyst-btn" data-analyst="victoria">👩 Victoria</button>
+      <button class="analyst-btn" data-analyst="all">👥 Todo el Equipo</button>
+    </div>
+
+    <!-- MODULE TABS -->
     <div class="nav-tabs">
       <button class="tab-btn active" data-tab="tab-map">🗺️ Mapa Operativo</button>
       <button class="tab-btn" data-tab="tab-crm">📋 Seguimientos CRM</button>
@@ -828,7 +859,7 @@
     <!-- ACTIONS -->
     <div class="header-actions">
       <button class="btn btn-light btn-sm" id="importBtn" title="Importar CSV/JSON">📥 Importar</button>
-      <button class="btn btn-light btn-sm" id="exportBtn" title="Exportar reporte CSV/JSON">📤 Exportar</button>
+      <button class="btn btn-light btn-sm" id="exportBtn" title="Exportar CSV/JSON">📤 Exportar</button>
       <button class="btn btn-white btn-sm" id="addShopBtn">+ Nuevo Comercio</button>
     </div>
   </header>
@@ -841,7 +872,7 @@
         <!-- STATS RESUMEN -->
         <section class="card">
           <div class="card-title">
-            <span>Resumen Operativo</span>
+            <span>Cartera Comercial</span>
             <span class="badge badge-pendiente" id="badgeTotalShops">0 Comercios</span>
           </div>
           <div class="stats-grid">
@@ -910,8 +941,8 @@
                 </select>
               </div>
               <div>
-                <label>Analista</label>
-                <input id="analystFilter" placeholder="Ej: Juan" />
+                <label>Fecha de Visita</label>
+                <input type="date" id="dateFilter" />
               </div>
             </div>
           </div>
@@ -920,8 +951,8 @@
         <!-- LISTA DE COMERCIOS -->
         <section class="card">
           <div class="card-title">
-            <span>Locales Filtrados</span>
-            <span style="font-size:12px;color:var(--muted)" id="listCount">0</span>
+            <span>Locales Registrados</span>
+            <span style="font-size:11px;color:var(--muted)" id="listCount">0</span>
           </div>
           <div id="shopList" class="shop-list"></div>
         </section>
@@ -937,7 +968,7 @@
             <span><i class="dot" style="background:#10b981"></i>Acuerdo</span>
             <span><i class="dot" style="background:#ef4444"></i>No interesado</span>
           </div>
-          <span style="font-size:12px;color:var(--muted)">💡 Hacé clic en el mapa para ubicar un comercio o usá el botón GPS.</span>
+          <span style="font-size:11px;color:var(--muted)">💡 Hacé clic sobre el mapa para cargar un comercio o usá el GPS.</span>
         </div>
 
         <div id="map">
@@ -949,13 +980,13 @@
     </div>
   </div>
 
-  <!-- TAB 2: SEGUIMIENTOS CRM -->
+  <!-- TAB 2: SEGUIMIENTOS CRM (POR ANALISTA) -->
   <div class="view-tab" id="tab-crm">
     <div class="crm-grid">
       <!-- VENCIDOS -->
       <div class="crm-column">
         <div class="crm-col-header">
-          <h3 style="color:#dc2626">⚠️ Seguimientos Vencidos</h3>
+          <h3 style="color:#dc2626">⚠️ Vencidos</h3>
           <span class="count-pill" id="countOverdue">0</span>
         </div>
         <div class="crm-cards" id="listOverdue"></div>
@@ -964,7 +995,7 @@
       <!-- HOY -->
       <div class="crm-column">
         <div class="crm-col-header">
-          <h3 style="color:#d97706">📅 Programados para Hoy</h3>
+          <h3 style="color:#d97706">📅 Programados Hoy</h3>
           <span class="count-pill" id="countToday">0</span>
         </div>
         <div class="crm-cards" id="listToday"></div>
@@ -982,7 +1013,7 @@
       <!-- EN NEGOCIACIÓN / INTERESADOS -->
       <div class="crm-column">
         <div class="crm-col-header">
-          <h3 style="color:#8b5cf6">🔥 Comercios Interesados</h3>
+          <h3 style="color:#8b5cf6">🔥 Interesados</h3>
           <span class="count-pill" id="countInterested">0</span>
         </div>
         <div class="crm-cards" id="listInterested"></div>
@@ -990,7 +1021,7 @@
     </div>
   </div>
 
-  <!-- TAB 3: DASHBOARD & MÉTRICAS -->
+  <!-- TAB 3: DASHBOARD & MÉTRICAS (POR ANALISTA O GLOBAL) -->
   <div class="view-tab" id="tab-metrics">
     <div class="dashboard-container">
       <!-- KPI CARDS -->
@@ -1001,9 +1032,9 @@
           <div class="kpi-sub">Acuerdos sobre comercios visitados</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-lbl">Promedio Flyers / Local</div>
+          <div class="kpi-lbl">Promedio Flyers / Visita</div>
           <div class="kpi-num" id="kpiAvgFlyers">0</div>
-          <div class="kpi-sub">Material entregado por visita</div>
+          <div class="kpi-sub">Material entregado en promedio</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-lbl">Comercios Tier A Adheridos</div>
@@ -1013,7 +1044,7 @@
         <div class="kpi-card">
           <div class="kpi-lbl">Tasa de Penetración</div>
           <div class="kpi-num" id="kpiCoverage">0%</div>
-          <div class="kpi-sub">Comercios contactados vs meta total</div>
+          <div class="kpi-sub">Comercios visitados vs meta asignada</div>
         </div>
       </div>
 
@@ -1021,11 +1052,11 @@
       <div class="dashboard-grid">
         <!-- EMBUDO COMERCIAL -->
         <div class="card">
-          <div class="card-title">🌪️ Embudo de Conversión Comercial (Funnel)</div>
+          <div class="card-title">🌪️ Embudo de Conversión Comercial</div>
           <div class="funnel-container">
             <div class="funnel-step">
               <div class="funnel-header">
-                <span>1. Relevados en Microcentro</span>
+                <span>1. Relevados en Cartera</span>
                 <span id="fnTotal">0 (100%)</span>
               </div>
               <div class="funnel-bar-bg">
@@ -1035,7 +1066,7 @@
 
             <div class="funnel-step">
               <div class="funnel-header">
-                <span>2. Comercios Visitados / Contactados</span>
+                <span>2. Comercios Visitados</span>
                 <span id="fnVisited">0 (0%)</span>
               </div>
               <div class="funnel-bar-bg">
@@ -1065,7 +1096,7 @@
           </div>
         </div>
 
-        <!-- RANKING DE ANALISTAS -->
+        <!-- RANKING DE RENDIMIENTO -->
         <div class="card">
           <div class="card-title">🏆 Rendimiento por Analista Comercial</div>
           <div style="overflow-x:auto">
@@ -1086,14 +1117,14 @@
 
         <!-- DISTRIBUCIÓN POR TIPOS DE CONVENIO -->
         <div class="card">
-          <div class="card-title">🤝 Tipos de Convenio Federar Acordados</div>
-          <div id="agreementsBreakdown" style="display:flex;flex-direction:column;gap:8px;padding-top:6px;"></div>
+          <div class="card-title">🤝 Tipos de Convenio Acordados</div>
+          <div id="agreementsBreakdown" style="display:flex;flex-direction:column;gap:8px;padding-top:4px;"></div>
         </div>
 
         <!-- DISTRIBUCIÓN POR CIRCUITO -->
         <div class="card">
-          <div class="card-title">📍 Cobertura por Circuito / Calle Clave</div>
-          <div id="circuitsBreakdown" style="display:flex;flex-direction:column;gap:8px;padding-top:6px;"></div>
+          <div class="card-title">📍 Cobertura por Circuito / Calle</div>
+          <div id="circuitsBreakdown" style="display:flex;flex-direction:column;gap:8px;padding-top:4px;"></div>
         </div>
       </div>
     </div>
@@ -1123,7 +1154,7 @@
 
         <div>
           <label>Dirección</label>
-          <input id="address" placeholder="Ej: Peatonal San Martín 750" />
+          <input id="address" placeholder="Ej: Peatonal San Martín 680" />
         </div>
 
         <div>
@@ -1141,17 +1172,20 @@
         </div>
 
         <div>
+          <label>Analista Responsable</label>
+          <select id="analystSelect">
+            <option value="magali">Magali</option>
+            <option value="victoria">Victoria</option>
+          </select>
+        </div>
+
+        <div>
           <label>Potencial del Local</label>
           <select id="tier">
             <option value="A">Tier A · Alto flujo de clientes</option>
             <option value="B" selected>Tier B · Flujo medio</option>
             <option value="C">Tier C · Local vecinal / bajo flujo</option>
           </select>
-        </div>
-
-        <div>
-          <label>Analista Responsable</label>
-          <input id="analyst" placeholder="Ej: Juan Pérez" />
         </div>
 
         <div>
@@ -1179,7 +1213,7 @@
         </div>
 
         <div>
-          <label>Contacto / Nombre del Encargado</label>
+          <label>Contacto / Encargado</label>
           <input id="contactPerson" placeholder="Ej: Roberto (Dueño)" />
         </div>
 
@@ -1189,7 +1223,7 @@
         </div>
 
         <div>
-          <label>Próximo Seguimiento Programado</label>
+          <label>Próximo Seguimiento</label>
           <input id="followUp" type="date" />
         </div>
 
@@ -1207,7 +1241,7 @@
 
         <div class="full">
           <label>Detalle del Acuerdo / Acción Realizada</label>
-          <input id="agreement" placeholder="Ej: Se colocó exhibidor en caja y se entregaron 50 folletos" />
+          <input id="agreement" placeholder="Ej: Se colocó exhibidor en caja y folletería" />
         </div>
 
         <div class="full">
@@ -1229,7 +1263,7 @@
         <input id="lng" type="hidden" />
       </div>
 
-      <div class="actions" style="display:flex;justify-content:space-between;align-items:center;margin-top:18px;border-top:1px solid var(--border);padding-top:14px;">
+      <div class="actions" style="display:flex;justify-content:space-between;align-items:center;margin-top:16px;border-top:1px solid var(--border);padding-top:12px;">
         <button type="button" class="btn-danger" id="deleteBtn" style="display:none">🗑️ Eliminar</button>
         <div style="display:flex;gap:8px;margin-left:auto;">
           <button type="button" class="btn-secondary" id="cancelBtn">Cancelar</button>
@@ -1248,21 +1282,21 @@
       <button class="close" id="closeIoModal">×</button>
     </div>
 
-    <div id="ioExportSection" style="display:flex;flex-direction:column;gap:12px;">
-      <p style="font-size:13px;color:#475569;margin:0;">Descarga la base de datos comercial para procesarla en Excel o guardarla como respaldo.</p>
+    <div id="ioExportSection" style="display:flex;flex-direction:column;gap:10px;">
+      <p style="font-size:12px;color:#475569;margin:0;">Descarga la cartera comercial de <strong id="exportAnalystTarget">Magali</strong> en formato Excel (CSV) o JSON.</p>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         <button class="btn btn-success" id="exportCsvBtn">📊 Descargar Excel (CSV)</button>
         <button class="btn btn-secondary" id="exportJsonBtn">💾 Descargar JSON</button>
       </div>
     </div>
 
-    <hr style="border:0;border-top:1px solid var(--border);margin:18px 0;">
+    <hr style="border:0;border-top:1px solid var(--border);margin:16px 0;">
 
-    <div id="ioImportSection" style="display:flex;flex-direction:column;gap:12px;">
-      <h3 style="margin:0;font-size:14px;font-weight:700;">Importar archivo (CSV o JSON)</h3>
+    <div id="ioImportSection" style="display:flex;flex-direction:column;gap:10px;">
+      <h3 style="margin:0;font-size:13px;font-weight:700;">Importar archivo a la analista activa</h3>
       <input type="file" id="fileInput" accept=".csv,.json" style="font-size:12px;" />
-      <div style="font-size:11px;color:var(--muted)">Sube un archivo exportado previamente o un CSV con columnas (Nombre, Rubro, Dirección, etc.).</div>
-      <button class="btn btn-primary" id="processImportBtn" disabled>Cargar Base de Datos</button>
+      <div style="font-size:11px;color:var(--muted)">Sube un archivo exportado previamente o un CSV con comercios.</div>
+      <button class="btn btn-primary" id="processImportBtn" disabled>Cargar a la Cartera</button>
     </div>
   </div>
 </div>
@@ -1275,8 +1309,15 @@
 
 <script>
 (() => {
-  const STORAGE_KEY = "federar_plan_comercial_v2";
-  const OLD_STORAGE_KEY = "federar_plan_comercial_v1";
+  const STORAGE_KEY_V2 = "federar_plan_comercial_v2";
+  const STORAGE_KEY_V1 = "federar_plan_comercial_v1";
+  const ACTIVE_ANALYST_KEY = "federar_active_analyst";
+
+  const ANALYST_NAMES = {
+    magali: "Magali",
+    victoria: "Victoria",
+    all: "Todo el Equipo"
+  };
 
   const statusColors = {
     "pendiente": "#64748b",
@@ -1294,13 +1335,138 @@
     "no-interesado": "No interesado"
   };
 
-  let shops = loadShops();
+  // MOCK INICIAL POR DEFECTO PARA CADA ANALISTA
+  function getSampleData() {
+    return {
+      version: 2,
+      analysts: {
+        magali: {
+          shops: [
+            {
+              id: "m-01",
+              name: "Zapatería Paraná Centro",
+              category: "Calzado / Indumentaria",
+              address: "Peatonal San Martín 680",
+              zone: "Peatonal San Martín",
+              tier: "A",
+              analyst: "magali",
+              status: "acuerdo",
+              flyers: 80,
+              contact: "3434112233",
+              contactPerson: "Carlos (Dueño)",
+              visitDate: new Date().toISOString().split("T")[0],
+              followUp: "",
+              agreementType: "Material POP / Exhibidor en mostrador",
+              agreement: "Exhibidor en caja + 80 folletos + promo en vidriera",
+              history: [{ date: new Date().toISOString().split("T")[0], note: "Se acordó exhibidor.", user: "Magali" }],
+              lat: -31.7328,
+              lng: -60.5294
+            },
+            {
+              id: "m-02",
+              name: "Moda & Estilo Urbano",
+              category: "Indumentaria",
+              address: "Calle Urquiza 940",
+              zone: "Calle Urquiza",
+              tier: "A",
+              analyst: "magali",
+              status: "interesado",
+              flyers: 30,
+              contact: "3434998877",
+              contactPerson: "Valeria",
+              visitDate: new Date().toISOString().split("T")[0],
+              followUp: new Date(Date.now() + 86400000).toISOString().split("T")[0],
+              agreementType: "Créditos para Empleados",
+              agreement: "Interesados en crédito para los empleados",
+              history: [{ date: new Date().toISOString().split("T")[0], note: "Hablé con la encargada.", user: "Magali" }],
+              lat: -31.7342,
+              lng: -60.5310
+            }
+          ]
+        },
+        victoria: {
+          shops: [
+            {
+              id: "v-01",
+              name: "Bazar & Deco Litoral",
+              category: "Hogar y Bazar",
+              address: "Calle 25 de Mayo 150",
+              zone: "Calle 25 de Mayo",
+              tier: "B",
+              analyst: "victoria",
+              status: "visitado",
+              flyers: 20,
+              contact: "3434556677",
+              contactPerson: "Martín",
+              visitDate: new Date().toISOString().split("T")[0],
+              followUp: new Date().toISOString().split("T")[0],
+              agreementType: "Financiación a Clientes del local",
+              agreement: "Dejó folletería para revisión",
+              history: [{ date: new Date().toISOString().split("T")[0], note: "Folletería entregada.", user: "Victoria" }],
+              lat: -31.7315,
+              lng: -60.5280
+            },
+            {
+              id: "v-02",
+              name: "Óptica Pellegrini",
+              category: "Salud y Óptica",
+              address: "Calle Pellegrini 320",
+              zone: "Calle Pellegrini",
+              tier: "B",
+              analyst: "victoria",
+              status: "pendiente",
+              flyers: 0,
+              contact: "",
+              contactPerson: "",
+              visitDate: "",
+              followUp: "",
+              agreementType: "",
+              agreement: "",
+              history: [],
+              lat: -31.7350,
+              lng: -60.5270
+            }
+          ]
+        }
+      }
+    };
+  }
+
+  function loadState() {
+    try {
+      const rawV2 = localStorage.getItem(STORAGE_KEY_V2);
+      if (rawV2) {
+        const parsed = JSON.parse(rawV2);
+        if (parsed && parsed.analysts && parsed.analysts.magali && parsed.analysts.victoria) {
+          return parsed;
+        }
+      }
+      const rawV1 = localStorage.getItem(STORAGE_KEY_V1);
+      if (rawV1) {
+        const parsedV1 = JSON.parse(rawV1);
+        if (Array.isArray(parsedV1)) {
+          const sample = getSampleData();
+          sample.analysts.magali.shops = parsedV1.map(s => ({ ...s, analyst: s.analyst || "magali" }));
+          return sample;
+        }
+      }
+      return getSampleData();
+    } catch(e) {
+      return getSampleData();
+    }
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(appData));
+  }
+
+  let appData = loadState();
+  let activeAnalyst = localStorage.getItem(ACTIVE_ANALYST_KEY) || "magali";
   let markers = new Map();
   let pendingLatLng = null;
   let userLocationMarker = null;
   let activeLogs = [];
 
-  // Límites geográficos del microcentro de Paraná
   const microcentroBounds = L.latLngBounds(
     [-31.7425, -60.5425],
     [-31.7215, -60.5155]
@@ -1314,10 +1480,9 @@
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
-    attribution: '&copy; OpenStreetMap · Federar Paraná'
+    attribution: '&copy; OpenStreetMap · Federar'
   }).addTo(map);
 
-  // Polígono de delimitación de microcentro
   L.rectangle(microcentroBounds, {
     color: "#1d4ed8",
     weight: 2,
@@ -1327,114 +1492,14 @@
     interactive: false
   }).addTo(map);
 
-  // MOCK DATA INICIAL SI ESTÁ VACÍO
-  function getSampleShops() {
-    return [
-      {
-        id: "f-01",
-        name: "Zapatería Paraná Centro",
-        category: "Calzado / Indumentaria",
-        address: "Peatonal San Martín 680",
-        zone: "Peatonal San Martín",
-        tier: "A",
-        analyst: "Juan Pérez",
-        status: "acuerdo",
-        flyers: 80,
-        contact: "3434112233",
-        contactPerson: "Carlos (Dueño)",
-        visitDate: new Date().toISOString().split("T")[0],
-        followUp: "",
-        agreementType: "Material POP / Exhibidor en mostrador",
-        agreement: "Exhibidor en caja + 80 folletos + promo en vidriera",
-        notes: "Excelente predisposición, muy concurrido",
-        history: [{ date: new Date().toISOString().split("T")[0], note: "Se firmó acuerdo y se dejó exhibidor.", user: "Juan Pérez" }],
-        lat: -31.7328,
-        lng: -60.5294
-      },
-      {
-        id: "f-02",
-        name: "Moda & Estilo Urbano",
-        category: "Indumentaria",
-        address: "Calle Urquiza 940",
-        zone: "Calle Urquiza",
-        tier: "A",
-        analyst: "María Gómez",
-        status: "interesado",
-        flyers: 30,
-        contact: "3434998877",
-        contactPerson: "Valeria",
-        visitDate: new Date().toISOString().split("T")[0],
-        followUp: new Date(Date.now() + 86400000).toISOString().split("T")[0],
-        agreementType: "Créditos para Empleados",
-        agreement: "Interesados en crédito para los 6 empleados del local",
-        notes: "Llamar mañana por la tarde para coordinar reunión",
-        history: [{ date: new Date().toISOString().split("T")[0], note: "Hablé con la encargada, le interesó la propuesta.", user: "María Gómez" }],
-        lat: -31.7342,
-        lng: -60.5310
-      },
-      {
-        id: "f-03",
-        name: "Bazar & Deco Litoral",
-        category: "Hogar y Bazar",
-        address: "Calle 25 de Mayo 150",
-        zone: "Calle 25 de Mayo",
-        tier: "B",
-        analyst: "Juan Pérez",
-        status: "visitado",
-        flyers: 20,
-        contact: "3434556677",
-        contactPerson: "Martín",
-        visitDate: new Date().toISOString().split("T")[0],
-        followUp: new Date().toISOString().split("T")[0],
-        agreementType: "Financiación a Clientes del local",
-        agreement: "Dejó folletería para revisión del dueño",
-        notes: "Seguimiento hoy para confirmar",
-        history: [{ date: new Date().toISOString().split("T")[0], note: "Folletería entregada.", user: "Juan Pérez" }],
-        lat: -31.7315,
-        lng: -60.5280
-      },
-      {
-        id: "f-04",
-        name: "Óptica Pellegrini",
-        category: "Salud y Óptica",
-        address: "Calle Pellegrini 320",
-        zone: "Calle Pellegrini",
-        tier: "B",
-        analyst: "Lucas Romero",
-        status: "pendiente",
-        flyers: 0,
-        contact: "",
-        contactPerson: "",
-        visitDate: "",
-        followUp: "",
-        agreementType: "",
-        agreement: "",
-        notes: "Local con alta concurrencia de jubilados",
-        history: [],
-        lat: -31.7350,
-        lng: -60.5270
-      }
-    ];
-  }
-
-  function loadShops() {
-    try {
-      let raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        raw = localStorage.getItem(OLD_STORAGE_KEY);
-      }
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) && parsed.length ? parsed : getSampleShops();
-      }
-      return getSampleShops();
-    } catch(e) {
-      return getSampleShops();
+  function getShopsForCurrentView() {
+    if (activeAnalyst === "all") {
+      const magaliShops = (appData.analysts.magali && appData.analysts.magali.shops) || [];
+      const victoriaShops = (appData.analysts.victoria && appData.analysts.victoria.shops) || [];
+      return [...magaliShops, ...victoriaShops];
     }
-  }
-
-  function saveShops() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(shops));
+    const current = appData.analysts[activeAnalyst];
+    return (current && current.shops) ? current.shops : [];
   }
 
   function showToast(msg) {
@@ -1443,6 +1508,24 @@
     t.style.display = "block";
     setTimeout(() => { t.style.display = "none"; }, 3000);
   }
+
+  // ANALYST SWITCHER CONTROLLER
+  document.querySelectorAll(".analyst-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".analyst-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      activeAnalyst = btn.dataset.analyst;
+      localStorage.setItem(ACTIVE_ANALYST_KEY, activeAnalyst);
+
+      document.getElementById("activeAnalystLabel").textContent = ANALYST_NAMES[activeAnalyst] || "Magali";
+      document.getElementById("exportAnalystTarget").textContent = ANALYST_NAMES[activeAnalyst] || "Magali";
+
+      renderAll();
+      if(document.getElementById("tab-crm").classList.contains("active")) renderCrmBoard();
+      if(document.getElementById("tab-metrics").classList.contains("active")) renderMetricsDashboard();
+      showToast(`Vista cambiada a: ${ANALYST_NAMES[activeAnalyst]}`);
+    });
+  });
 
   // TABS CONTROLLER
   document.querySelectorAll(".tab-btn").forEach(btn => {
@@ -1466,7 +1549,7 @@
   // GPS / MI UBICACIÓN
   document.getElementById("gpsBtn").addEventListener("click", () => {
     if (!navigator.geolocation) {
-      alert("Geolocalización no soportada por su navegador.");
+      alert("Geolocalización no soportada.");
       return;
     }
     const btn = document.getElementById("gpsBtn");
@@ -1485,50 +1568,45 @@
           fillColor: "#3b82f6",
           color: "#ffffff",
           weight: 3,
-          opacity: 1,
           fillOpacity: 0.9
         }).addTo(map);
 
-        userLocationMarker.bindPopup("<b>📍 Estás aquí</b><br><span style='font-size:11px'>Precisión: " + Math.round(pos.coords.accuracy) + " m</span>").openPopup();
+        userLocationMarker.bindPopup(`<b>📍 ${ANALYST_NAMES[activeAnalyst] || 'Ubicación'}</b><br><span style='font-size:11px'>Precisión: ${Math.round(pos.coords.accuracy)} m</span>`).openPopup();
         map.setView([lat, lng], 17);
-        showToast("Ubicación GPS actualizada");
+        showToast("Ubicación GPS fijada");
       },
       err => {
         btn.textContent = "📍 Mi Ubicación";
-        alert("No se pudo obtener la ubicación: " + err.message);
+        alert("Error de GPS: " + err.message);
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
   });
 
-  // WHATSAPP URL GENERATOR
-  function getWhatsAppUrl(phone, shopName, analystName) {
+  // WHATSAPP URL
+  function getWhatsAppUrl(phone, shopName, analystKey) {
     if(!phone) return "";
     let clean = phone.replace(/\D/g, "");
-    if(clean.length === 10 && clean.startsWith("343")) {
-      clean = "549" + clean;
-    } else if(clean.length === 10) {
-      clean = "549" + clean;
-    } else if(!clean.startsWith("54")) {
-      clean = "549" + clean;
-    }
-    const text = encodeURIComponent(`Hola ${shopName ? shopName : ''}! Te saluda ${analystName ? analystName : 'el equipo'} de Federar Paraná. Te escribo para comentarte sobre los convenios comerciales y beneficios que tenemos para tu comercio y tus clientes.`);
+    if(clean.length === 10) clean = "549" + clean;
+    else if(!clean.startsWith("54")) clean = "549" + clean;
+
+    const senderName = ANALYST_NAMES[analystKey] || ANALYST_NAMES[activeAnalyst] || "el equipo";
+    const text = encodeURIComponent(`Hola ${shopName ? shopName : ''}! Te saluda ${senderName} de Federar Paraná. Te contacto para coordinar sobre los convenios comerciales y créditos especiales que tenemos para tu comercio y tus clientes.`);
     return `https://wa.me/${clean}?text=${text}`;
   }
 
   document.getElementById("modalWaBtn").addEventListener("click", () => {
     const phone = document.getElementById("contact").value.trim();
     const name = document.getElementById("name").value.trim();
-    const analyst = document.getElementById("analyst").value.trim();
+    const an = document.getElementById("analystSelect").value;
     if(!phone) {
       alert("Por favor ingresá un número de teléfono primero.");
       return;
     }
-    const url = getWhatsAppUrl(phone, name, analyst);
+    const url = getWhatsAppUrl(phone, name, an);
     window.open(url, "_blank");
   });
 
-  // MAKE LEAFLET MARKER
   function makeMarker(shop) {
     const color = statusColors[shop.status] || statusColors.pendiente;
     return L.circleMarker([shop.lat, shop.lng], {
@@ -1546,6 +1624,7 @@
     }[c]));
 
     const waLink = shop.contact ? getWhatsAppUrl(shop.contact, shop.name, shop.analyst) : "";
+    const analystDisplayName = ANALYST_NAMES[shop.analyst] || shop.analyst || "Magali";
 
     return `
       <div style="min-width:240px;padding:2px">
@@ -1553,11 +1632,11 @@
           <span class="badge badge-${shop.status}">${safe(statusLabels[shop.status] || shop.status)}</span>
           <span class="tier-badge tier-${shop.tier || 'B'}">Tier ${safe(shop.tier || 'B')}</span>
         </div>
-        <strong style="font-size:15px;color:#0f172a;display:block">${safe(shop.name)}</strong>
-        <span style="color:#64748b;font-size:12px">${safe(shop.category || "Sin rubro")} · ${safe(shop.zone || "Microcentro")}</span>
-        <hr style="border:0;border-top:1px solid #e2e8f0;margin:8px 0">
-        <div style="font-size:12px;display:grid;gap:3px;color:#334155">
-          <div><b>Analista:</b> ${safe(shop.analyst || "-")}</div>
+        <strong style="font-size:14px;color:#0f172a;display:block">${safe(shop.name)}</strong>
+        <span style="color:#64748b;font-size:11px">${safe(shop.category || "Sin rubro")} · ${safe(shop.zone || "Microcentro")}</span>
+        <hr style="border:0;border-top:1px solid #e2e8f0;margin:6px 0">
+        <div style="font-size:11px;display:grid;gap:3px;color:#334155">
+          <div><b>Analista:</b> <span class="analyst-tag">${safe(analystDisplayName)}</span></div>
           <div><b>Dirección:</b> ${safe(shop.address || "-")}</div>
           <div><b>Flyers:</b> ${Number(shop.flyers || 0)}</div>
           ${shop.agreementType ? `<div><b>Convenio:</b> <span style="color:#15803d;font-weight:700">${safe(shop.agreementType)}</span></div>` : ''}
@@ -1565,8 +1644,8 @@
         </div>
 
         <div style="display:flex;gap:6px;margin-top:10px">
-          ${waLink ? `<a href="${waLink}" target="_blank" style="text-decoration:none;flex:1"><button style="width:100%;padding:7px;background:#25D366;color:#fff;border:0;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">💬 WhatsApp</button></a>` : ''}
-          <button data-edit="${shop.id}" style="flex:1;padding:7px;border:0;border-radius:8px;background:#1d4ed8;color:#fff;font-weight:700;font-size:12px;cursor:pointer">✏️ Editar</button>
+          ${waLink ? `<a href="${waLink}" target="_blank" style="text-decoration:none;flex:1"><button style="width:100%;padding:6px;background:#25D366;color:#fff;border:0;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer">💬 WhatsApp</button></a>` : ''}
+          <button data-edit="${shop.id}" style="flex:1;padding:6px;border:0;border-radius:7px;background:#1d4ed8;color:#fff;font-weight:700;font-size:11px;cursor:pointer">✏️ Editar</button>
         </div>
       </div>
     `;
@@ -1595,16 +1674,18 @@
     const status = document.getElementById("statusFilter").value;
     const zone = document.getElementById("zoneFilter").value;
     const tier = document.getElementById("tierFilter").value;
-    const analyst = document.getElementById("analystFilter").value.trim().toLowerCase();
+    const date = document.getElementById("dateFilter").value;
 
-    return shops.filter(shop => {
+    const baseShops = getShopsForCurrentView();
+
+    return baseShops.filter(shop => {
       const text = [shop.name, shop.category, shop.address, shop.contactPerson].join(" ").toLowerCase();
       const okQ = !q || text.includes(q);
       const okStatus = !status || shop.status === status;
       const okZone = !zone || shop.zone === zone;
       const okTier = !tier || shop.tier === tier;
-      const okAnalyst = !analyst || String(shop.analyst || "").toLowerCase().includes(analyst);
-      return okQ && okStatus && okZone && okTier && okAnalyst;
+      const okDate = !date || shop.visitDate === date;
+      return okQ && okStatus && okZone && okTier && okDate;
     });
   }
 
@@ -1615,17 +1696,21 @@
     document.getElementById("listCount").textContent = `${filtered.length} locales`;
 
     if(!filtered.length) {
-      list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:24px 10px;font-size:13px">No se encontraron comercios con los filtros aplicados.</div>';
+      list.innerHTML = '<div style="text-align:center;color:var(--muted);padding:20px 10px;font-size:12px">No hay comercios para la analista/filtros activos.</div>';
       return;
     }
 
     filtered.forEach(shop => {
       const item = document.createElement("div");
       item.className = "shop-item";
+      const anTag = activeAnalyst === "all" ? `<span class="analyst-tag">${ANALYST_NAMES[shop.analyst] || 'Magali'}</span>` : '';
       item.innerHTML = `
         <div class="shop-item-head">
           <strong>${escapeHtml(shop.name)}</strong>
-          <span class="tier-badge tier-${shop.tier || 'B'}">Tier ${escapeHtml(shop.tier || 'B')}</span>
+          <div style="display:flex;gap:4px;align-items:center;">
+            ${anTag}
+            <span class="tier-badge tier-${shop.tier || 'B'}">Tier ${escapeHtml(shop.tier || 'B')}</span>
+          </div>
         </div>
         <div class="meta">
           <span>${escapeHtml(shop.category || "Sin rubro")}</span>
@@ -1647,11 +1732,12 @@
   }
 
   function renderStats() {
-    document.getElementById("statTotal").textContent = shops.length;
-    document.getElementById("badgeTotalShops").textContent = `${shops.length} Comercios`;
-    document.getElementById("statVisited").textContent = shops.filter(s => s.status !== "pendiente").length;
-    document.getElementById("statDeals").textContent = shops.filter(s => s.status === "acuerdo").length;
-    document.getElementById("statFlyers").textContent = shops.reduce((sum, s) => sum + Number(s.flyers || 0), 0);
+    const currentShops = getShopsForCurrentView();
+    document.getElementById("statTotal").textContent = currentShops.length;
+    document.getElementById("badgeTotalShops").textContent = `${currentShops.length} Comercios (${ANALYST_NAMES[activeAnalyst]})`;
+    document.getElementById("statVisited").textContent = currentShops.filter(s => s.status !== "pendiente").length;
+    document.getElementById("statDeals").textContent = currentShops.filter(s => s.status === "acuerdo").length;
+    document.getElementById("statFlyers").textContent = currentShops.reduce((sum, s) => sum + Number(s.flyers || 0), 0);
   }
 
   function renderAll() {
@@ -1669,6 +1755,8 @@
   // CRM BOARD RENDERER
   function renderCrmBoard() {
     const todayStr = new Date().toISOString().split("T")[0];
+    const currentShops = getShopsForCurrentView();
+
     const overdueList = document.getElementById("listOverdue");
     const todayList = document.getElementById("listToday");
     const upcomingList = document.getElementById("listUpcoming");
@@ -1681,8 +1769,7 @@
 
     let countOver = 0, countTod = 0, countUp = 0, countInt = 0;
 
-    shops.forEach(shop => {
-      // Interesados
+    currentShops.forEach(shop => {
       if(shop.status === "interesado") {
         countInt++;
         interestedList.appendChild(createCrmCard(shop, 'interested'));
@@ -1710,33 +1797,36 @@
     document.getElementById("countUpcoming").textContent = countUp;
     document.getElementById("countInterested").textContent = countInt;
 
-    if(!countOver) overdueList.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:14px">Sin seguimientos vencidos. ¡Al día! ✨</div>';
-    if(!countTod) todayList.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:14px">No hay tareas programadas para hoy.</div>';
-    if(!countUp) upcomingList.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:14px">Sin seguimientos próximos agendados.</div>';
-    if(!countInt) interestedList.innerHTML = '<div style="color:var(--muted);font-size:12px;text-align:center;padding:14px">No hay comercios en estado interesado actualmente.</div>';
+    if(!countOver) overdueList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px">Sin seguimientos vencidos. ✨</div>';
+    if(!countTod) todayList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px">Sin tareas para hoy.</div>';
+    if(!countUp) upcomingList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px">Sin seguimientos próximos.</div>';
+    if(!countInt) interestedList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:12px">No hay comercios interesados activos.</div>';
   }
 
   function createCrmCard(shop, type) {
     const card = document.createElement("div");
     card.className = `crm-card-item ${type}`;
     const waLink = shop.contact ? getWhatsAppUrl(shop.contact, shop.name, shop.analyst) : "";
+    const anTag = `<span class="analyst-tag">${ANALYST_NAMES[shop.analyst] || 'Magali'}</span>`;
 
     card.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <strong style="font-size:13px;color:#0f172a">${escapeHtml(shop.name)}</strong>
-        <span class="badge badge-${shop.status}">${statusLabels[shop.status] || shop.status}</span>
+        <strong style="font-size:12px;color:#0f172a">${escapeHtml(shop.name)}</strong>
+        <div style="display:flex;gap:4px;align-items:center;">
+          ${anTag}
+          <span class="badge badge-${shop.status}">${statusLabels[shop.status] || shop.status}</span>
+        </div>
       </div>
-      <div style="font-size:11px;color:var(--muted);margin-top:2px">
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">
         ${escapeHtml(shop.category || "Sin rubro")} · ${escapeHtml(shop.zone || "Microcentro")}
       </div>
-      <div style="font-size:12px;margin-top:6px;color:#334155">
+      <div style="font-size:11px;margin-top:5px;color:#334155">
         <div><b>Contacto:</b> ${escapeHtml(shop.contactPerson || shop.contact || "Sin contacto")}</div>
-        ${shop.followUp ? `<div><b>Fecha:</b> ${escapeHtml(shop.followUp)}</div>` : ''}
-        ${shop.notes ? `<div style="font-style:italic;color:#64748b;margin-top:4px">"${escapeHtml(shop.notes)}"</div>` : ''}
+        ${shop.followUp ? `<div><b>Seguimiento:</b> 📅 ${escapeHtml(shop.followUp)}</div>` : ''}
       </div>
       <div class="crm-card-actions">
         ${waLink ? `<a href="${waLink}" target="_blank" style="text-decoration:none"><button class="btn btn-whatsapp btn-sm">💬 WhatsApp</button></a>` : ''}
-        <button class="btn btn-secondary btn-sm" onclick="window.quickReschedule('${shop.id}')">📅 +3 Días</button>
+        <button class="btn btn-secondary btn-sm" onclick="window.quickReschedule('${shop.id}', '${shop.analyst || 'magali'}')">📅 +3 Días</button>
         <button class="btn btn-primary btn-sm" onclick="window.openEditShop('${shop.id}')">✏️ Ficha</button>
       </div>
     `;
@@ -1747,8 +1837,9 @@
     openEdit(id);
   };
 
-  window.quickReschedule = function(id) {
-    const shop = shops.find(s => s.id === id);
+  window.quickReschedule = function(id, analystKey) {
+    const targetKey = analystKey || (activeAnalyst === "all" ? "magali" : activeAnalyst);
+    const shop = appData.analysts[targetKey].shops.find(s => s.id === id);
     if(!shop) return;
     const d = new Date();
     d.setDate(d.getDate() + 3);
@@ -1757,36 +1848,35 @@
     shop.history.push({
       date: new Date().toISOString().split("T")[0],
       note: "Seguimiento pospuesto 3 días.",
-      user: "Analista"
+      user: ANALYST_NAMES[targetKey] || "Analista"
     });
-    saveShops();
+    saveState();
     renderCrmBoard();
     renderAll();
-    showToast("Seguimiento reprogramado +3 días");
+    showToast("Seguimiento pospuesto +3 días");
   };
 
   // DASHBOARD & KPI RENDERER
   function renderMetricsDashboard() {
-    const total = shops.length;
-    const visited = shops.filter(s => s.status !== "pendiente").length;
-    const interested = shops.filter(s => s.status === "interesado").length;
-    const deals = shops.filter(s => s.status === "acuerdo").length;
-    const flyersTotal = shops.reduce((sum, s) => sum + Number(s.flyers || 0), 0);
+    const currentShops = getShopsForCurrentView();
+    const total = currentShops.length;
+    const visited = currentShops.filter(s => s.status !== "pendiente").length;
+    const interested = currentShops.filter(s => s.status === "interesado").length;
+    const deals = currentShops.filter(s => s.status === "acuerdo").length;
+    const flyersTotal = currentShops.reduce((sum, s) => sum + Number(s.flyers || 0), 0);
 
-    // KPIs
     const convRate = visited > 0 ? Math.round((deals / visited) * 100) : 0;
     document.getElementById("kpiConversionRate").textContent = `${convRate}%`;
 
     const avgFlyers = visited > 0 ? (flyersTotal / visited).toFixed(1) : "0";
     document.getElementById("kpiAvgFlyers").textContent = avgFlyers;
 
-    const tierADeals = shops.filter(s => s.status === "acuerdo" && s.tier === "A").length;
+    const tierADeals = currentShops.filter(s => s.status === "acuerdo" && s.tier === "A").length;
     document.getElementById("kpiTierADeals").textContent = tierADeals;
 
     const coverage = total > 0 ? Math.round((visited / total) * 100) : 0;
     document.getElementById("kpiCoverage").textContent = `${coverage}%`;
 
-    // Funnel calculations
     document.getElementById("fnTotal").textContent = `${total} (100%)`;
     document.getElementById("barTotal").style.width = "100%";
 
@@ -1805,29 +1895,23 @@
     document.getElementById("barDeals").style.width = `${Math.max(pctDeals, 5)}%`;
     document.getElementById("barDeals").textContent = `${pctDeals}%`;
 
-    // Analysts ranking table
-    const analystsMap = {};
-    shops.forEach(s => {
-      const a = s.analyst ? s.analyst.trim() : "Sin asignar";
-      if(!analystsMap[a]) {
-        analystsMap[a] = { visits: 0, deals: 0, flyers: 0 };
-      }
-      if(s.status !== "pendiente") analystsMap[a].visits++;
-      if(s.status === "acuerdo") analystsMap[a].deals++;
-      analystsMap[a].flyers += Number(s.flyers || 0);
-    });
-
+    // Ranking Table (both Magali and Victoria)
     const tbody = document.getElementById("analystTableBody");
     tbody.innerHTML = "";
-    Object.keys(analystsMap).forEach(name => {
-      const row = analystsMap[name];
-      const eff = row.visits > 0 ? Math.round((row.deals / row.visits) * 100) : 0;
+
+    ["magali", "victoria"].forEach(key => {
+      const sh = (appData.analysts[key] && appData.analysts[key].shops) || [];
+      const v = sh.filter(s => s.status !== "pendiente").length;
+      const d = sh.filter(s => s.status === "acuerdo").length;
+      const fl = sh.reduce((sum, s) => sum + Number(s.flyers || 0), 0);
+      const eff = v > 0 ? Math.round((d / v) * 100) : 0;
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td><b>${escapeHtml(name)}</b></td>
-        <td>${row.visits}</td>
-        <td><span style="color:#059669;font-weight:700">${row.deals}</span></td>
-        <td>${row.flyers}</td>
+        <td><b>👩 ${ANALYST_NAMES[key]}</b></td>
+        <td>${v}</td>
+        <td><span style="color:#059669;font-weight:700">${d}</span></td>
+        <td>${fl}</td>
         <td><b>${eff}%</b></td>
       `;
       tbody.appendChild(tr);
@@ -1835,7 +1919,7 @@
 
     // Breakdown Agreements
     const agMap = {};
-    shops.filter(s => s.status === "acuerdo").forEach(s => {
+    currentShops.filter(s => s.status === "acuerdo").forEach(s => {
       const t = s.agreementType || "Convenio General";
       agMap[t] = (agMap[t] || 0) + 1;
     });
@@ -1843,18 +1927,18 @@
     const agContainer = document.getElementById("agreementsBreakdown");
     agContainer.innerHTML = "";
     if(!Object.keys(agMap).length) {
-      agContainer.innerHTML = '<div style="font-size:12px;color:var(--muted)">Aún no se registraron convenios cerrados.</div>';
+      agContainer.innerHTML = '<div style="font-size:11px;color:var(--muted)">Sin acuerdos logrados aún en esta selección.</div>';
     } else {
       Object.keys(agMap).forEach(key => {
         const count = agMap[key];
         const pct = deals > 0 ? Math.round((count / deals) * 100) : 0;
         agContainer.innerHTML += `
           <div>
-            <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:600;margin-bottom:2px">
+            <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:2px">
               <span>${escapeHtml(key)}</span>
               <span>${count} (${pct}%)</span>
             </div>
-            <div style="background:#f1f5f9;height:12px;border-radius:6px;overflow:hidden">
+            <div style="background:#f1f5f9;height:10px;border-radius:5px;overflow:hidden">
               <div style="background:#10b981;height:100%;width:${pct}%"></div>
             </div>
           </div>
@@ -1864,7 +1948,7 @@
 
     // Breakdown Circuits
     const circMap = {};
-    shops.forEach(s => {
+    currentShops.forEach(s => {
       const z = s.zone || "Microcentro";
       if(!circMap[z]) circMap[z] = { total: 0, deals: 0 };
       circMap[z].total++;
@@ -1876,7 +1960,7 @@
     Object.keys(circMap).forEach(z => {
       const item = circMap[z];
       circContainer.innerHTML += `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:#f8fafc;border-radius:8px;border:1px solid #e2e8f0;font-size:12px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:#f8fafc;border-radius:6px;border:1px solid #e2e8f0;font-size:11px">
           <strong>${escapeHtml(z)}</strong>
           <span>${item.total} locales · <b style="color:#15803d">${item.deals} acuerdos</b></span>
         </div>
@@ -1884,7 +1968,7 @@
     });
   }
 
-  // MODAL SHOP LOGS / BITÁCORA
+  // MODAL SHOP LOGS
   function renderActiveLogs() {
     const cont = document.getElementById("logTimeline");
     cont.innerHTML = "";
@@ -1910,17 +1994,25 @@
     const input = document.getElementById("newLogInput");
     const note = input.value.trim();
     if(!note) return;
-    const analyst = document.getElementById("analyst").value.trim() || "Analista";
+    const an = document.getElementById("analystSelect").value;
     activeLogs.push({
       date: new Date().toISOString().split("T")[0],
       note,
-      user: analyst
+      user: ANALYST_NAMES[an] || "Analista"
     });
     input.value = "";
     renderActiveLogs();
   });
 
-  // MODAL SHOP (OPEN NEW / EDIT)
+  // FIND SHOP ACROSS ANALYSTS
+  function findShopAndAnalyst(id) {
+    for (const key of ["magali", "victoria"]) {
+      const s = appData.analysts[key].shops.find(item => item.id === id);
+      if (s) return { shop: s, analystKey: key };
+    }
+    return null;
+  }
+
   function openNew(latlng=null) {
     document.getElementById("shopForm").reset();
     document.getElementById("shopId").value = "";
@@ -1930,6 +2022,7 @@
     document.getElementById("status").value = "pendiente";
     document.getElementById("tier").value = "B";
     document.getElementById("zone").value = "Peatonal San Martín";
+    document.getElementById("analystSelect").value = activeAnalyst === "all" ? "magali" : activeAnalyst;
     document.getElementById("visitDate").value = new Date().toISOString().split("T")[0];
     activeLogs = [];
     renderActiveLogs();
@@ -1942,16 +2035,17 @@
   }
 
   function openEdit(id) {
-    const shop = shops.find(s => s.id === id);
-    if(!shop) return;
+    const found = findShopAndAnalyst(id);
+    if(!found) return;
+    const shop = found.shop;
 
     document.getElementById("shopId").value = shop.id;
     document.getElementById("name").value = shop.name || "";
     document.getElementById("category").value = shop.category || "";
     document.getElementById("address").value = shop.address || "";
     document.getElementById("zone").value = shop.zone || "Peatonal San Martín";
+    document.getElementById("analystSelect").value = shop.analyst || found.analystKey;
     document.getElementById("tier").value = shop.tier || "B";
-    document.getElementById("analyst").value = shop.analyst || "";
     document.getElementById("status").value = shop.status || "pendiente";
     document.getElementById("flyers").value = Number(shop.flyers || 0);
     document.getElementById("contact").value = shop.contact || "";
@@ -1979,15 +2073,17 @@
   document.getElementById("shopForm").addEventListener("submit", e => {
     e.preventDefault();
 
-    const id = document.getElementById("shopId").value || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()));
+    const id = document.getElementById("shopId").value || ("c-" + Date.now());
+    const targetAnalyst = document.getElementById("analystSelect").value;
+
     const shop = {
       id,
       name: document.getElementById("name").value.trim(),
       category: document.getElementById("category").value.trim(),
       address: document.getElementById("address").value.trim(),
       zone: document.getElementById("zone").value,
+      analyst: targetAnalyst,
       tier: document.getElementById("tier").value,
-      analyst: document.getElementById("analyst").value.trim(),
       status: document.getElementById("status").value,
       flyers: Math.max(0, Number(document.getElementById("flyers").value || 0)),
       contact: document.getElementById("contact").value.trim(),
@@ -1997,19 +2093,21 @@
       agreementType: document.getElementById("agreementType").value,
       agreement: document.getElementById("agreement").value.trim(),
       history: activeLogs,
-      notes: activeLogs.length ? activeLogs[activeLogs.length - 1].note : "",
       lat: Number(document.getElementById("lat").value),
       lng: Number(document.getElementById("lng").value)
     };
 
-    const index = shops.findIndex(s => s.id === id);
-    if(index >= 0) shops[index] = shop;
-    else shops.push(shop);
+    // Remove from both first to allow reassigning analyst
+    appData.analysts.magali.shops = appData.analysts.magali.shops.filter(s => s.id !== id);
+    appData.analysts.victoria.shops = appData.analysts.victoria.shops.filter(s => s.id !== id);
 
-    saveShops();
+    // Insert into selected analyst
+    appData.analysts[targetAnalyst].shops.push(shop);
+
+    saveState();
     renderAll();
     closeModal();
-    showToast("Comercio guardado exitosamente");
+    showToast(`Guardado en la cartera de ${ANALYST_NAMES[targetAnalyst]}`);
 
     map.setView([shop.lat, shop.lng], Math.max(map.getZoom(), 16));
   });
@@ -2017,10 +2115,12 @@
   document.getElementById("deleteBtn").addEventListener("click", () => {
     const id = document.getElementById("shopId").value;
     if(!id) return;
-    if(!confirm("¿Estás seguro de eliminar este comercio?")) return;
+    if(!confirm("¿Estás seguro de eliminar este comercio de la cartera?")) return;
 
-    shops = shops.filter(s => s.id !== id);
-    saveShops();
+    appData.analysts.magali.shops = appData.analysts.magali.shops.filter(s => s.id !== id);
+    appData.analysts.victoria.shops = appData.analysts.victoria.shops.filter(s => s.id !== id);
+
+    saveState();
     renderAll();
     closeModal();
     showToast("Comercio eliminado");
@@ -2039,58 +2139,57 @@
     openNew(e.latlng);
   });
 
-  // FILTERS EVENT LISTENERS
-  ["searchInput","statusFilter","zoneFilter","tierFilter","analystFilter"].forEach(id => {
+  ["searchInput","statusFilter","zoneFilter","tierFilter","dateFilter"].forEach(id => {
     const el = document.getElementById(id);
     el.addEventListener("input", renderAll);
     el.addEventListener("change", renderAll);
   });
 
-  // IMPORT / EXPORT MODAL & LOGIC
+  // IMPORT / EXPORT
   const ioModal = document.getElementById("ioModal");
-  document.getElementById("exportBtn").addEventListener("click", () => {
-    ioModal.classList.add("show");
-  });
-  document.getElementById("importBtn").addEventListener("click", () => {
-    ioModal.classList.add("show");
-  });
-  document.getElementById("closeIoModal").addEventListener("click", () => {
-    ioModal.classList.remove("show");
-  });
+  document.getElementById("exportBtn").addEventListener("click", () => ioModal.classList.add("show"));
+  document.getElementById("importBtn").addEventListener("click", () => ioModal.classList.add("show"));
+  document.getElementById("closeIoModal").addEventListener("click", () => ioModal.classList.remove("show"));
   ioModal.addEventListener("click", e => {
     if(e.target.id === "ioModal") ioModal.classList.remove("show");
   });
 
   // EXPORT JSON
   document.getElementById("exportJsonBtn").addEventListener("click", () => {
-    const blob = new Blob([JSON.stringify(shops, null, 2)], { type: "application/json" });
+    const dataToExport = activeAnalyst === "all" ? appData : {
+      version: 2,
+      analyst: activeAnalyst,
+      shops: appData.analysts[activeAnalyst].shops
+    };
+    const blob = new Blob([JSON.stringify(dataToExport, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `plan_comercial_federar_${new Date().toISOString().split("T")[0]}.json`;
+    a.download = `plan_comercial_federar_${activeAnalyst}_${new Date().toISOString().split("T")[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
     showToast("Exportado a JSON");
   });
 
-  // EXPORT CSV (EXCEL FRIENDLY)
+  // EXPORT CSV
   document.getElementById("exportCsvBtn").addEventListener("click", () => {
+    const targetShops = getShopsForCurrentView();
     const headers = [
-      "ID", "Nombre", "Rubro", "Direccion", "Circuito", "Potencial_Tier",
-      "Analista", "Estado", "Flyers", "Telefono", "Contacto",
-      "Fecha_Visita", "Proximo_Seguimiento", "Tipo_Convenio", "Detalle_Acuerdo", "Latitud", "Longitud"
+      "ID", "Nombre", "Rubro", "Direccion", "Circuito", "Analista", "Potencial_Tier",
+      "Estado", "Flyers", "Telefono", "Contacto", "Fecha_Visita", "Proximo_Seguimiento",
+      "Tipo_Convenio", "Detalle_Acuerdo", "Latitud", "Longitud"
     ];
 
     const escapeCsv = v => `"${String(v || "").replace(/"/g, '""')}"`;
 
-    const rows = shops.map(s => [
+    const rows = targetShops.map(s => [
       escapeCsv(s.id),
       escapeCsv(s.name),
       escapeCsv(s.category),
       escapeCsv(s.address),
       escapeCsv(s.zone),
+      escapeCsv(ANALYST_NAMES[s.analyst] || s.analyst || "Magali"),
       escapeCsv(s.tier),
-      escapeCsv(s.analyst),
       escapeCsv(statusLabels[s.status] || s.status),
       Number(s.flyers || 0),
       escapeCsv(s.contact),
@@ -2108,7 +2207,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `plan_comercial_federar_${new Date().toISOString().split("T")[0]}.csv`;
+    a.download = `plan_comercial_federar_${activeAnalyst}_${new Date().toISOString().split("T")[0]}.csv`;
     a.click();
     URL.revokeObjectURL(url);
     showToast("Exportado a Excel (CSV)");
@@ -2117,7 +2216,7 @@
   // IMPORT FILE
   const fileInput = document.getElementById("fileInput");
   const processImportBtn = document.getElementById("processImportBtn");
-  let importData = null;
+  let importShops = null;
 
   fileInput.addEventListener("change", e => {
     const file = e.target.files[0];
@@ -2130,43 +2229,48 @@
       try {
         const text = ev.target.result;
         if(file.name.endsWith(".json")) {
-          importData = JSON.parse(text);
-          if(!Array.isArray(importData)) throw new Error("JSON debe ser una lista de comercios.");
+          const parsed = JSON.parse(text);
+          if (parsed.analysts && parsed.analysts[activeAnalyst]) {
+            importShops = parsed.analysts[activeAnalyst].shops;
+          } else if(Array.isArray(parsed.shops)) {
+            importShops = parsed.shops;
+          } else if(Array.isArray(parsed)) {
+            importShops = parsed;
+          } else {
+            throw new Error("Formato JSON no compatible");
+          }
         } else {
-          // CSV parser básico
           const lines = text.split(/\r?\n/).filter(l => l.trim().length);
-          if(lines.length < 2) throw new Error("CSV vacío o sin datos.");
+          if(lines.length < 2) throw new Error("CSV vacío.");
           const delimiter = lines[0].includes(";") ? ";" : ",";
           const parsed = [];
           for(let i = 1; i < lines.length; i++) {
             const cols = lines[i].split(delimiter).map(c => c.replace(/^"|"$/g, "").trim());
             if(cols.length >= 2) {
               parsed.push({
-                id: cols[0] || String(Date.now() + i),
+                id: cols[0] || ("imp-" + Date.now() + i),
                 name: cols[1] || "Comercio",
                 category: cols[2] || "",
                 address: cols[3] || "",
                 zone: cols[4] || "Peatonal San Martín",
-                tier: cols[5] || "B",
-                analyst: cols[6] || "",
+                analyst: activeAnalyst === "all" ? "magali" : activeAnalyst,
+                tier: cols[6] || "B",
                 status: "pendiente",
                 flyers: Number(cols[8]) || 0,
                 contact: cols[9] || "",
                 contactPerson: cols[10] || "",
                 visitDate: cols[11] || "",
                 followUp: cols[12] || "",
-                agreementType: cols[13] || "",
-                agreement: cols[14] || "",
                 lat: Number(cols[15]) || -31.7330,
                 lng: Number(cols[16]) || -60.5297,
                 history: []
               });
             }
           }
-          importData = parsed;
+          importShops = parsed;
         }
         processImportBtn.disabled = false;
-        processImportBtn.textContent = `Cargar ${importData.length} comercios`;
+        processImportBtn.textContent = `Cargar ${importShops.length} comercios a ${ANALYST_NAMES[activeAnalyst]}`;
       } catch(err) {
         alert("Error al leer archivo: " + err.message);
         processImportBtn.disabled = true;
@@ -2176,23 +2280,31 @@
   });
 
   processImportBtn.addEventListener("click", () => {
-    if(!importData || !importData.length) return;
-    if(confirm(`Se importarán ${importData.length} comercios. ¿Deseas reemplazar la base actual (Aceptar) o sumarlos a la existente (Cancelar)?`)) {
-      shops = importData;
+    if(!importShops || !importShops.length) return;
+    const dest = activeAnalyst === "all" ? "magali" : activeAnalyst;
+    if(confirm(`Se importarán ${importShops.length} comercios a la cartera de ${ANALYST_NAMES[dest]}. ¿Deseas reemplazar su cartera (Aceptar) o sumar estos comercios (Cancelar)?`)) {
+      appData.analysts[dest].shops = importShops.map(s => ({ ...s, analyst: dest }));
     } else {
-      shops = [...shops, ...importData];
+      appData.analysts[dest].shops = [...appData.analysts[dest].shops, ...importShops.map(s => ({ ...s, analyst: dest }))];
     }
-    saveShops();
+    saveState();
     renderAll();
     ioModal.classList.remove("show");
-    showToast(`Base actualizada con ${shops.length} comercios`);
+    showToast(`Base de ${ANALYST_NAMES[dest]} actualizada`);
   });
 
   // INICIALIZACIÓN
+  document.getElementById("activeAnalystLabel").textContent = ANALYST_NAMES[activeAnalyst] || "Magali";
+  document.getElementById("exportAnalystTarget").textContent = ANALYST_NAMES[activeAnalyst] || "Magali";
+  document.querySelectorAll(".analyst-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.analyst === activeAnalyst);
+  });
+
   renderAll();
 
-  if(shops.length) {
-    const valid = shops.filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)));
+  const currentShops = getShopsForCurrentView();
+  if(currentShops.length) {
+    const valid = currentShops.filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)));
     if(valid.length) {
       const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
       map.fitBounds(bounds.pad(0.15));
