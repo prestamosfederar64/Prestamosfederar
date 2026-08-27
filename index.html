@@ -343,6 +343,157 @@
       box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.12);
     }
 
+    /* CUSTOM SELECT SYSTEM */
+    .custom-select-wrap {
+      position: relative;
+      width: 100%;
+      user-select: none;
+    }
+
+    .custom-select-native {
+      position: absolute !important;
+      opacity: 0 !important;
+      width: 1px !important;
+      height: 1px !important;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .custom-select-trigger {
+      width: 100%;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      min-height: 31px;
+      font-family: inherit;
+      text-align: left;
+    }
+
+    .custom-select-trigger:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+
+    .custom-select-wrap.open .custom-select-trigger {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(29, 78, 216, 0.15);
+      background: #ffffff;
+    }
+
+    .custom-select-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .custom-select-arrow {
+      width: 13px;
+      height: 13px;
+      color: var(--muted);
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .custom-select-wrap.open .custom-select-arrow {
+      transform: rotate(180deg);
+      color: var(--primary);
+    }
+
+    .custom-select-dropdown {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 12px 28px -4px rgba(15, 23, 42, 0.18), 0 4px 10px rgba(15, 23, 42, 0.06);
+      z-index: 2500;
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 4px;
+      display: none;
+      animation: selectFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes selectFadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .custom-select-wrap.open .custom-select-dropdown {
+      display: block;
+    }
+
+    .custom-select-option {
+      padding: 6px 8px;
+      font-size: 11px;
+      border-radius: 5px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      color: var(--text);
+      transition: background 0.12s ease, color 0.12s ease;
+    }
+
+    .custom-select-option:hover {
+      background: #f1f5f9;
+      color: var(--primary);
+    }
+
+    .custom-select-option.selected {
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .custom-select-opt-content {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .custom-select-check {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      opacity: 0;
+    }
+
+    .custom-select-option.selected .custom-select-check {
+      opacity: 1;
+    }
+
+    .select-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      display: inline-block;
+    }
+
     /* SHOP LIST */
     .shop-list {
       display: flex;
@@ -491,22 +642,215 @@
       gap: 6px;
     }
 
-    .route-info-panel {
+    /* GOOGLE MAPS STYLE SEARCH BAR */
+    .map-search-wrapper {
       position: absolute;
-      bottom: 12px;
-      left: 12px;
-      z-index: 999;
-      background: rgba(9, 30, 66, 0.92);
-      color: #fff;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 11px;
-      display: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-      border: 1px solid rgba(255,255,255,0.15);
+      top: 10px;
+      left: 54px;
+      z-index: 1000;
+      width: 360px;
+      max-width: calc(100% - 180px);
+      font-family: inherit;
     }
 
-    .route-info-panel.active { display: block; }
+    .map-search-bar {
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      height: 38px;
+      padding: 0 12px;
+      border-radius: 20px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.16), 0 1px 3px rgba(0,0,0,0.06);
+      border: 1px solid #e2e8f0;
+      gap: 8px;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .map-search-bar:focus-within {
+      border-color: #2563eb;
+      box-shadow: 0 4px 18px rgba(37, 99, 235, 0.22), 0 2px 6px rgba(0,0,0,0.08);
+      background: #ffffff;
+    }
+
+    .map-search-btn {
+      background: transparent;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      transition: color 0.15s ease, transform 0.15s ease;
+      flex-shrink: 0;
+    }
+
+    .map-search-btn:hover {
+      color: #1d4ed8;
+      transform: scale(1.1);
+    }
+
+    .map-search-icon {
+      width: 15px;
+      height: 15px;
+      color: inherit;
+      flex-shrink: 0;
+    }
+
+    #mapSearchInput {
+      border: none;
+      outline: none;
+      background: transparent;
+      width: 100%;
+      font-size: 12px;
+      font-family: inherit;
+      color: #0f172a;
+      padding: 0;
+    }
+
+    #mapSearchInput::placeholder {
+      color: #94a3b8;
+      font-size: 11.5px;
+    }
+
+    .map-search-clear {
+      background: #f1f5f9;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      font-size: 11px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s ease, color 0.15s ease;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .map-search-clear:hover {
+      color: #0f172a;
+      background: #e2e8f0;
+    }
+
+    .map-search-spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid #cbd5e1;
+      border-top-color: #2563eb;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      flex-shrink: 0;
+    }
+
+    .map-search-results {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      right: 0;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.2), 0 4px 10px rgba(15, 23, 42, 0.08);
+      border: 1px solid #e2e8f0;
+      max-height: 320px;
+      overflow-y: auto;
+      padding: 6px;
+      animation: selectFadeIn 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .map-search-section-header {
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #94a3b8;
+      padding: 6px 8px 3px;
+    }
+
+    .map-search-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 7px 9px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: 11.5px;
+      transition: background 0.12s ease;
+      color: #1e293b;
+    }
+
+    .map-search-item:hover, .map-search-item.highlighted {
+      background: #f1f5f9;
+    }
+
+    .map-search-item-icon {
+      font-size: 13px;
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #eff6ff;
+      border-radius: 6px;
+    }
+
+    .map-search-item-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .map-search-item-title {
+      font-weight: 600;
+      color: #0f172a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .map-search-item-subtitle {
+      font-size: 10px;
+      color: #64748b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .map-search-tag {
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .map-search-empty {
+      padding: 14px 10px;
+      text-align: center;
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    @keyframes bouncePin {
+      0% { transform: translateY(-16px); opacity: 0; }
+      60% { transform: translateY(3px); opacity: 1; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    @media(max-width: 640px) {
+      .map-search-wrapper {
+        left: 48px;
+        width: calc(100% - 150px);
+      }
+    }
+
+
 
     /* CRM & FOLLOW-UP VIEW */
     .crm-grid {
@@ -1002,28 +1346,27 @@
         </div>
 
         <div id="map">
+          <!-- GOOGLE MAPS STYLE SEARCH BAR -->
+          <div class="map-search-wrapper" id="mapSearchWrapper">
+            <div class="map-search-bar">
+              <button type="button" class="map-search-btn" id="mapSearchBtn" title="Buscar dirección">
+                <svg class="map-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"></circle>
+                  <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+              </button>
+              <input type="text" id="mapSearchInput" placeholder="Buscar dirección, calle o comercio en Paraná..." autocomplete="off" />
+              <div class="map-search-spinner" id="mapSearchSpinner" style="display:none;"></div>
+              <button type="button" class="map-search-clear" id="mapSearchClearBtn" title="Limpiar búsqueda" style="display:none;">✕</button>
+            </div>
+            <div class="map-search-results" id="mapSearchResults" style="display:none;"></div>
+          </div>
+
           <!-- MAP CONTROLS -->
           <div class="map-controls-group">
-            <button class="btn btn-white btn-sm" id="traceCircuitBtn" title="Trazar ruta sugerida entre comercios">
-              Trazar Ruta
-            </button>
-            <button class="btn btn-primary btn-sm" id="routeTrackBtn" title="Iniciar o pausar marcado de recorrido GPS">
-              Iniciar Recorrido
-            </button>
             <button class="btn btn-secondary btn-sm" id="gpsBtn" title="Ubicarme en el mapa">
               Mi Ubicación
             </button>
-          </div>
-
-          <!-- RECORRIDO LIVE STATS PANEL -->
-          <div class="route-info-panel" id="routeInfoPanel">
-            <div style="font-weight:800;margin-bottom:2px;display:flex;justify-content:space-between;gap:12px;">
-              <span>Recorrido Activo</span>
-              <span id="routeTimer">00:00</span>
-            </div>
-            <div style="font-size:10px;color:#cbd5e1;">
-              Distancia: <strong id="routeDistLabel" style="color:#fff;">0 m</strong> · Puntos: <strong id="routePointsCount" style="color:#fff;">0</strong>
-            </div>
           </div>
         </div>
       </main>
@@ -1340,7 +1683,6 @@
   const STORAGE_KEY_V2 = "federar_plan_comercial_v2";
   const STORAGE_KEY_V1 = "federar_plan_comercial_v1";
   const ACTIVE_ANALYST_KEY = "federar_active_analyst";
-  const ROUTE_STORAGE_PREFIX = "federar_route_track_";
 
   const ANALYST_NAMES = {
     magali: "Magali",
@@ -1372,6 +1714,20 @@
     "B": "Flujo medio",
     "C": "Flujo bajo"
   };
+
+  function getLocalDateStr(d = new Date()) {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+
+  function parseDateParts(dateStr) {
+    if(!dateStr) return null;
+    const parts = dateStr.split("-");
+    if(parts.length !== 3) return null;
+    return new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+  }
 
   function normalizeTier(t) {
     if(t === "A" || t === "alto") return "alto";
@@ -1510,26 +1866,16 @@
   let userLocationMarker = null;
   let activeLogs = [];
 
-  // ROUTE TRACKING VARIABLES
-  let isTrackingRoute = false;
-  let routeWatchId = null;
-  let routePoints = [];
-  let routePolyline = null;
-  let circuitPolyline = null;
-  let routeStartTime = null;
-  let routeTimerInterval = null;
-  let totalDistanceMeters = 0;
 
   const microcentroBounds = L.latLngBounds(
-    [-31.7425, -60.5425],
-    [-31.7215, -60.5155]
+    [-31.7385, -60.5365],
+    [-31.7265, -60.5225]
   );
 
   const map = L.map("map", {
-    maxBounds: microcentroBounds,
-    maxBoundsViscosity: 1.0,
-    minZoom: 14
-  }).setView([-31.73304, -60.52977], 16);
+    minZoom: 14,
+    maxZoom: 19
+  }).setView([-31.7328, -60.5292], 16);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
@@ -1540,7 +1886,7 @@
     color: "#1d4ed8",
     weight: 2,
     fillColor: "#1d4ed8",
-    fillOpacity: 0.03,
+    fillOpacity: 0.04,
     dashArray: "6 6",
     interactive: false
   }).addTo(map);
@@ -1573,7 +1919,6 @@
       document.getElementById("activeAnalystLabel").textContent = ANALYST_NAMES[activeAnalyst] || "Magali";
 
       renderAll();
-      loadSavedRouteForActiveAnalyst();
       if(document.getElementById("tab-crm").classList.contains("active")) renderCrmBoard();
       if(document.getElementById("tab-metrics").classList.contains("active")) renderMetricsDashboard();
       showToast(`Vista cambiada a: ${ANALYST_NAMES[activeAnalyst]}`);
@@ -1636,224 +1981,53 @@
     );
   });
 
-  // ROUTE TRACKING & LIVE PATH RECORDING
-  const routeTrackBtn = document.getElementById("routeTrackBtn");
-  const routeInfoPanel = document.getElementById("routeInfoPanel");
-  const routeTimerEl = document.getElementById("routeTimer");
-  const routeDistLabel = document.getElementById("routeDistLabel");
-  const routePointsCount = document.getElementById("routePointsCount");
 
-  function formatTimer(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+  // WHATSAPP URL & NUMBER FORMATTER
+  function formatWhatsAppNumber(phone) {
+    if(!phone) return "";
+    let clean = String(phone).replace(/\D/g, "");
+    if(!clean) return "";
+
+    // Si empieza con 0, remover el 0 (ej: 0343 -> 343)
+    if(clean.startsWith("0")) {
+      clean = clean.substring(1);
+    }
+
+    // Si ya empieza con 549
+    if(clean.startsWith("549")) {
+      return clean;
+    }
+
+    // Si empieza con 54 pero sin 9 (ej: 543434556677)
+    if(clean.startsWith("54")) {
+      return "549" + clean.substring(2);
+    }
+
+    // Manejo de prefijo 15 en celulares argentinos: ej 343 15 4556677 (12 dígitos) -> 343 4556677
+    if(clean.length === 12 && clean.substring(3, 5) === "15") {
+      clean = clean.substring(0, 3) + clean.substring(5);
+    } else if(clean.length === 12 && clean.substring(2, 4) === "15") {
+      clean = clean.substring(0, 2) + clean.substring(4);
+    }
+
+    // Si tiene 10 dígitos (código de área + número local, ej 3434556677)
+    if(clean.length === 10) {
+      return "549" + clean;
+    }
+
+    // Fallback general agregando código de país Argentina si faltaba
+    return clean.length >= 8 ? "549" + clean : clean;
   }
 
-  function startRouteTracking() {
-    if (!navigator.geolocation) {
-      alert("Geolocalización no disponible.");
-      return;
-    }
-
-    isTrackingRoute = true;
-    routeTrackBtn.textContent = "Finalizar Recorrido";
-    routeTrackBtn.className = "btn btn-danger btn-sm";
-    routeInfoPanel.classList.add("active");
-
-    routeStartTime = Date.now();
-    let elapsedSeconds = 0;
-    if(routeTimerInterval) clearInterval(routeTimerInterval);
-    routeTimerInterval = setInterval(() => {
-      elapsedSeconds++;
-      routeTimerEl.textContent = formatTimer(elapsedSeconds);
-    }, 1000);
-
-    if(!routePolyline) {
-      routePolyline = L.polyline(routePoints, {
-        color: "#ea580c",
-        weight: 4,
-        opacity: 0.9,
-        lineCap: "round",
-        lineJoin: "round"
-      }).addTo(map);
-    }
-
-    routeWatchId = navigator.geolocation.watchPosition(
-      pos => {
-        const lat = pos.coords.latitude;
-        const lng = pos.coords.longitude;
-        const newPoint = [lat, lng];
-
-        if(routePoints.length > 0) {
-          const lastPoint = routePoints[routePoints.length - 1];
-          const dist = L.latLng(lastPoint).distanceTo(L.latLng(newPoint));
-          if(dist >= 3) { // Solo agregar si se movió al menos 3 metros
-            totalDistanceMeters += dist;
-            routePoints.push(newPoint);
-            routePolyline.setLatLngs(routePoints);
-          }
-        } else {
-          routePoints.push(newPoint);
-          routePolyline.setLatLngs(routePoints);
-        }
-
-        if(userLocationMarker) map.removeLayer(userLocationMarker);
-        userLocationMarker = L.circleMarker([lat, lng], {
-          radius: 8,
-          fillColor: "#ea580c",
-          color: "#ffffff",
-          weight: 3,
-          fillOpacity: 1
-        }).addTo(map);
-
-        routePointsCount.textContent = routePoints.length;
-        routeDistLabel.textContent = totalDistanceMeters > 1000 
-          ? (totalDistanceMeters / 1000).toFixed(2) + " km" 
-          : Math.round(totalDistanceMeters) + " m";
-
-        saveActiveRoute();
-      },
-      err => {
-        console.warn("Error en watchPosition:", err.message);
-      },
-      { enableHighAccuracy: true, timeout: 12000, maximumAge: 2000 }
-    );
-
-    showToast("Grabación de recorrido iniciada");
-  }
-
-  function stopRouteTracking() {
-    isTrackingRoute = false;
-    routeTrackBtn.textContent = "Iniciar Recorrido";
-    routeTrackBtn.className = "btn btn-primary btn-sm";
-    routeInfoPanel.classList.remove("active");
-
-    if(routeWatchId !== null) {
-      navigator.geolocation.clearWatch(routeWatchId);
-      routeWatchId = null;
-    }
-    if(routeTimerInterval) {
-      clearInterval(routeTimerInterval);
-      routeTimerInterval = null;
-    }
-
-    saveActiveRoute();
-    showToast(`Recorrido finalizado. Total: ${Math.round(totalDistanceMeters)} metros.`);
-  }
-
-  function saveActiveRoute() {
-    const key = ROUTE_STORAGE_PREFIX + activeAnalyst;
-    localStorage.setItem(key, JSON.stringify({
-      points: routePoints,
-      distance: totalDistanceMeters,
-      date: new Date().toISOString()
-    }));
-  }
-
-  function loadSavedRouteForActiveAnalyst() {
-    if(routePolyline) {
-      map.removeLayer(routePolyline);
-      routePolyline = null;
-    }
-    routePoints = [];
-    totalDistanceMeters = 0;
-
-    const key = ROUTE_STORAGE_PREFIX + activeAnalyst;
-    try {
-      const raw = localStorage.getItem(key);
-      if(raw) {
-        const parsed = JSON.parse(raw);
-        if(parsed && Array.isArray(parsed.points) && parsed.points.length > 0) {
-          routePoints = parsed.points;
-          totalDistanceMeters = parsed.distance || 0;
-          routePolyline = L.polyline(routePoints, {
-            color: "#ea580c",
-            weight: 4,
-            opacity: 0.8,
-            dashArray: isTrackingRoute ? null : "4 6",
-            lineCap: "round"
-          }).addTo(map);
-        }
-      }
-    } catch(e) {}
-  }
-
-  routeTrackBtn.addEventListener("click", () => {
-    if(isTrackingRoute) {
-      stopRouteTracking();
-    } else {
-      startRouteTracking();
-    }
-  });
-
-  // TRAZAR CIRCUITO SUGERIDO ENTRE COMERCIOS
-  const traceCircuitBtn = document.getElementById("traceCircuitBtn");
-  let isCircuitVisible = false;
-
-  traceCircuitBtn.addEventListener("click", () => {
-    if(isCircuitVisible) {
-      if(circuitPolyline) {
-        map.removeLayer(circuitPolyline);
-        circuitPolyline = null;
-      }
-      isCircuitVisible = false;
-      traceCircuitBtn.textContent = "Trazar Ruta";
-      traceCircuitBtn.className = "btn btn-white btn-sm";
-      showToast("Ruta sugerida oculta");
-      return;
-    }
-
-    const filtered = getFilteredShops().filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)));
-    if(filtered.length < 2) {
-      alert("Se necesitan al menos 2 comercios para trazar una ruta.");
-      return;
-    }
-
-    // Ordenamiento por aproximación geográfica básica (ruta más corta secuencial)
-    const points = [];
-    const remaining = [...filtered];
-    let current = remaining.shift();
-    points.push([current.lat, current.lng]);
-
-    while(remaining.length > 0) {
-      let nearestIdx = 0;
-      let minDistance = Infinity;
-      for(let i = 0; i < remaining.length; i++) {
-        const d = L.latLng(current.lat, current.lng).distanceTo(L.latLng(remaining[i].lat, remaining[i].lng));
-        if(d < minDistance) {
-          minDistance = d;
-          nearestIdx = i;
-        }
-      }
-      current = remaining.splice(nearestIdx, 1)[0];
-      points.push([current.lat, current.lng]);
-    }
-
-    if(circuitPolyline) map.removeLayer(circuitPolyline);
-    circuitPolyline = L.polyline(points, {
-      color: "#1d4ed8",
-      weight: 3,
-      opacity: 0.75,
-      dashArray: "6 6"
-    }).addTo(map);
-
-    map.fitBounds(circuitPolyline.getBounds().pad(0.15));
-    isCircuitVisible = true;
-    traceCircuitBtn.textContent = "Ocultar Ruta";
-    traceCircuitBtn.className = "btn btn-secondary btn-sm";
-    showToast(`Ruta trazada para ${points.length} comercios`);
-  });
-
-  // WHATSAPP URL
   function getWhatsAppUrl(phone, shopName, analystKey) {
     if(!phone) return "";
-    let clean = phone.replace(/\D/g, "");
-    if(clean.length === 10) clean = "549" + clean;
-    else if(!clean.startsWith("54")) clean = "549" + clean;
+    const cleanNumber = formatWhatsAppNumber(phone);
+    if(!cleanNumber) return "";
 
     const senderName = ANALYST_NAMES[analystKey] || ANALYST_NAMES[activeAnalyst] || "el equipo";
     const text = encodeURIComponent(`Hola ${shopName ? shopName : ''}! Te saluda ${senderName} de Federar Paraná. Te contacto para coordinar sobre los convenios comerciales y créditos especiales que tenemos para tu comercio y tus clientes.`);
-    return `https://wa.me/${clean}?text=${text}`;
+    return `https://wa.me/${cleanNumber}?text=${text}`;
   }
 
   document.getElementById("modalWaBtn").addEventListener("click", () => {
@@ -1907,8 +2081,8 @@
         </div>
 
         <div style="display:flex;gap:6px;margin-top:8px">
-          ${waLink ? `<a href="${waLink}" target="_blank" style="text-decoration:none;flex:1"><button style="width:100%;padding:5px;background:#16a34a;color:#fff;border:0;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer">WhatsApp</button></a>` : ''}
-          <button data-edit="${shop.id}" style="flex:1;padding:5px;border:0;border-radius:5px;background:#1d4ed8;color:#fff;font-weight:700;font-size:11px;cursor:pointer">Editar</button>
+          ${waLink ? `<a href="${waLink}" target="_blank" style="text-decoration:none;flex:1"><button type="button" style="width:100%;padding:5px;background:#16a34a;color:#fff;border:0;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer">WhatsApp</button></a>` : ''}
+          <button type="button" onclick="window.openEditShop('${shop.id}')" style="flex:1;padding:5px;border:0;border-radius:5px;background:#1d4ed8;color:#fff;font-weight:700;font-size:11px;cursor:pointer">Editar</button>
         </div>
       </div>
     `;
@@ -1922,12 +2096,6 @@
       if(!Number.isFinite(Number(shop.lat)) || !Number.isFinite(Number(shop.lng))) return;
       const marker = makeMarker(shop).addTo(map);
       marker.bindPopup(popupHtml(shop));
-      marker.on("popupopen", () => {
-        setTimeout(() => {
-          const btn = document.querySelector(`[data-edit="${shop.id}"]`);
-          if(btn) btn.addEventListener("click", () => openEdit(shop.id), {once:true});
-        }, 0);
-      });
       markers.set(shop.id, marker);
     });
   }
@@ -2008,6 +2176,8 @@
     renderStats();
     renderList();
     refreshMarkers();
+    renderCrmBoard();
+    renderMetricsDashboard();
   }
 
   function escapeHtml(val) {
@@ -2018,7 +2188,9 @@
 
   // CRM BOARD RENDERER
   function renderCrmBoard() {
-    const todayStr = new Date().toISOString().split("T")[0];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayStr = getLocalDateStr(today);
     const currentShops = getShopsForCurrentView();
 
     const overdueList = document.getElementById("listOverdue");
@@ -2034,25 +2206,34 @@
     let countOver = 0, countTod = 0, countUp = 0, countInt = 0;
 
     currentShops.forEach(shop => {
+      // 1. Interesados siempre van en su columna si no están cerrados
       if(shop.status === "interesado") {
         countInt++;
-        interestedList.appendChild(createCrmCard(shop, 'interested'));
+        interestedList.appendChild(createCrmCard(shop, 'interested', shop.followUp || shop.visitDate));
       }
 
-      if(!shop.followUp || shop.status === "acuerdo" || shop.status === "no-interesado") return;
+      // Si ya está acordado o descartado, no requiere seguimiento operativo
+      if(shop.status === "acuerdo" || shop.status === "no-interesado") return;
 
-      if(shop.followUp < todayStr) {
+      // La fecha de tarea puede ser el Próximo Seguimiento o la Fecha de Visita programada
+      const targetDate = shop.followUp || shop.visitDate;
+      if(!targetDate) return;
+
+      const targetObj = parseDateParts(targetDate);
+      if(!targetObj) return;
+      targetObj.setHours(0, 0, 0, 0);
+
+      const diffDays = Math.round((targetObj.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+      if(diffDays < 0) {
         countOver++;
-        overdueList.appendChild(createCrmCard(shop, 'overdue'));
-      } else if(shop.followUp === todayStr) {
+        overdueList.appendChild(createCrmCard(shop, 'overdue', targetDate));
+      } else if(diffDays === 0) {
         countTod++;
-        todayList.appendChild(createCrmCard(shop, 'today'));
-      } else {
-        const diffDays = (new Date(shop.followUp) - new Date(todayStr)) / (1000 * 60 * 60 * 24);
-        if(diffDays <= 7) {
-          countUp++;
-          upcomingList.appendChild(createCrmCard(shop, 'upcoming'));
-        }
+        todayList.appendChild(createCrmCard(shop, 'today', targetDate));
+      } else if(diffDays > 0 && diffDays <= 7) {
+        countUp++;
+        upcomingList.appendChild(createCrmCard(shop, 'upcoming', targetDate));
       }
     });
 
@@ -2067,11 +2248,13 @@
     if(!countInt) interestedList.innerHTML = '<div style="color:var(--muted);font-size:11px;text-align:center;padding:10px">No hay comercios interesados activos.</div>';
   }
 
-  function createCrmCard(shop, type) {
+  function createCrmCard(shop, type, targetDate) {
     const card = document.createElement("div");
     card.className = `crm-card-item ${type}`;
     const waLink = shop.contact ? getWhatsAppUrl(shop.contact, shop.name, shop.analyst) : "";
     const anTag = `<span class="analyst-tag">${ANALYST_NAMES[shop.analyst] || 'Magali'}</span>`;
+    const dateLabel = shop.followUp ? 'Seguimiento' : 'Fecha Visita';
+    const displayDate = targetDate || shop.followUp || shop.visitDate || '';
 
     card.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
@@ -2086,7 +2269,7 @@
       </div>
       <div style="font-size:11px;margin-top:4px;color:#334155">
         <div><b>Contacto:</b> ${escapeHtml(shop.contactPerson || shop.contact || "Sin contacto")}</div>
-        ${shop.followUp ? `<div><b>Seguimiento:</b> ${escapeHtml(shop.followUp)}</div>` : ''}
+        ${displayDate ? `<div><b>${dateLabel}:</b> ${escapeHtml(displayDate)}</div>` : ''}
       </div>
       <div class="crm-card-actions">
         ${waLink ? `<a href="${waLink}" target="_blank" style="text-decoration:none"><button class="btn btn-whatsapp btn-sm">WhatsApp</button></a>` : ''}
@@ -2107,10 +2290,10 @@
     if(!shop) return;
     const d = new Date();
     d.setDate(d.getDate() + 3);
-    shop.followUp = d.toISOString().split("T")[0];
+    shop.followUp = getLocalDateStr(d);
     if(!shop.history) shop.history = [];
     shop.history.push({
-      date: new Date().toISOString().split("T")[0],
+      date: getLocalDateStr(),
       note: "Seguimiento pospuesto 3 días.",
       user: ANALYST_NAMES[targetKey] || "Analista"
     });
@@ -2260,7 +2443,7 @@
     if(!note) return;
     const an = document.getElementById("analystSelect").value;
     activeLogs.push({
-      date: new Date().toISOString().split("T")[0],
+      date: getLocalDateStr(),
       note,
       user: ANALYST_NAMES[an] || "Analista"
     });
@@ -2276,7 +2459,7 @@
     return null;
   }
 
-  function openNew(latlng=null) {
+  function openNew(latlng=null, initialAddress="") {
     document.getElementById("shopForm").reset();
     document.getElementById("shopId").value = "";
     document.getElementById("modalTitle").textContent = "Agregar Comercio";
@@ -2286,9 +2469,14 @@
     document.getElementById("tier").value = "medio";
     document.getElementById("zone").value = "Peatonal San Martín";
     document.getElementById("analystSelect").value = activeAnalyst === "all" ? "magali" : activeAnalyst;
-    document.getElementById("visitDate").value = new Date().toISOString().split("T")[0];
+    document.getElementById("visitDate").value = getLocalDateStr();
+    document.getElementById("followUp").value = getLocalDateStr();
+    if(initialAddress) {
+      document.getElementById("address").value = initialAddress;
+    }
     activeLogs = [];
     renderActiveLogs();
+    syncAllCustomSelects();
 
     const coords = latlng || pendingLatLng || map.getCenter();
     document.getElementById("lat").value = coords.lat;
@@ -2296,6 +2484,356 @@
 
     document.getElementById("shopModal").classList.add("show");
   }
+
+  // GOOGLE MAPS STYLE ADDRESS & SHOP SEARCH ENGINE
+  const mapSearchInput = document.getElementById("mapSearchInput");
+  const mapSearchResults = document.getElementById("mapSearchResults");
+  const mapSearchClearBtn = document.getElementById("mapSearchClearBtn");
+  const mapSearchSpinner = document.getElementById("mapSearchSpinner");
+  let searchDebounceTimer = null;
+  let searchTargetMarker = null;
+
+  // Prevent map clicks when interacting with the search bar or controls
+  const searchWrapEl = document.getElementById("mapSearchWrapper");
+  if(searchWrapEl) {
+    L.DomEvent.disableClickPropagation(searchWrapEl);
+    L.DomEvent.disableScrollPropagation(searchWrapEl);
+    ['click', 'dblclick', 'mousedown', 'pointerdown', 'touchstart'].forEach(ev => {
+      searchWrapEl.addEventListener(ev, e => e.stopPropagation());
+    });
+  }
+  document.querySelectorAll(".map-controls-group").forEach(el => {
+    L.DomEvent.disableClickPropagation(el);
+    L.DomEvent.disableScrollPropagation(el);
+    ['click', 'dblclick', 'mousedown', 'pointerdown', 'touchstart'].forEach(ev => {
+      el.addEventListener(ev, e => e.stopPropagation());
+    });
+  });
+
+  function clearSearch(keepText = false) {
+    if(!keepText) {
+      mapSearchInput.value = "";
+    }
+    mapSearchResults.style.display = "none";
+    mapSearchResults.innerHTML = "";
+    mapSearchClearBtn.style.display = mapSearchInput.value ? "flex" : "none";
+    mapSearchSpinner.style.display = "none";
+  }
+
+  mapSearchClearBtn.addEventListener("click", () => {
+    clearSearch(false);
+    if(searchTargetMarker) {
+      map.removeLayer(searchTargetMarker);
+      searchTargetMarker = null;
+    }
+    map.fitBounds(microcentroBounds, { padding: [25, 25], maxZoom: 16, animate: true });
+    mapSearchInput.focus();
+  });
+
+  map.on("popupclose", (e) => {
+    if(searchTargetMarker && e.popup && e.popup._source === searchTargetMarker) {
+      map.removeLayer(searchTargetMarker);
+      searchTargetMarker = null;
+      clearSearch(false);
+      map.fitBounds(microcentroBounds, { padding: [25, 25], maxZoom: 16, animate: true });
+    }
+  });
+
+  async function searchParanaAddresses(query) {
+    let cleanQuery = query.trim();
+    if(!cleanQuery) return [];
+
+    let fullQuery = cleanQuery;
+    const lower = cleanQuery.toLowerCase();
+    if(!lower.includes("paraná") && !lower.includes("parana")) {
+      fullQuery += ", Paraná, Entre Ríos, Argentina";
+    }
+
+    const url1 = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullQuery)}&countrycodes=ar&limit=6`;
+
+    try {
+      const resp = await fetch(url1, {
+        headers: { 'Accept-Language': 'es' }
+      });
+      if(resp.ok) {
+        const data = await resp.json();
+        if(Array.isArray(data) && data.length > 0) {
+          return data;
+        }
+      }
+    } catch(err) {
+      console.warn("Geocoding error url1:", err);
+    }
+
+    // Fallback con structured street
+    try {
+      const url2 = `https://nominatim.openstreetmap.org/search?format=json&street=${encodeURIComponent(cleanQuery)}&city=Paran%C3%A1&state=Entre+R%C3%ADos&country=Argentina&limit=6`;
+      const resp2 = await fetch(url2, { headers: { 'Accept-Language': 'es' } });
+      if(resp2.ok) {
+        const data2 = await resp2.json();
+        if(Array.isArray(data2) && data2.length > 0) return data2;
+      }
+    } catch(e) {
+      console.warn("Geocoding error url2:", e);
+    }
+
+    return [];
+  }
+
+  function formatParanaAddress(res, userQuery = "") {
+    if (!res) return "Dirección en Paraná";
+    
+    let road = "";
+    let houseNumber = "";
+
+    if (res.address) {
+      road = res.address.road || res.address.pedestrian || res.address.street || res.address.footway || res.address.residential || "";
+      houseNumber = res.address.house_number || "";
+    }
+
+    const raw = res.display_name || "";
+    const parts = raw.split(",").map(p => p.trim());
+
+    if (!road) {
+      if (parts.length >= 2 && /^\d+$/.test(parts[0])) {
+        houseNumber = parts[0];
+        road = parts[1];
+      } else {
+        road = parts[0] || raw;
+      }
+    }
+
+    // Si el usuario especificó una altura (ej: "Perú 16") y el servicio no trajo número, asociar la altura
+    if (!houseNumber && userQuery) {
+      const matchNum = userQuery.match(/\b(\d+)\b/);
+      if (matchNum) {
+        houseNumber = matchNum[1];
+      }
+    }
+
+    if (road && houseNumber) {
+      const cleanRoad = road.replace(/\s+\d+$/, "");
+      return `${cleanRoad} ${houseNumber}`;
+    }
+
+    return road || parts[0] || raw;
+  }
+
+  function renderSearchResults(query, matchedShops, osmResults) {
+    mapSearchResults.innerHTML = "";
+
+    if(!matchedShops.length && !osmResults.length) {
+      mapSearchResults.innerHTML = `<div class="map-search-empty">No se encontraron resultados para "<b>${escapeHtml(query)}</b>" en Paraná.</div>`;
+      mapSearchResults.style.display = "block";
+      return;
+    }
+
+    // 1. Comercios Registrados (Deduplicados)
+    if(matchedShops.length > 0) {
+      const seenShops = new Set();
+      const uniqueShops = [];
+      matchedShops.forEach(s => {
+        if(!seenShops.has(s.id)) {
+          seenShops.add(s.id);
+          uniqueShops.push(s);
+        }
+      });
+
+      if(uniqueShops.length > 0) {
+        const secHeader = document.createElement("div");
+        secHeader.className = "map-search-section-header";
+        secHeader.textContent = "Comercios Registrados";
+        mapSearchResults.appendChild(secHeader);
+
+        uniqueShops.forEach(shop => {
+          const item = document.createElement("div");
+          item.className = "map-search-item";
+          item.innerHTML = `
+            <div class="map-search-item-icon" style="background:#eff6ff;color:#1d4ed8">🏪</div>
+            <div class="map-search-item-info">
+              <div class="map-search-item-title">${escapeHtml(shop.name)}</div>
+              <div class="map-search-item-subtitle">${escapeHtml(shop.address || shop.zone || "Paraná")} · ${escapeHtml(shop.category || "")}</div>
+            </div>
+            <span class="map-search-tag badge badge-${shop.status}">${statusLabels[shop.status] || shop.status}</span>
+          `;
+
+          item.addEventListener("click", () => {
+            mapSearchInput.value = shop.name;
+            clearSearch(true);
+            if(searchTargetMarker) {
+              map.removeLayer(searchTargetMarker);
+              searchTargetMarker = null;
+            }
+            if(Number.isFinite(Number(shop.lat)) && Number.isFinite(Number(shop.lng))) {
+              map.flyTo([shop.lat, shop.lng], 18, { duration: 0.8 });
+              setTimeout(() => {
+                if(markers.has(shop.id)) {
+                  markers.get(shop.id).openPopup();
+                } else {
+                  openEdit(shop.id);
+                }
+              }, 850);
+            }
+          });
+
+          mapSearchResults.appendChild(item);
+        });
+      }
+    }
+
+    // 2. Direcciones de Calles en Paraná (Deduplicadas)
+    if(osmResults.length > 0) {
+      const seenAddresses = new Set();
+      const uniqueResults = [];
+
+      osmResults.forEach(res => {
+        const cleanAddress = formatParanaAddress(res, query);
+        const normKey = cleanAddress.toLowerCase().trim();
+        if(!seenAddresses.has(normKey)) {
+          seenAddresses.add(normKey);
+          uniqueResults.push({ res, cleanAddress });
+        }
+      });
+
+      if(uniqueResults.length > 0) {
+        const secHeader = document.createElement("div");
+        secHeader.className = "map-search-section-header";
+        secHeader.textContent = "Direcciones & Calles (Paraná)";
+        mapSearchResults.appendChild(secHeader);
+
+        uniqueResults.forEach(({ res, cleanAddress }) => {
+          const item = document.createElement("div");
+          item.className = "map-search-item";
+
+          item.innerHTML = `
+            <div class="map-search-item-icon" style="background:#fef2f2;color:#dc2626">📍</div>
+            <div class="map-search-item-info">
+              <div class="map-search-item-title">${escapeHtml(cleanAddress)}</div>
+              <div class="map-search-item-subtitle">Paraná, Entre Ríos</div>
+            </div>
+          `;
+
+          item.addEventListener("click", () => {
+            const lat = parseFloat(res.lat);
+            const lng = parseFloat(res.lon);
+            mapSearchInput.value = cleanAddress;
+            clearSearch(true);
+
+            if(searchTargetMarker) {
+              map.removeLayer(searchTargetMarker);
+            }
+
+            searchTargetMarker = L.marker([lat, lng], {
+              icon: L.divIcon({
+                className: 'search-target-pin',
+                html: '<div style="background:#ef4444;color:#fff;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:0 4px 12px rgba(0,0,0,0.35);border:2px solid #fff;animation:bouncePin 0.4s ease;">📍</div>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 30]
+              })
+            }).addTo(map);
+
+            map.flyTo([lat, lng], 17, { duration: 0.8 });
+
+            const safeAddressStr = escapeHtml(cleanAddress).replace(/'/g, "\\'");
+            const popupHtml = `
+              <div style="font-size:13px;min-width:180px;padding:2px 0;">
+                <div style="font-weight:700;color:#0f172a;margin-bottom:8px;font-size:13px;display:flex;align-items:center;gap:5px;">
+                  <span>📍</span> <span>${escapeHtml(cleanAddress)}</span>
+                </div>
+                <button class="btn btn-primary btn-sm" style="width:100%;display:flex;align-items:center;justify-content:center;gap:4px;padding:6px 12px;font-weight:600;" onclick="window.createShopAtLocation(${lat}, ${lng}, '${safeAddressStr}')">
+                  ➕ Agregar Comercio Aquí
+                </button>
+              </div>
+            `;
+
+            searchTargetMarker.bindPopup(popupHtml).openPopup();
+          });
+
+          mapSearchResults.appendChild(item);
+        });
+      }
+    }
+
+    mapSearchResults.style.display = "block";
+  }
+
+  window.createShopAtLocation = function(lat, lng, addressName) {
+    if(searchTargetMarker) {
+      map.removeLayer(searchTargetMarker);
+      searchTargetMarker = null;
+    }
+    openNew({ lat: Number(lat), lng: Number(lng) }, addressName);
+  };
+
+  async function performSearch(selectFirstOnEnter = false) {
+    const q = mapSearchInput.value.trim();
+    mapSearchClearBtn.style.display = q ? "flex" : "none";
+
+    if(q.length < 2) {
+      clearSearch(true);
+      return;
+    }
+
+    const lower = q.toLowerCase();
+    const allShops = [...((appData.analysts.magali && appData.analysts.magali.shops) || []), ...((appData.analysts.victoria && appData.analysts.victoria.shops) || [])];
+    const matchedShops = allShops.filter(s => 
+      (s.name && s.name.toLowerCase().includes(lower)) ||
+      (s.address && s.address.toLowerCase().includes(lower)) ||
+      (s.category && s.category.toLowerCase().includes(lower))
+    ).slice(0, 4);
+
+    mapSearchSpinner.style.display = "block";
+    const osmResults = await searchParanaAddresses(q);
+    mapSearchSpinner.style.display = "none";
+    renderSearchResults(q, matchedShops, osmResults);
+
+    if(selectFirstOnEnter) {
+      const firstItem = mapSearchResults.querySelector(".map-search-item");
+      if(firstItem) {
+        firstItem.click();
+      }
+    }
+  }
+
+  mapSearchInput.addEventListener("input", () => {
+    const q = mapSearchInput.value.trim();
+    mapSearchClearBtn.style.display = q ? "flex" : "none";
+
+    if(q.length < 2) {
+      clearSearch(true);
+      return;
+    }
+
+    if(searchDebounceTimer) clearTimeout(searchDebounceTimer);
+    mapSearchSpinner.style.display = "block";
+    searchDebounceTimer = setTimeout(() => {
+      performSearch(false);
+    }, 280);
+  });
+
+  mapSearchInput.addEventListener("keydown", e => {
+    if(e.key === "Escape") {
+      clearSearch(true);
+    } else if(e.key === "Enter") {
+      e.preventDefault();
+      if(searchDebounceTimer) clearTimeout(searchDebounceTimer);
+      performSearch(true);
+    }
+  });
+
+  document.getElementById("mapSearchBtn").addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if(searchDebounceTimer) clearTimeout(searchDebounceTimer);
+    performSearch(false);
+  });
+
+  document.addEventListener("click", e => {
+    const wrap = document.getElementById("mapSearchWrapper");
+    if(wrap && !wrap.contains(e.target)) {
+      mapSearchResults.style.display = "none";
+    }
+  });
 
   function openEdit(id) {
     const found = findShopAndAnalyst(id);
@@ -2322,6 +2860,7 @@
 
     activeLogs = Array.isArray(shop.history) ? [...shop.history] : [];
     renderActiveLogs();
+    syncAllCustomSelects();
 
     document.getElementById("modalTitle").textContent = "Editar Comercio";
     document.getElementById("deleteBtn").style.display = "inline-block";
@@ -2406,23 +2945,156 @@
     el.addEventListener("change", renderAll);
   });
 
+  // CUSTOM SELECT ENHANCER LOGIC
+  const selectMetaIcons = {
+    "pendiente": { dot: "#64748b" },
+    "visitado": { dot: "#f97316" },
+    "interesado": { dot: "#eab308" },
+    "acuerdo": { dot: "#10b981" },
+    "no-interesado": { dot: "#ef4444" },
+    "alto": { dot: "#10b981" },
+    "medio": { dot: "#3b82f6" },
+    "bajo": { dot: "#8b5cf6" },
+    "magali": { icon: "👤" },
+    "victoria": { icon: "👤" },
+    "all": { icon: "👥" }
+  };
+
+  function getOptionDecoration(val, selectId) {
+    if(!val) return "";
+    const meta = selectMetaIcons[val];
+    if(meta) {
+      if(meta.dot) return `<span class="select-dot" style="background:${meta.dot}"></span>`;
+      if(meta.icon) return `<span style="font-size:12px">${meta.icon}</span>`;
+    }
+    if(selectId === "zoneFilter" || selectId === "zone") {
+      return `<span style="font-size:11px;opacity:0.7">📍</span>`;
+    }
+    if(selectId === "agreementType") {
+      return `<span style="font-size:11px;opacity:0.7">🤝</span>`;
+    }
+    return "";
+  }
+
+  function setupCustomSelects() {
+    document.querySelectorAll("select").forEach(select => {
+      if(select.dataset.customized) return;
+      select.dataset.customized = "true";
+      select.classList.add("custom-select-native");
+
+      const wrapper = document.createElement("div");
+      wrapper.className = "custom-select-wrap";
+      wrapper.dataset.selectId = select.id;
+
+      select.parentNode.insertBefore(wrapper, select);
+      wrapper.appendChild(select);
+
+      const trigger = document.createElement("button");
+      trigger.type = "button";
+      trigger.className = "custom-select-trigger";
+      trigger.innerHTML = `
+        <span class="custom-select-label"></span>
+        <svg class="custom-select-arrow" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"/>
+        </svg>
+      `;
+
+      const dropdown = document.createElement("div");
+      dropdown.className = "custom-select-dropdown";
+
+      wrapper.appendChild(trigger);
+      wrapper.appendChild(dropdown);
+
+      function buildOptions() {
+        dropdown.innerHTML = "";
+        Array.from(select.options).forEach(opt => {
+          const item = document.createElement("div");
+          item.className = "custom-select-option" + (opt.value === select.value ? " selected" : "");
+          item.dataset.value = opt.value;
+          const deco = getOptionDecoration(opt.value, select.id);
+          item.innerHTML = `
+            <div class="custom-select-opt-content">
+              ${deco}
+              <span>${escapeHtml(opt.text)}</span>
+            </div>
+            <span class="custom-select-check">✓</span>
+          `;
+
+          item.addEventListener("click", (e) => {
+            e.stopPropagation();
+            select.value = opt.value;
+            syncTrigger();
+            wrapper.classList.remove("open");
+            select.dispatchEvent(new Event("change", { bubbles: true }));
+            select.dispatchEvent(new Event("input", { bubbles: true }));
+          });
+
+          dropdown.appendChild(item);
+        });
+      }
+
+      function syncTrigger() {
+        const selectedOpt = select.options[select.selectedIndex] || select.options[0];
+        const labelEl = trigger.querySelector(".custom-select-label");
+        if(selectedOpt) {
+          const deco = getOptionDecoration(selectedOpt.value, select.id);
+          labelEl.innerHTML = `${deco}<span>${escapeHtml(selectedOpt.text)}</span>`;
+        } else {
+          labelEl.innerHTML = `<span style="color:var(--muted)">Seleccionar...</span>`;
+        }
+
+        dropdown.querySelectorAll(".custom-select-option").forEach(item => {
+          item.classList.toggle("selected", item.dataset.value === select.value);
+        });
+      }
+
+      trigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isOpen = wrapper.classList.contains("open");
+        document.querySelectorAll(".custom-select-wrap.open").forEach(w => {
+          if(w !== wrapper) w.classList.remove("open");
+        });
+        if(!isOpen) {
+          buildOptions();
+          syncTrigger();
+          wrapper.classList.add("open");
+        } else {
+          wrapper.classList.remove("open");
+        }
+      });
+
+      wrapper._sync = syncTrigger;
+      wrapper._rebuild = buildOptions;
+      syncTrigger();
+    });
+  }
+
+  function syncAllCustomSelects() {
+    document.querySelectorAll(".custom-select-wrap").forEach(w => {
+      if(typeof w._sync === "function") w._sync();
+    });
+  }
+
+  document.addEventListener("click", () => {
+    document.querySelectorAll(".custom-select-wrap.open").forEach(w => w.classList.remove("open"));
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape") {
+      document.querySelectorAll(".custom-select-wrap.open").forEach(w => w.classList.remove("open"));
+    }
+  });
+
   // INICIALIZACIÓN
+  setupCustomSelects();
   document.getElementById("activeAnalystLabel").textContent = ANALYST_NAMES[activeAnalyst] || "Magali";
   document.querySelectorAll(".analyst-btn").forEach(b => {
     b.classList.toggle("active", b.dataset.analyst === activeAnalyst);
   });
 
   renderAll();
-  loadSavedRouteForActiveAnalyst();
 
-  const currentShops = getShopsForCurrentView();
-  if(currentShops.length) {
-    const valid = currentShops.filter(s => Number.isFinite(Number(s.lat)) && Number.isFinite(Number(s.lng)));
-    if(valid.length) {
-      const bounds = L.latLngBounds(valid.map(s => [s.lat, s.lng]));
-      map.fitBounds(bounds.pad(0.15));
-    }
-  }
+  map.fitBounds(microcentroBounds, { padding: [25, 25], maxZoom: 16 });
 })();
 </script>
 </body>
