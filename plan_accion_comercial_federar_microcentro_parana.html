@@ -1677,6 +1677,8 @@
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 (() => {
@@ -1857,6 +1859,115 @@
 
   function saveState() {
     localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(appData));
+  }
+
+  // SUPABASE CLOUD DATABASE & REALTIME CLIENT
+  const SUPABASE_URL = "https://cksdaioqbpyvfdxkzpot.supabase.co";
+  const SUPABASE_KEY = "sb_publishable_q8HQLCX7Nvm6UtXwAAUHfg_N638zDQA";
+  const supabaseClient = (window.supabase && typeof window.supabase.createClient === "function") 
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) 
+    : null;
+
+  function shopToRow(shop) {
+    return {
+      id: String(shop.id),
+      name: shop.name || "",
+      category: shop.category || "",
+      address: shop.address || "",
+      zone: shop.zone || "Peatonal San Martín",
+      analyst: shop.analyst || "magali",
+      tier: shop.tier || "medio",
+      status: shop.status || "pendiente",
+      flyers: Number(shop.flyers || 0),
+      contact: shop.contact || "",
+      contact_person: shop.contactPerson || "",
+      visit_date: shop.visitDate || "",
+      follow_up: shop.followUp || "",
+      agreement_type: shop.agreementType || "",
+      agreement: shop.agreement || "",
+      history: Array.isArray(shop.history) ? shop.history : [],
+      lat: Number(shop.lat || 0),
+      lng: Number(shop.lng || 0),
+      updated_at: new Date().toISOString()
+    };
+  }
+
+  function rowToShop(row) {
+    return {
+      id: String(row.id),
+      name: row.name || "",
+      category: row.category || "",
+      address: row.address || "",
+      zone: row.zone || "Peatonal San Martín",
+      analyst: row.analyst || "magali",
+      tier: normalizeTier(row.tier),
+      status: row.status || "pendiente",
+      flyers: Number(row.flyers || 0),
+      contact: row.contact || "",
+      contactPerson: row.contact_person || "",
+      visitDate: row.visit_date || "",
+      followUp: row.follow_up || "",
+      agreementType: row.agreement_type || "",
+      agreement: row.agreement || "",
+      history: Array.isArray(row.history) ? row.history : [],
+      lat: Number(row.lat || 0),
+      lng: Number(row.lng || 0)
+    };
+  }
+
+  async function syncFromSupabase() {
+    if (!supabaseClient) return;
+    try {
+      const { data, error } = await supabaseClient.from('shops').select('*');
+      if (error) {
+        console.warn("Supabase select error:", error);
+        return;
+      }
+
+      if (Array.isArray(data) && data.length > 0) {
+        const magaliShops = [];
+        const victoriaShops = [];
+
+        data.forEach(row => {
+          const shop = rowToShop(row);
+          if (shop.analyst === "victoria") {
+            victoriaShops.push(shop);
+          } else {
+            magaliShops.push(shop);
+          }
+        });
+
+        appData.analysts.magali.shops = magaliShops;
+        appData.analysts.victoria.shops = victoriaShops;
+
+        saveState();
+        renderAll();
+      } else if (Array.isArray(data) && data.length === 0) {
+        // Primera sincronización: subir comercios existentes a Supabase
+        const currentShops = [...(appData.analysts.magali.shops || []), ...(appData.analysts.victoria.shops || [])];
+        if (currentShops.length > 0) {
+          const rows = currentShops.map(shopToRow);
+          await supabaseClient.from('shops').upsert(rows);
+        }
+      }
+    } catch(err) {
+      console.warn("Error en syncFromSupabase:", err);
+    }
+  }
+
+  function setupSupabaseRealtime() {
+    if (!supabaseClient) return;
+    try {
+      supabaseClient
+        .channel('public:shops')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'shops' }, payload => {
+          console.log('Cambio en tiempo real recibido desde Supabase:', payload);
+          syncFromSupabase();
+        })
+        .subscribe();
+    } catch(err) {
+      console.warn("Error configurando suscripción Realtime:", err);
+    }
   }
 
   let appData = loadState();
@@ -2301,6 +2412,16 @@
     renderCrmBoard();
     renderAll();
     showToast("Seguimiento pospuesto 3 días");
+
+    if (supabaseClient) {
+      supabaseClient.from('shops').update({
+        follow_up: shop.followUp,
+        history: shop.history,
+        updated_at: new Date().toISOString()
+      }).eq('id', id).then(({ error }) => {
+        if (error) console.error("Error actualizando reprogramación en Supabase:", error);
+      });
+    }
   };
 
   // DASHBOARD & KPI RENDERER
@@ -2910,6 +3031,12 @@
     showToast(`Guardado en la cartera de ${ANALYST_NAMES[targetAnalyst]}`);
 
     map.setView([shop.lat, shop.lng], Math.max(map.getZoom(), 16));
+
+    if (supabaseClient) {
+      supabaseClient.from('shops').upsert(shopToRow(shop)).then(({ error }) => {
+        if (error) console.error("Error guardando comercio en Supabase:", error);
+      });
+    }
   });
 
   document.getElementById("deleteBtn").addEventListener("click", () => {
@@ -2924,6 +3051,12 @@
     renderAll();
     closeModal();
     showToast("Comercio eliminado");
+
+    if (supabaseClient) {
+      supabaseClient.from('shops').delete().eq('id', id).then(({ error }) => {
+        if (error) console.error("Error eliminando comercio en Supabase:", error);
+      });
+    }
   });
 
   document.getElementById("addShopBtn").addEventListener("click", () => openNew());
@@ -3095,6 +3228,10 @@
   renderAll();
 
   map.fitBounds(microcentroBounds, { padding: [25, 25], maxZoom: 16 });
+
+  // Sincronización en la nube con Supabase Realtime
+  syncFromSupabase();
+  setupSupabaseRealtime();
 })();
 </script>
 </body>
