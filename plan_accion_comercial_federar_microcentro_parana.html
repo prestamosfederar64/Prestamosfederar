@@ -59,18 +59,25 @@
 
     /* HEADER */
     header {
-      background: #091e42;
+      background: linear-gradient(135deg, #091e42 0%, #0f2757 100%);
       color: #fff;
-      padding: 10px 18px;
+      padding: 8px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
       position: sticky;
       top: 0;
       z-index: 1000;
-      flex-wrap: wrap;
+    }
+
+    .header-main-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 12px;
     }
 
     .header-brand {
@@ -84,9 +91,9 @@
       align-items: center;
       justify-content: center;
       background: #ffffff;
-      padding: 4px 12px;
-      border-radius: 7px;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      padding: 5px 12px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
     .brand-text-logo {
@@ -98,7 +105,7 @@
 
     .brand-text-main {
       font-family: 'Inter', sans-serif;
-      font-size: 19px;
+      font-size: 18px;
       font-weight: 900;
       color: #091e42;
       letter-spacing: -0.5px;
@@ -106,8 +113,8 @@
 
     .brand-text-sub {
       font-family: 'Inter', sans-serif;
-      font-size: 7px;
-      font-weight: 700;
+      font-size: 6.5px;
+      font-weight: 800;
       color: #64748b;
       letter-spacing: 0.4px;
       margin-top: 2px;
@@ -117,18 +124,19 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      background: rgba(255, 255, 255, 0.12);
-      padding: 4px 9px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 4px 10px;
       border-radius: 6px;
       font-size: 11px;
       font-weight: 600;
       color: #e2e8f0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     /* ANALYST SWITCHER */
     .analyst-switcher {
       display: flex;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.25);
       padding: 3px;
       border-radius: 8px;
       gap: 3px;
@@ -164,10 +172,11 @@
     /* MODULE NAVIGATION TABS */
     .nav-tabs {
       display: flex;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.08);
       padding: 3px;
       border-radius: 8px;
       gap: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .tab-btn {
@@ -181,6 +190,7 @@
       cursor: pointer;
       display: flex;
       align-items: center;
+      gap: 5px;
       transition: all 0.15s ease;
       font-family: inherit;
     }
@@ -192,6 +202,53 @@
       display: flex;
       align-items: center;
       gap: 8px;
+    }
+
+    /* ULTRA-PREMIUM DEAL MARKER FOR ACUERDOS */
+    .deal-marker-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .deal-marker-core {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      border: 2px solid #fbbf24;
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.6), 0 3px 8px rgba(0, 0, 0, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      z-index: 2;
+    }
+
+    .deal-marker-core:hover {
+      transform: scale(1.18);
+    }
+
+    .deal-marker-pulse {
+      position: absolute;
+      top: -4px;
+      left: -4px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.4);
+      animation: dealPulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    @keyframes dealPulse {
+      0% { transform: scale(0.8); opacity: 0.9; }
+      70% { transform: scale(1.6); opacity: 0; }
+      100% { transform: scale(1.6); opacity: 0; }
     }
 
     /* BUTTONS */
@@ -843,11 +900,200 @@
       100% { transform: translateY(0); opacity: 1; }
     }
 
-    @media(max-width: 640px) {
-      .map-search-wrapper {
-        left: 48px;
-        width: calc(100% - 150px);
+    @media (max-width: 768px) {
+      header {
+        padding: 6px 10px;
       }
+
+      .header-main-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+      }
+
+      .brand-logo-wrap {
+        padding: 3px 7px;
+      }
+
+      .brand-text-main {
+        font-size: 15px;
+      }
+
+      .brand-text-sub {
+        font-size: 5.5px;
+      }
+
+      .analyst-active-badge {
+        display: none;
+      }
+
+      .analyst-switcher {
+        padding: 2px;
+        gap: 2px;
+      }
+
+      .analyst-btn {
+        padding: 4px 7px;
+        font-size: 10px;
+      }
+
+      #addShopBtn {
+        padding: 5px 8px;
+        font-size: 11px;
+        white-space: nowrap;
+      }
+
+      /* FIXED BOTTOM NAVIGATION BAR */
+      .nav-tabs {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 52px;
+        background: #ffffff;
+        border-top: 1px solid #e2e8f0;
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+        padding: 4px 8px;
+        border-radius: 0;
+        z-index: 2000;
+        display: flex;
+        justify-content: space-around;
+        gap: 4px;
+      }
+
+      .tab-btn {
+        flex: 1;
+        justify-content: center;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 700;
+        border-radius: 8px;
+        padding: 6px 2px;
+      }
+
+      .tab-btn.active {
+        background: #eff6ff;
+        color: #1d4ed8;
+        box-shadow: none;
+      }
+
+      /* MAP VIEWPORT FILL */
+      .map-layout {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 104px);
+        min-height: auto;
+        position: relative;
+        padding: 0;
+        gap: 0;
+      }
+
+      #tab-map {
+        padding: 0;
+      }
+
+      .map-wrap {
+        height: 100%;
+        gap: 0;
+      }
+
+      .map-toolbar {
+        border-radius: 0;
+        border-left: 0;
+        border-right: 0;
+        padding: 6px 10px;
+        font-size: 9px;
+      }
+
+      #map {
+        border-radius: 0;
+        border: 0;
+        height: 100% !important;
+        min-height: calc(100vh - 146px);
+      }
+
+      .map-search-wrapper {
+        top: 8px;
+        left: 48px;
+        width: calc(100% - 130px);
+      }
+
+      /* MOBILE SIDEBAR DRAWER */
+      .sidebar {
+        position: fixed;
+        bottom: 52px;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        border-top-left-radius: 18px;
+        border-top-right-radius: 18px;
+        box-shadow: 0 -8px 30px rgba(15, 23, 42, 0.25);
+        z-index: 1500;
+        max-height: 75vh;
+        overflow-y: auto;
+        padding: 16px 12px 24px;
+        transform: translateY(110%);
+        transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1px solid var(--border);
+      }
+
+      .sidebar.open {
+        transform: translateY(0);
+      }
+
+      .mobile-sidebar-toggle {
+        display: flex !important;
+        position: absolute;
+        bottom: 14px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        border-radius: 999px;
+        padding: 8px 18px;
+        font-size: 12px;
+        font-weight: 700;
+        gap: 6px;
+        align-items: center;
+        background: #091e42;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+      }
+
+      .sidebar-drawer-header {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 10px;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+
+      .sidebar-drawer-handle {
+        width: 36px;
+        height: 4px;
+        background: #cbd5e1;
+        border-radius: 4px;
+        margin: -8px auto 10px;
+      }
+
+      .crm-cards {
+        max-height: calc(100vh - 220px);
+      }
+
+      .view-tab {
+        padding: 10px;
+        padding-bottom: 65px;
+      }
+    }
+
+    .mobile-sidebar-toggle {
+      display: none;
+    }
+    .sidebar-drawer-header {
+      display: none;
     }
 
 
@@ -1182,24 +1428,6 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
-    /* RESPONSIVE */
-    @media(max-width: 960px) {
-      .map-layout { grid-template-columns: 1fr; height: auto; }
-      #map { height: 440px; min-height: 440px; }
-      .dashboard-grid { grid-template-columns: 1fr; }
-      .form-grid-compact { grid-template-columns: 1fr 1fr; }
-      .span-2 { grid-column: span 2; }
-      .span-3 { grid-column: span 2; }
-    }
-
-    @media(max-width: 640px) {
-      header { padding: 8px 10px; flex-direction: column; align-items: stretch; gap: 6px; }
-      .analyst-switcher { justify-content: center; }
-      .nav-tabs { justify-content: center; }
-      .form-grid-compact { grid-template-columns: 1fr; }
-      .span-2 { grid-column: span 1; }
-      .span-3 { grid-column: span 1; }
-    }
   </style>
 </head>
 <body>
@@ -1207,42 +1435,49 @@
 <div class="app">
   <!-- HEADER -->
   <header>
-    <div class="header-brand">
-      <!-- FEDERAR LOGO SIN ISOTIPO GEOMÉTRICO -->
-      <div class="brand-logo-wrap" title="FEDERAR">
-        <div class="brand-text-logo">
-          <span class="brand-text-main">FEDER<span style="color:#ea580c;">ar</span></span>
-          <span class="brand-text-sub">PRESTAMOS EFECTIVOS</span>
+    <div class="header-main-row">
+      <div class="header-brand">
+        <!-- FEDERAR LOGO -->
+        <div class="brand-logo-wrap" title="FEDERAR">
+          <div class="brand-text-logo">
+            <span class="brand-text-main">FEDER<span style="color:#ea580c;">ar</span></span>
+            <span class="brand-text-sub">PRESTAMOS EFECTIVOS</span>
+          </div>
         </div>
+        <span class="analyst-active-badge">Analista: <strong id="activeAnalystLabel">Magali</strong></span>
       </div>
-      <span class="analyst-active-badge">Analista: <strong id="activeAnalystLabel">Magali</strong></span>
-    </div>
 
-    <!-- ANALYST SWITCHER -->
-    <div class="analyst-switcher" id="analystSwitcher">
-      <button class="analyst-btn active" data-analyst="magali">Magali</button>
-      <button class="analyst-btn" data-analyst="victoria">Victoria</button>
-      <button class="analyst-btn" data-analyst="all">Todo el Equipo</button>
+      <!-- ANALYST SWITCHER -->
+      <div class="analyst-switcher" id="analystSwitcher">
+        <button class="analyst-btn active" data-analyst="magali">Magali</button>
+        <button class="analyst-btn" data-analyst="victoria">Victoria</button>
+        <button class="analyst-btn" data-analyst="all">👥 Todo</button>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="header-actions">
+        <button class="btn btn-orange btn-sm" id="addShopBtn">+ Nuevo Comercio</button>
+      </div>
     </div>
 
     <!-- MODULE TABS -->
     <div class="nav-tabs">
-      <button class="tab-btn active" data-tab="tab-map">Mapa</button>
-      <button class="tab-btn" data-tab="tab-crm">Seguimiento</button>
-      <button class="tab-btn" data-tab="tab-metrics">Métricas & Embudo</button>
-    </div>
-
-    <!-- ACTIONS -->
-    <div class="header-actions">
-      <button class="btn btn-white btn-sm" id="addShopBtn">+ Nuevo Comercio</button>
+      <button class="tab-btn active" data-tab="tab-map">🗺️ Mapa</button>
+      <button class="tab-btn" data-tab="tab-crm">📋 Seguimiento</button>
+      <button class="tab-btn" data-tab="tab-metrics">📊 Métricas</button>
     </div>
   </header>
 
   <!-- TAB 1: MAPA -->
   <div class="view-tab active" id="tab-map">
     <div class="map-layout">
-      <!-- SIDEBAR -->
-      <aside class="sidebar">
+      <!-- SIDEBAR (DRAWER EN MÓVIL) -->
+      <aside class="sidebar" id="mapSidebar">
+        <div class="sidebar-drawer-handle"></div>
+        <div class="sidebar-drawer-header">
+          <strong style="font-size:13px;color:#0f172a">📋 Cartera & Filtros</strong>
+          <button type="button" class="close" id="closeSidebarBtn" style="width:24px;height:24px;font-size:13px;">✕</button>
+        </div>
         <!-- STATS RESUMEN -->
         <section class="card">
           <div class="card-title">
@@ -1365,9 +1600,14 @@
           <!-- MAP CONTROLS -->
           <div class="map-controls-group">
             <button class="btn btn-secondary btn-sm" id="gpsBtn" title="Ubicarme en el mapa">
-              Mi Ubicación
+              📍 Mi Ubicación
             </button>
           </div>
+
+          <!-- MOBILE FLOATING TOGGLE BUTTON -->
+          <button class="mobile-sidebar-toggle" id="mobileSidebarToggle" type="button">
+            <span>📋</span> <span id="mobileSidebarToggleText">Ver Cartera (0)</span>
+          </button>
         </div>
       </main>
     </div>
@@ -1741,94 +1981,8 @@
     return {
       version: 2,
       analysts: {
-        magali: {
-          shops: [
-            {
-              id: "m-01",
-              name: "Zapatería Paraná Centro",
-              category: "Calzado / Indumentaria",
-              address: "Peatonal San Martín 680",
-              zone: "Peatonal San Martín",
-              tier: "alto",
-              analyst: "magali",
-              status: "acuerdo",
-              flyers: 80,
-              contact: "3434112233",
-              contactPerson: "Carlos",
-              visitDate: new Date().toISOString().split("T")[0],
-              followUp: "",
-              agreementType: "Material POP / Exhibidor en mostrador",
-              agreement: "Exhibidor en caja + 80 folletos + promo en vidriera",
-              history: [{ date: new Date().toISOString().split("T")[0], note: "Se acordó exhibidor.", user: "Magali" }],
-              lat: -31.7328,
-              lng: -60.5294
-            },
-            {
-              id: "m-02",
-              name: "Moda & Estilo Urbano",
-              category: "Indumentaria",
-              address: "Calle Urquiza 940",
-              zone: "Calle Urquiza",
-              tier: "alto",
-              analyst: "magali",
-              status: "interesado",
-              flyers: 30,
-              contact: "3434998877",
-              contactPerson: "Valeria",
-              visitDate: new Date().toISOString().split("T")[0],
-              followUp: new Date(Date.now() + 86400000).toISOString().split("T")[0],
-              agreementType: "Créditos preferenciales para Empleados",
-              agreement: "Interesados en crédito para los empleados",
-              history: [{ date: new Date().toISOString().split("T")[0], note: "Hablé con la encargada.", user: "Magali" }],
-              lat: -31.7342,
-              lng: -60.5310
-            }
-          ]
-        },
-        victoria: {
-          shops: [
-            {
-              id: "v-01",
-              name: "Bazar & Deco Litoral",
-              category: "Hogar y Bazar",
-              address: "Calle 25 de Mayo 150",
-              zone: "Calle 25 de Mayo",
-              tier: "medio",
-              analyst: "victoria",
-              status: "visitado",
-              flyers: 20,
-              contact: "3434556677",
-              contactPerson: "Martín",
-              visitDate: new Date().toISOString().split("T")[0],
-              followUp: new Date().toISOString().split("T")[0],
-              agreementType: "Financiación de compras a Clientes",
-              agreement: "Dejó folletería para revisión",
-              history: [{ date: new Date().toISOString().split("T")[0], note: "Folletería entregada.", user: "Victoria" }],
-              lat: -31.7315,
-              lng: -60.5280
-            },
-            {
-              id: "v-02",
-              name: "Óptica Pellegrini",
-              category: "Salud y Óptica",
-              address: "Calle Pellegrini 320",
-              zone: "Calle Pellegrini",
-              tier: "medio",
-              analyst: "victoria",
-              status: "pendiente",
-              flyers: 0,
-              contact: "",
-              contactPerson: "",
-              visitDate: "",
-              followUp: "",
-              agreementType: "",
-              agreement: "",
-              history: [],
-              lat: -31.7350,
-              lng: -60.5270
-            }
-          ]
-        }
+        magali: { shops: [] },
+        victoria: { shops: [] }
       }
     };
   }
@@ -2154,12 +2308,27 @@
   });
 
   function makeMarker(shop) {
-    const color = statusColors[shop.status] || statusColors.pendiente;
     const isHigh = normalizeTier(shop.tier) === "alto";
+
+    if (shop.status === "acuerdo") {
+      return L.marker([shop.lat, shop.lng], {
+        icon: L.divIcon({
+          className: 'deal-marker-wrap',
+          html: `
+            <div class="deal-marker-pulse"></div>
+            <div class="deal-marker-core" title="Acuerdo Cerrado: ${escapeHtml(shop.name)}">🤝</div>
+          `,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14]
+        })
+      });
+    }
+
+    const color = statusColors[shop.status] || statusColors.pendiente;
     return L.circleMarker([shop.lat, shop.lng], {
       radius: isHigh ? 10 : 8,
       color: "#ffffff",
-      weight: 2,
+      weight: 2.5,
       fillColor: color,
       fillOpacity: 0.95
     });
@@ -2281,6 +2450,11 @@
     document.getElementById("statVisited").textContent = currentShops.filter(s => s.status !== "pendiente").length;
     document.getElementById("statDeals").textContent = currentShops.filter(s => s.status === "acuerdo").length;
     document.getElementById("statFlyers").textContent = currentShops.reduce((sum, s) => sum + Number(s.flyers || 0), 0);
+
+    const toggleText = document.getElementById("mobileSidebarToggleText");
+    if(toggleText) {
+      toggleText.textContent = `Ver Cartera (${currentShops.length})`;
+    }
   }
 
   function renderAll() {
@@ -3217,6 +3391,25 @@
       document.querySelectorAll(".custom-select-wrap.open").forEach(w => w.classList.remove("open"));
     }
   });
+
+  // MOBILE SIDEBAR DRAWER TOGGLE
+  const mapSidebarEl = document.getElementById("mapSidebar");
+  const mobileSidebarToggleBtn = document.getElementById("mobileSidebarToggle");
+  const closeSidebarBtn = document.getElementById("closeSidebarBtn");
+
+  if(mobileSidebarToggleBtn && mapSidebarEl) {
+    mobileSidebarToggleBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      mapSidebarEl.classList.toggle("open");
+    });
+  }
+
+  if(closeSidebarBtn && mapSidebarEl) {
+    closeSidebarBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      mapSidebarEl.classList.remove("open");
+    });
+  }
 
   // INICIALIZACIÓN
   setupCustomSelects();
