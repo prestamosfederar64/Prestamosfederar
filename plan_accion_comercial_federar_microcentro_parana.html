@@ -1154,6 +1154,45 @@
         padding: 8px 14px;
         font-size: 12px;
       }
+
+      /* DASHBOARD & METRICS EN MÓVIL (1 COLUMNA SIN CORTES) */
+      .dashboard-container {
+        gap: 12px;
+        padding-bottom: 20px;
+      }
+
+      .kpi-row {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+      }
+
+      .kpi-card {
+        padding: 10px 12px !important;
+      }
+
+      .kpi-card .kpi-lbl {
+        font-size: 8.5px !important;
+      }
+
+      .kpi-card .kpi-num {
+        font-size: 19px !important;
+      }
+
+      .kpi-card .kpi-sub {
+        font-size: 9px !important;
+        line-height: 1.2;
+      }
+
+      .dashboard-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+      }
+
+      /* CRM KANBAN EN MÓVIL */
+      .crm-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+      }
     }
 
     .mobile-sidebar-toggle {
