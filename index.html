@@ -1534,6 +1534,370 @@
       to { transform: translateY(0); opacity: 1; }
     }
 
+    /* FOTOS DE VISITA & MULTIMEDIA */
+    .photo-section-box {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .photo-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .photo-counter-badge {
+      background: #e0e7ff;
+      color: #3730a3;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 12px;
+    }
+
+    .photo-dropzone {
+      border: 2px dashed #cbd5e1;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 12px 14px;
+      text-align: center;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .photo-dropzone.dragover {
+      border-color: var(--primary);
+      background: #eff6ff;
+    }
+
+    .photo-dropzone-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .photo-dropzone-icon {
+      font-size: 24px;
+      line-height: 1;
+    }
+
+    .photo-dropzone-text {
+      font-size: 11px;
+      color: #334155;
+    }
+
+    .photo-dropzone-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding: 2px;
+    }
+
+    .photo-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .photo-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+
+    .photo-thumb-wrap {
+      width: 100%;
+      height: 90px;
+      position: relative;
+      background: #0f172a;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .photo-thumb {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.25s ease;
+    }
+
+    .photo-thumb-wrap:hover .photo-thumb {
+      transform: scale(1.06);
+    }
+
+    .photo-zoom-hint {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 16px;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .photo-thumb-wrap:hover .photo-zoom-hint {
+      opacity: 1;
+    }
+
+    .photo-del-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      background: rgba(239, 68, 68, 0.9);
+      color: #fff;
+      border: 0;
+      border-radius: 50%;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.25);
+      z-index: 5;
+    }
+
+    .photo-del-btn:hover {
+      background: #dc2626;
+      transform: scale(1.1);
+    }
+
+    .photo-card-body {
+      padding: 5px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      background: #ffffff;
+    }
+
+    .photo-tag-select {
+      width: 100%;
+      font-size: 9px;
+      padding: 3px 4px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: #f8fafc;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .photo-date-lbl {
+      font-size: 8px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* BADGES & PREVIEWS EN LISTADOS Y MAPA */
+    .shop-photo-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: #ede9fe;
+      color: #6d28d9;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    .popup-photo-strip {
+      display: flex;
+      gap: 4px;
+      margin: 6px 0;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .popup-photo-item {
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .popup-photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* LIGHTBOX VISOR FULLSCREEN */
+    .photo-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 5000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .lightbox-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(4px);
+    }
+
+    .lightbox-content {
+      position: relative;
+      z-index: 5001;
+      max-width: 92vw;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lightbox-img-wrap {
+      max-width: 90vw;
+      max-height: 75vh;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox-img-wrap img {
+      max-width: 100%;
+      max-height: 75vh;
+      object-fit: contain;
+      display: block;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -38px;
+      right: 0;
+      background: rgba(255,255,255,0.2);
+      border: 0;
+      color: #ffffff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255,255,255,0.35);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.2);
+      color: #ffffff;
+      border: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 26px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(255,255,255,0.4);
+      transform: translateY(-50%) scale(1.1);
+    }
+
+    .lightbox-prev { left: -56px; }
+    .lightbox-next { right: -56px; }
+
+    @media (max-width: 640px) {
+      .lightbox-prev { left: 8px; }
+      .lightbox-next { right: 8px; }
+      .lightbox-close { top: -34px; right: 4px; }
+    }
+
+    .lightbox-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      color: #ffffff;
+      font-size: 12px;
+      padding: 4px 6px;
+    }
+
+    .lightbox-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lightbox-title {
+      font-weight: 700;
+    }
+
+    .lightbox-tag {
+      background: #ea580c;
+      color: #fff;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .lightbox-date {
+      color: #94a3b8;
+      font-size: 11px;
+    }
+
+    .lightbox-counter {
+      color: #cbd5e1;
+      font-weight: 600;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -1990,7 +2354,41 @@
             <input id="agreement" />
           </div>
 
-          <!-- Fila 6: Bitácora Compacta -->
+          <!-- Fila 6: Registro Fotográfico de la Visita -->
+          <div class="span-3 photo-section-box">
+            <div class="photo-section-head">
+              <label style="margin:0;display:flex;align-items:center;gap:6px;">
+                <span>📸 Registro Fotográfico de la Visita</span>
+                <span class="photo-counter-badge" id="photoCountBadge">0 fotos</span>
+              </label>
+              <span style="font-size:10px;color:var(--muted)">Fachadas, folletería entregada, POP, acuerdos</span>
+            </div>
+
+            <!-- Dropzone & File Input -->
+            <div class="photo-dropzone" id="photoDropzone">
+              <input type="file" id="photoFileInput" accept="image/*" multiple style="display:none;" />
+              
+              <div class="photo-dropzone-content">
+                <div class="photo-dropzone-icon">📁</div>
+                <div class="photo-dropzone-text">
+                  <strong>Arrastrá fotos aquí</strong> o subí desde tu dispositivo:
+                </div>
+                <div class="photo-dropzone-actions">
+                  <button type="button" class="btn btn-primary btn-sm" id="selectPhotosBtn">
+                    📁 Subir Fotos / Archivos
+                  </button>
+                </div>
+                <div style="font-size:10px;color:var(--muted);margin-top:2px;">
+                  Formatos JPG, PNG, WebP. Se optimizan automáticamente.
+                </div>
+              </div>
+            </div>
+
+            <!-- Photo Thumbnails Grid -->
+            <div class="photo-grid" id="photoGrid"></div>
+          </div>
+
+          <!-- Fila 7: Bitácora Compacta -->
           <div class="span-3">
             <label>Nueva Nota de Bitácora</label>
             <div style="display:flex;gap:6px;">
@@ -2015,6 +2413,29 @@
         </div>
       </div>
     </form>
+  </div>
+</div>
+
+<!-- LIGHTBOX VISOR DE FOTOS EN PANTALLA COMPLETA -->
+<div class="photo-lightbox" id="photoLightbox" style="display:none;">
+  <div class="lightbox-overlay" id="lightboxOverlay"></div>
+  <div class="lightbox-content">
+    <button type="button" class="lightbox-close" id="lightboxCloseBtn" title="Cerrar (Esc)">✕</button>
+    <button type="button" class="lightbox-nav lightbox-prev" id="lightboxPrevBtn" title="Anterior (←)">‹</button>
+    <button type="button" class="lightbox-nav lightbox-next" id="lightboxNextBtn" title="Siguiente (→)">›</button>
+    
+    <div class="lightbox-img-wrap">
+      <img id="lightboxImg" src="" alt="Foto del comercio" />
+    </div>
+
+    <div class="lightbox-footer">
+      <div class="lightbox-info">
+        <span class="lightbox-title" id="lightboxTitle">Foto del comercio</span>
+        <span class="lightbox-tag" id="lightboxTag">Fachada</span>
+        <span class="lightbox-date" id="lightboxDate"></span>
+      </div>
+      <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
+    </div>
   </div>
 </div>
 
@@ -2146,6 +2567,7 @@
       agreement_type: shop.agreementType || "",
       agreement: shop.agreement || "",
       history: Array.isArray(shop.history) ? shop.history : [],
+      photos: Array.isArray(shop.photos) ? shop.photos : [],
       lat: Number(shop.lat || 0),
       lng: Number(shop.lng || 0),
       updated_at: new Date().toISOString()
@@ -2170,6 +2592,7 @@
       agreementType: row.agreement_type || "",
       agreement: row.agreement || "",
       history: Array.isArray(row.history) ? row.history : [],
+      photos: Array.isArray(row.photos) ? row.photos : [],
       lat: Number(row.lat || 0),
       lng: Number(row.lng || 0)
     };
@@ -2236,6 +2659,7 @@
   let pendingLatLng = null;
   let userLocationMarker = null;
   let activeLogs = [];
+  let activePhotos = [];
 
 
   const microcentroBounds = L.latLngBounds(
@@ -2448,9 +2872,34 @@
     const waLink = shop.contact ? getWhatsAppUrl(shop.contact, shop.name, shop.analyst) : "";
     const analystDisplayName = ANALYST_NAMES[shop.analyst] || shop.analyst || "Magali";
     const tierKey = normalizeTier(shop.tier);
+    const photos = Array.isArray(shop.photos) ? shop.photos : [];
+
+    let photoHtml = "";
+    if (photos.length > 0) {
+      photoHtml = `
+        <div style="margin-top:6px;border-top:1px solid #e2e8f0;padding-top:5px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px;">
+            <span style="font-size:10px;font-weight:700;color:#334155;">📸 Fotos (${photos.length})</span>
+            <button type="button" onclick="window.viewShopPhotos('${shop.id}', 0)" style="background:none;border:none;color:#1d4ed8;font-size:10px;font-weight:700;cursor:pointer;padding:0;">Ver todas ↗</button>
+          </div>
+          <div class="popup-photo-strip">
+            ${photos.slice(0, 4).map((p, idx) => `
+              <div class="popup-photo-item" onclick="window.viewShopPhotos('${shop.id}', ${idx})" title="${safe(p.caption || 'Foto de visita')}">
+                <img src="${p.url}" alt="${safe(p.caption || 'Foto')}" />
+              </div>
+            `).join('')}
+            ${photos.length > 4 ? `
+              <div class="popup-photo-item" onclick="window.viewShopPhotos('${shop.id}', 4)" style="background:#0f172a;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;">
+                +${photos.length - 4}
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `;
+    }
 
     return `
-      <div style="min-width:230px;padding:2px">
+      <div style="min-width:230px;max-width:270px;padding:2px">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
           <span class="badge badge-${shop.status}">${safe(statusLabels[shop.status] || shop.status)}</span>
           <span class="tier-badge tier-${tierKey}">${safe(tierLabels[tierKey] || 'Flujo medio')}</span>
@@ -2465,6 +2914,8 @@
           ${shop.agreementType ? `<div><b>Convenio:</b> <span style="color:#15803d;font-weight:700">${safe(shop.agreementType)}</span></div>` : ''}
           ${shop.followUp ? `<div><b>Seguimiento:</b> ${safe(shop.followUp)}</div>` : ''}
         </div>
+
+        ${photoHtml}
 
         <div style="display:flex;gap:6px;margin-top:8px">
           ${waLink ? `<a href="${waLink}" target="_blank" style="text-decoration:none;flex:1"><button type="button" style="width:100%;padding:5px;background:#16a34a;color:#fff;border:0;border-radius:5px;font-size:11px;font-weight:700;cursor:pointer">WhatsApp</button></a>` : ''}
@@ -2522,10 +2973,15 @@
       item.className = "shop-item";
       const anTag = activeAnalyst === "all" ? `<span class="analyst-tag">${ANALYST_NAMES[shop.analyst] || 'Magali'}</span>` : '';
       const tierKey = normalizeTier(shop.tier);
+      const photoBadge = (Array.isArray(shop.photos) && shop.photos.length > 0)
+        ? `<span class="shop-photo-pill" title="${shop.photos.length} fotos registradas">📸 ${shop.photos.length}</span>`
+        : '';
+
       item.innerHTML = `
         <div class="shop-item-head">
           <strong>${escapeHtml(shop.name)}</strong>
           <div style="display:flex;gap:4px;align-items:center;">
+            ${photoBadge}
             ${anTag}
             <span class="tier-badge tier-${tierKey}">${escapeHtml(tierLabels[tierKey] || 'Flujo medio')}</span>
           </div>
@@ -2646,11 +3102,15 @@
     const anTag = `<span class="analyst-tag">${ANALYST_NAMES[shop.analyst] || 'Magali'}</span>`;
     const dateLabel = shop.followUp ? 'Seguimiento' : 'Fecha Visita';
     const displayDate = targetDate || shop.followUp || shop.visitDate || '';
+    const photoBadge = (Array.isArray(shop.photos) && shop.photos.length > 0)
+      ? `<span class="shop-photo-pill" title="${shop.photos.length} fotos">📸 ${shop.photos.length}</span>`
+      : '';
 
     card.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:flex-start">
         <strong style="font-size:12px;color:#0f172a">${escapeHtml(shop.name)}</strong>
         <div style="display:flex;gap:4px;align-items:center;">
+          ${photoBadge}
           ${anTag}
           <span class="badge badge-${shop.status}">${statusLabels[shop.status] || shop.status}</span>
         </div>
@@ -2852,6 +3312,260 @@
     renderActiveLogs();
   });
 
+  // COMPRESIÓN Y GESTIÓN MULTIMEDIA DE FOTOS
+  function compressImage(file, maxWidth = 1280, quality = 0.8) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+          resolve(compressedDataUrl);
+        };
+        img.onerror = (err) => reject(err);
+        img.src = e.target.result;
+      };
+      reader.onerror = (err) => reject(err);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function renderPhotoGrid() {
+    const grid = document.getElementById("photoGrid");
+    const countBadge = document.getElementById("photoCountBadge");
+    if (!grid || !countBadge) return;
+
+    grid.innerHTML = "";
+    countBadge.textContent = `${activePhotos.length} ${activePhotos.length === 1 ? 'foto' : 'fotos'}`;
+
+    if (!activePhotos.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted);font-size:10px;padding:8px 0;">No hay fotos adjuntas a esta visita aún.</div>';
+      return;
+    }
+
+    const tagOptions = [
+      "Fachada",
+      "Exhibidor / POP",
+      "Folletería",
+      "Convenio / Acuerdo",
+      "Reunión / Local",
+      "General"
+    ];
+
+    activePhotos.forEach((photo, index) => {
+      const card = document.createElement("div");
+      card.className = "photo-card";
+
+      const thumbWrap = document.createElement("div");
+      thumbWrap.className = "photo-thumb-wrap";
+      thumbWrap.title = "Clic para ver en pantalla completa";
+      thumbWrap.innerHTML = `
+        <img class="photo-thumb" src="${photo.url}" alt="${escapeHtml(photo.caption || 'Foto')}" />
+        <div class="photo-zoom-hint">🔍</div>
+      `;
+      thumbWrap.addEventListener("click", () => {
+        openLightbox(activePhotos, index, document.getElementById("name").value.trim() || "Comercio");
+      });
+
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "photo-del-btn";
+      delBtn.innerHTML = "✕";
+      delBtn.title = "Eliminar foto";
+      delBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if(confirm("¿Eliminar esta foto?")) {
+          activePhotos.splice(index, 1);
+          renderPhotoGrid();
+          showToast("Foto eliminada");
+        }
+      });
+
+      const body = document.createElement("div");
+      body.className = "photo-card-body";
+
+      const select = document.createElement("select");
+      select.className = "photo-tag-select";
+      tagOptions.forEach(opt => {
+        const option = document.createElement("option");
+        option.value = opt;
+        option.textContent = opt;
+        if ((photo.caption || "Fachada") === opt) option.selected = true;
+        select.appendChild(option);
+      });
+      select.addEventListener("change", (e) => {
+        photo.caption = e.target.value;
+      });
+
+      const dateLbl = document.createElement("div");
+      dateLbl.className = "photo-date-lbl";
+      dateLbl.innerHTML = `<span>${escapeHtml(photo.date || getLocalDateStr())}</span><span>#${index + 1}</span>`;
+
+      body.appendChild(select);
+      body.appendChild(dateLbl);
+
+      card.appendChild(delBtn);
+      card.appendChild(thumbWrap);
+      card.appendChild(body);
+      grid.appendChild(card);
+    });
+  }
+
+  async function handlePhotoFiles(fileList) {
+    if (!fileList || !fileList.length) return;
+    const files = Array.from(fileList).filter(f => f.type.startsWith("image/"));
+    if (!files.length) {
+      alert("Por favor selecciona únicamente archivos de imagen (JPG, PNG, WebP).");
+      return;
+    }
+
+    showToast(`Procesando ${files.length} ${files.length === 1 ? 'foto' : 'fotos'}...`);
+
+    let loadedCount = 0;
+    for (const file of files) {
+      try {
+        const dataUrl = await compressImage(file, 1280, 0.82);
+        activePhotos.push({
+          id: "ph-" + Date.now() + "-" + Math.random().toString(36).substr(2, 5),
+          url: dataUrl,
+          caption: "Fachada",
+          date: getLocalDateStr()
+        });
+        loadedCount++;
+      } catch (err) {
+        console.error("Error optimizando imagen:", err);
+      }
+    }
+
+    renderPhotoGrid();
+    showToast(`Se agregaron ${loadedCount} fotos correctamente`);
+  }
+
+  // EVENTOS DE SUBIDA Y DRAG & DROP
+  const photoFileInput = document.getElementById("photoFileInput");
+  const selectPhotosBtn = document.getElementById("selectPhotosBtn");
+  const photoDropzone = document.getElementById("photoDropzone");
+
+  if (selectPhotosBtn && photoFileInput) {
+    selectPhotosBtn.addEventListener("click", () => photoFileInput.click());
+    photoFileInput.addEventListener("change", (e) => {
+      handlePhotoFiles(e.target.files);
+      photoFileInput.value = "";
+    });
+  }
+
+  if (photoDropzone) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+      photoDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        photoDropzone.classList.add('dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      photoDropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        photoDropzone.classList.remove('dragover');
+      });
+    });
+
+    photoDropzone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      if (dt && dt.files && dt.files.length) {
+        handlePhotoFiles(dt.files);
+      }
+    });
+  }
+
+  // LIGHTBOX CONTROLLER
+  let lightboxPhotos = [];
+  let lightboxIndex = 0;
+  let lightboxShopTitle = "";
+
+  function openLightbox(photos, startIndex = 0, title = "Comercio") {
+    if (!photos || !photos.length) return;
+    lightboxPhotos = photos;
+    lightboxIndex = Math.max(0, Math.min(startIndex, photos.length - 1));
+    lightboxShopTitle = title;
+    updateLightboxUI();
+    document.getElementById("photoLightbox").style.display = "flex";
+  }
+
+  function updateLightboxUI() {
+    const photo = lightboxPhotos[lightboxIndex];
+    if (!photo) return;
+    document.getElementById("lightboxImg").src = photo.url;
+    document.getElementById("lightboxTitle").textContent = lightboxShopTitle || "Comercio";
+    document.getElementById("lightboxTag").textContent = photo.caption || "Foto";
+    document.getElementById("lightboxDate").textContent = photo.date || "";
+    document.getElementById("lightboxCounter").textContent = `${lightboxIndex + 1} / ${lightboxPhotos.length}`;
+
+    const prevBtn = document.getElementById("lightboxPrevBtn");
+    const nextBtn = document.getElementById("lightboxNextBtn");
+    if (prevBtn) prevBtn.style.display = lightboxPhotos.length > 1 ? "flex" : "none";
+    if (nextBtn) nextBtn.style.display = lightboxPhotos.length > 1 ? "flex" : "none";
+  }
+
+  function closeLightbox() {
+    document.getElementById("photoLightbox").style.display = "none";
+    document.getElementById("lightboxImg").src = "";
+  }
+
+  function nextLightboxPhoto() {
+    if (lightboxPhotos.length <= 1) return;
+    lightboxIndex = (lightboxIndex + 1) % lightboxPhotos.length;
+    updateLightboxUI();
+  }
+
+  function prevLightboxPhoto() {
+    if (lightboxPhotos.length <= 1) return;
+    lightboxIndex = (lightboxIndex - 1 + lightboxPhotos.length) % lightboxPhotos.length;
+    updateLightboxUI();
+  }
+
+  const lbCloseBtn = document.getElementById("lightboxCloseBtn");
+  const lbOverlay = document.getElementById("lightboxOverlay");
+  const lbNextBtn = document.getElementById("lightboxNextBtn");
+  const lbPrevBtn = document.getElementById("lightboxPrevBtn");
+
+  if (lbCloseBtn) lbCloseBtn.addEventListener("click", closeLightbox);
+  if (lbOverlay) lbOverlay.addEventListener("click", closeLightbox);
+  if (lbNextBtn) lbNextBtn.addEventListener("click", nextLightboxPhoto);
+  if (lbPrevBtn) lbPrevBtn.addEventListener("click", prevLightboxPhoto);
+
+  document.addEventListener("keydown", (e) => {
+    const lb = document.getElementById("photoLightbox");
+    if (lb && lb.style.display === "flex") {
+      if (e.key === "Escape") closeLightbox();
+      else if (e.key === "ArrowRight") nextLightboxPhoto();
+      else if (e.key === "ArrowLeft") prevLightboxPhoto();
+    }
+  });
+
+  window.viewShopPhotos = function(shopId, startIndex = 0) {
+    const found = findShopAndAnalyst(shopId);
+    if (!found || !found.shop) return;
+    const shop = found.shop;
+    if (Array.isArray(shop.photos) && shop.photos.length > 0) {
+      openLightbox(shop.photos, startIndex, shop.name);
+    } else {
+      showToast("Este comercio aún no tiene fotos registradas.");
+    }
+  };
+
   function findShopAndAnalyst(id) {
     for (const key of ["magali", "victoria"]) {
       const s = appData.analysts[key].shops.find(item => item.id === id);
@@ -2877,6 +3591,8 @@
     }
     activeLogs = [];
     renderActiveLogs();
+    activePhotos = [];
+    renderPhotoGrid();
     syncAllCustomSelects();
 
     const coords = latlng || pendingLatLng || map.getCenter();
@@ -3261,6 +3977,8 @@
 
     activeLogs = Array.isArray(shop.history) ? [...shop.history] : [];
     renderActiveLogs();
+    activePhotos = Array.isArray(shop.photos) ? [...shop.photos] : [];
+    renderPhotoGrid();
     syncAllCustomSelects();
 
     document.getElementById("modalTitle").textContent = "Editar Comercio";
@@ -3296,6 +4014,7 @@
       agreementType: document.getElementById("agreementType").value,
       agreement: document.getElementById("agreement").value.trim(),
       history: activeLogs,
+      photos: activePhotos,
       lat: Number(document.getElementById("lat").value),
       lng: Number(document.getElementById("lng").value)
     };
@@ -3313,8 +4032,13 @@
     map.setView([shop.lat, shop.lng], Math.max(map.getZoom(), 16));
 
     if (supabaseClient) {
-      supabaseClient.from('shops').upsert(shopToRow(shop)).then(({ error }) => {
-        if (error) console.error("Error guardando comercio en Supabase:", error);
+      const row = shopToRow(shop);
+      supabaseClient.from('shops').upsert(row).then(({ error }) => {
+        if (error) {
+          console.warn("Error guardando en Supabase con fotos (reintentando sin columna photos):", error);
+          const { photos, ...rowWithoutPhotos } = row;
+          supabaseClient.from('shops').upsert(rowWithoutPhotos).catch(err => console.error("Error final Supabase:", err));
+        }
       });
     }
   });
