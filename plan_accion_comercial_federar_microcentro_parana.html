@@ -3178,11 +3178,18 @@
     d.setDate(d.getDate() + 3);
     shop.followUp = getLocalDateStr(d);
     if(!shop.history) shop.history = [];
-    shop.history.push({
-      date: getLocalDateStr(),
-      note: "Seguimiento pospuesto 3 días.",
-      user: ANALYST_NAMES[targetKey] || "Analista"
-    });
+
+    const todayStr = getLocalDateStr();
+    const noteText = "Seguimiento pospuesto 3 días.";
+    const lastNote = shop.history[shop.history.length - 1];
+    if (!lastNote || lastNote.date !== todayStr || lastNote.note !== noteText) {
+      shop.history.push({
+        date: todayStr,
+        note: noteText,
+        user: ANALYST_NAMES[targetKey] || "Analista"
+      });
+    }
+
     saveState();
     renderCrmBoard();
     renderAll();
@@ -3311,24 +3318,51 @@
     });
   }
 
+  function deduplicateLogs(logs) {
+    if (!Array.isArray(logs)) return [];
+    const result = [];
+    logs.forEach(l => {
+      if (!l || !l.note) return;
+      const prev = result[result.length - 1];
+      if (prev && prev.date === l.date && prev.user === l.user && prev.note.trim() === l.note.trim()) {
+        return;
+      }
+      result.push(l);
+    });
+    return result;
+  }
+
   // MODAL SHOP LOGS
   function renderActiveLogs() {
     const cont = document.getElementById("logTimeline");
+    if (!cont) return;
     cont.innerHTML = "";
-    if(!activeLogs.length) {
+    if (!activeLogs.length) {
       cont.innerHTML = '<div style="color:var(--muted);font-size:10px;text-align:center;">Sin notas registradas.</div>';
       return;
     }
-    activeLogs.slice().reverse().forEach(l => {
+    activeLogs.slice().reverse().forEach((l, revIdx) => {
+      const realIndex = activeLogs.length - 1 - revIdx;
       const it = document.createElement("div");
       it.className = "timeline-item";
       it.innerHTML = `
         <div class="time-meta">
           <span>${escapeHtml(l.date || "")}</span>
-          <span>${escapeHtml(l.user || "Analista")}</span>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span>${escapeHtml(l.user || "Analista")}</span>
+            <button type="button" class="log-del-btn" title="Eliminar nota" style="background:none;border:none;color:#ef4444;font-size:11px;font-weight:700;cursor:pointer;padding:0 3px;line-height:1;opacity:0.85;">✕</button>
+          </div>
         </div>
-        <div>${escapeHtml(l.note || "")}</div>
+        <div style="margin-top:2px;">${escapeHtml(l.note || "")}</div>
       `;
+      const delBtn = it.querySelector(".log-del-btn");
+      if (delBtn) {
+        delBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          activeLogs.splice(realIndex, 1);
+          renderActiveLogs();
+        });
+      }
       cont.appendChild(it);
     });
   }
@@ -4035,7 +4069,8 @@
     document.getElementById("lat").value = shop.lat;
     document.getElementById("lng").value = shop.lng;
 
-    activeLogs = Array.isArray(shop.history) ? [...shop.history] : [];
+    activeLogs = deduplicateLogs(Array.isArray(shop.history) ? [...shop.history] : []);
+    shop.history = activeLogs;
     renderActiveLogs();
     activePhotos = Array.isArray(shop.photos) ? [...shop.photos] : [];
     renderPhotoGrid();
