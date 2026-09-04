@@ -2542,6 +2542,26 @@
     localStorage.setItem(STORAGE_KEY_V2, JSON.stringify(appData));
   }
 
+  let appData = loadState();
+  let activeAnalyst = localStorage.getItem(ACTIVE_ANALYST_KEY) || "magali";
+  let markers = new Map();
+  let pendingLatLng = null;
+  let userLocationMarker = null;
+  let activeLogs = [];
+  let activePhotos = [];
+
+  function findShopAndAnalyst(id) {
+    if (!appData || !appData.analysts) return null;
+    const targetId = String(id);
+    for (const key of ["magali", "victoria"]) {
+      if (appData.analysts[key] && Array.isArray(appData.analysts[key].shops)) {
+        const s = appData.analysts[key].shops.find(item => String(item.id) === targetId);
+        if (s) return { shop: s, analystKey: key };
+      }
+    }
+    return null;
+  }
+
   // SUPABASE CLOUD DATABASE & REALTIME CLIENT
   const SUPABASE_URL = "https://cksdaioqbpyvfdxkzpot.supabase.co";
   const SUPABASE_KEY = "sb_publishable_q8HQLCX7Nvm6UtXwAAUHfg_N638zDQA";
@@ -2575,6 +2595,16 @@
   }
 
   function rowToShop(row) {
+    const existing = findShopAndAnalyst(row.id);
+    const existingPhotos = (existing && existing.shop && Array.isArray(existing.shop.photos)) ? existing.shop.photos : [];
+    const remotePhotos = Array.isArray(row.photos) ? row.photos : [];
+    // Si Supabase aún no tiene la columna o viene vacío, preserva las fotos locales guardadas
+    const mergedPhotos = (remotePhotos.length > 0) ? remotePhotos : existingPhotos;
+
+    const existingHistory = (existing && existing.shop && Array.isArray(existing.shop.history)) ? existing.shop.history : [];
+    const remoteHistory = Array.isArray(row.history) ? row.history : [];
+    const mergedHistory = (remoteHistory.length > 0) ? remoteHistory : existingHistory;
+
     return {
       id: String(row.id),
       name: row.name || "",
@@ -2591,8 +2621,8 @@
       followUp: row.follow_up || "",
       agreementType: row.agreement_type || "",
       agreement: row.agreement || "",
-      history: Array.isArray(row.history) ? row.history : [],
-      photos: Array.isArray(row.photos) ? row.photos : [],
+      history: mergedHistory,
+      photos: mergedPhotos,
       lat: Number(row.lat || 0),
       lng: Number(row.lng || 0)
     };
@@ -2652,14 +2682,6 @@
       console.warn("Error configurando suscripción Realtime:", err);
     }
   }
-
-  let appData = loadState();
-  let activeAnalyst = localStorage.getItem(ACTIVE_ANALYST_KEY) || "magali";
-  let markers = new Map();
-  let pendingLatLng = null;
-  let userLocationMarker = null;
-  let activeLogs = [];
-  let activePhotos = [];
 
 
   const microcentroBounds = L.latLngBounds(
@@ -3566,14 +3588,6 @@
     }
   };
 
-  function findShopAndAnalyst(id) {
-    for (const key of ["magali", "victoria"]) {
-      const s = appData.analysts[key].shops.find(item => item.id === id);
-      if (s) return { shop: s, analystKey: key };
-    }
-    return null;
-  }
-
   function openNew(latlng=null, initialAddress="") {
     document.getElementById("shopForm").reset();
     document.getElementById("shopId").value = "";
@@ -4035,9 +4049,11 @@
       const row = shopToRow(shop);
       supabaseClient.from('shops').upsert(row).then(({ error }) => {
         if (error) {
-          console.warn("Error guardando en Supabase con fotos (reintentando sin columna photos):", error);
+          console.warn("Aviso: Supabase aún no tiene la columna photos (ejecutar SQL en Supabase para habilitar fotos en la nube). Reintentando sin columna photos:", error);
           const { photos, ...rowWithoutPhotos } = row;
-          supabaseClient.from('shops').upsert(rowWithoutPhotos).catch(err => console.error("Error final Supabase:", err));
+          supabaseClient.from('shops').upsert(rowWithoutPhotos).then(({ error: retryErr }) => {
+            if (retryErr) console.error("Error final Supabase:", retryErr);
+          });
         }
       });
     }
