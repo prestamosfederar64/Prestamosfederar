@@ -1426,6 +1426,8 @@
       border-radius: 12px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
       overflow: hidden;
+      position: relative;
+      will-change: transform;
     }
 
     .modal-head {
@@ -1436,6 +1438,13 @@
       border-bottom: 1px solid var(--border);
       background: #f8fafc;
       flex-shrink: 0;
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .modal-head:active {
+      cursor: grabbing;
     }
 
     .modal-head h2 {
@@ -2223,7 +2232,6 @@
           <div class="card-title">Tipos de Convenio Acordados</div>
           <div id="agreementsBreakdown" style="display:flex;flex-direction:column;gap:6px;padding-top:4px;"></div>
         </div>
-
         <!-- DISTRIBUCIÓN POR CIRCUITO -->
         <div class="card">
           <div class="card-title">Cobertura por Circuito / Calle</div>
@@ -2237,9 +2245,12 @@
 <!-- MODAL COMPACTO SIN SCROLL FORZADO -->
 <div class="modal" id="shopModal">
   <div class="modal-card">
-    <div class="modal-head">
-      <h2 id="modalTitle">Agregar Comercio</h2>
-      <button class="close" id="closeModal" type="button">×</button>
+    <div class="modal-head" id="modalDragHandle" title="Arrastrá para mover el modal">
+      <div style="display:flex;align-items:center;gap:7px;">
+        <span style="color:#94a3b8;font-size:13px;letter-spacing:1px;cursor:grab;" title="Arrastrar modal">⋮⋮</span>
+        <h2 id="modalTitle">Agregar Comercio</h2>
+      </div>
+      <button class="close" id="closeModal" type="button" title="Cerrar">×</button>
     </div>
 
     <form id="shopForm" style="display:flex;flex-direction:column;flex:1;overflow:hidden;margin:0;">
@@ -2349,33 +2360,36 @@
             </select>
           </div>
 
+          <!-- Fila 5B: Detalle del Acuerdo / Observaciones -->
           <div class="span-3">
-            <label>Detalle del Acuerdo / Acción Realizada</label>
-            <input id="agreement" />
+            <label>Detalle del Acuerdo / Observaciones</label>
+            <input id="agreement" placeholder="Ej: Cartelería POP colocada en caja principal..." />
           </div>
 
           <!-- Fila 6: Registro Fotográfico de la Visita -->
           <div class="span-3 photo-section-box">
             <div class="photo-section-head">
-              <label style="margin:0;display:flex;align-items:center;gap:6px;">
+              <div class="photo-section-title">
                 <span>📸 Registro Fotográfico de la Visita</span>
-                <span class="photo-counter-badge" id="photoCountBadge">0 fotos</span>
-              </label>
-              <span style="font-size:10px;color:var(--muted)">Fachadas, folletería entregada, POP, acuerdos</span>
+                <span class="photo-badge-count" id="photoCountBadge">0 fotos</span>
+              </div>
+              <div style="font-size:10.5px;color:var(--muted);">
+                Fotos del local, exhibidores o folletería
+              </div>
             </div>
 
-            <!-- Dropzone & File Input -->
+            <!-- Dropzone & File Inputs -->
             <div class="photo-dropzone" id="photoDropzone">
               <input type="file" id="photoFileInput" accept="image/*" multiple style="display:none;" />
               
               <div class="photo-dropzone-content">
-                <div class="photo-dropzone-icon">📁</div>
+                <div class="photo-dropzone-icon">📷</div>
                 <div class="photo-dropzone-text">
-                  <strong>Arrastrá fotos aquí</strong> o subí desde tu dispositivo:
+                  <strong>Arrastrá fotos aquí</strong> o elegí una opción:
                 </div>
                 <div class="photo-dropzone-actions">
-                  <button type="button" class="btn btn-primary btn-sm" id="selectPhotosBtn">
-                    📁 Subir Fotos / Archivos
+                  <button type="button" class="btn btn-secondary btn-sm" id="selectPhotosBtn">
+                    📁 Galería / Archivos
                   </button>
                 </div>
                 <div style="font-size:10px;color:var(--muted);margin-top:2px;">
@@ -2390,9 +2404,9 @@
 
           <!-- Fila 7: Bitácora Compacta -->
           <div class="span-3">
-            <label>Nueva Nota de Bitácora</label>
+            <label>Nueva nota</label>
             <div style="display:flex;gap:6px;">
-              <input id="newLogInput" />
+              <input id="newLogInput" placeholder="Escribí una nota o comentario..." />
               <button type="button" class="btn btn-secondary btn-sm" id="addLogBtn">+ Nota</button>
             </div>
             <div class="timeline" id="logTimeline">
@@ -2431,7 +2445,6 @@
     <div class="lightbox-footer">
       <div class="lightbox-info">
         <span class="lightbox-title" id="lightboxTitle">Foto del comercio</span>
-        <span class="lightbox-tag" id="lightboxTag">Fachada</span>
         <span class="lightbox-date" id="lightboxDate"></span>
       </div>
       <div class="lightbox-counter" id="lightboxCounter">1 / 1</div>
@@ -3376,15 +3389,6 @@
       return;
     }
 
-    const tagOptions = [
-      "Fachada",
-      "Exhibidor / POP",
-      "Folletería",
-      "Convenio / Acuerdo",
-      "Reunión / Local",
-      "General"
-    ];
-
     activePhotos.forEach((photo, index) => {
       const card = document.createElement("div");
       card.className = "photo-card";
@@ -3393,7 +3397,7 @@
       thumbWrap.className = "photo-thumb-wrap";
       thumbWrap.title = "Clic para ver en pantalla completa";
       thumbWrap.innerHTML = `
-        <img class="photo-thumb" src="${photo.url}" alt="${escapeHtml(photo.caption || 'Foto')}" />
+        <img class="photo-thumb" src="${photo.url}" alt="Foto ${index + 1}" />
         <div class="photo-zoom-hint">🔍</div>
       `;
       thumbWrap.addEventListener("click", () => {
@@ -3417,24 +3421,10 @@
       const body = document.createElement("div");
       body.className = "photo-card-body";
 
-      const select = document.createElement("select");
-      select.className = "photo-tag-select";
-      tagOptions.forEach(opt => {
-        const option = document.createElement("option");
-        option.value = opt;
-        option.textContent = opt;
-        if ((photo.caption || "Fachada") === opt) option.selected = true;
-        select.appendChild(option);
-      });
-      select.addEventListener("change", (e) => {
-        photo.caption = e.target.value;
-      });
-
       const dateLbl = document.createElement("div");
       dateLbl.className = "photo-date-lbl";
-      dateLbl.innerHTML = `<span>${escapeHtml(photo.date || getLocalDateStr())}</span><span>#${index + 1}</span>`;
+      dateLbl.innerHTML = `<span>${escapeHtml(photo.date || getLocalDateStr())}</span><span>Foto #${index + 1}</span>`;
 
-      body.appendChild(select);
       body.appendChild(dateLbl);
 
       card.appendChild(delBtn);
@@ -3461,7 +3451,6 @@
         activePhotos.push({
           id: "ph-" + Date.now() + "-" + Math.random().toString(36).substr(2, 5),
           url: dataUrl,
-          caption: "Fachada",
           date: getLocalDateStr()
         });
         loadedCount++;
@@ -3531,7 +3520,6 @@
     if (!photo) return;
     document.getElementById("lightboxImg").src = photo.url;
     document.getElementById("lightboxTitle").textContent = lightboxShopTitle || "Comercio";
-    document.getElementById("lightboxTag").textContent = photo.caption || "Foto";
     document.getElementById("lightboxDate").textContent = photo.date || "";
     document.getElementById("lightboxCounter").textContent = `${lightboxIndex + 1} / ${lightboxPhotos.length}`;
 
@@ -3556,6 +3544,58 @@
     if (lightboxPhotos.length <= 1) return;
     lightboxIndex = (lightboxIndex - 1 + lightboxPhotos.length) % lightboxPhotos.length;
     updateLightboxUI();
+  }
+
+  // DRAGGABLE MODAL (SELECCIONAR Y MOVER CON EL MOUSE)
+  function setupDraggableModal(modalId) {
+    const modalEl = document.getElementById(modalId);
+    if (!modalEl) return;
+    const card = modalEl.querySelector(".modal-card");
+    const handle = modalEl.querySelector(".modal-head");
+    if (!card || !handle) return;
+
+    let isDragging = false;
+    let startX = 0, startY = 0;
+    let currentX = 0, currentY = 0;
+
+    card._resetPosition = function() {
+      currentX = 0;
+      currentY = 0;
+      card.style.transform = "";
+    };
+
+    handle.addEventListener("pointerdown", function(e) {
+      if (e.button !== 0) return;
+      if (e.target.closest("button") || e.target.closest("input") || e.target.closest("select")) return;
+      if (window.innerWidth <= 768) return;
+
+      isDragging = true;
+      startX = e.clientX - currentX;
+      startY = e.clientY - currentY;
+      handle.style.cursor = "grabbing";
+      document.body.style.userSelect = "none";
+
+      function onPointerMove(ev) {
+        if (!isDragging) return;
+        currentX = ev.clientX - startX;
+        currentY = ev.clientY - startY;
+        card.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+      }
+
+      function onPointerUp() {
+        if (!isDragging) return;
+        isDragging = false;
+        handle.style.cursor = "grab";
+        document.body.style.userSelect = "";
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+        window.removeEventListener("pointercancel", onPointerUp);
+      }
+
+      window.addEventListener("pointermove", onPointerMove);
+      window.addEventListener("pointerup", onPointerUp);
+      window.addEventListener("pointercancel", onPointerUp);
+    });
   }
 
   const lbCloseBtn = document.getElementById("lightboxCloseBtn");
@@ -3589,6 +3629,9 @@
   };
 
   function openNew(latlng=null, initialAddress="") {
+    const card = document.querySelector("#shopModal .modal-card");
+    if(card && typeof card._resetPosition === "function") card._resetPosition();
+
     document.getElementById("shopForm").reset();
     document.getElementById("shopId").value = "";
     document.getElementById("modalTitle").textContent = "Agregar Comercio";
@@ -3967,6 +4010,9 @@
   });
 
   function openEdit(id) {
+    const card = document.querySelector("#shopModal .modal-card");
+    if(card && typeof card._resetPosition === "function") card._resetPosition();
+
     const found = findShopAndAnalyst(id);
     if(!found) return;
     const shop = found.shop;
@@ -4259,6 +4305,7 @@
 
   // INICIALIZACIÓN
   setupCustomSelects();
+  setupDraggableModal("shopModal");
   document.getElementById("activeAnalystLabel").textContent = ANALYST_NAMES[activeAnalyst] || "Magali";
   document.querySelectorAll(".analyst-btn").forEach(b => {
     b.classList.toggle("active", b.dataset.analyst === activeAnalyst);
